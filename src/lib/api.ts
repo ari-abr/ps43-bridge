@@ -8,6 +8,13 @@
 //   That event does not fire in the window that made the change, so we also
 //   notify local listeners directly.
 
+import demoState from '../data/demo-state.json'
+import kitsSeed from '../data/kits.json'
+import partnersSeed from '../data/partners.json'
+import schoolsSeed from '../data/schools.json'
+import { needScore, nearestKm, tierFromSurvey, type NeedInput, type Tier } from './scoring.ts'
+import type { Kit, Partner, School, SchoolStatus, Shipment, ShipmentStatus, Survey } from './types.ts'
+
 export const KEY_PREFIX = 'ps43:'
 const SERVER_PREFIX = KEY_PREFIX + 'server:'
 const QUEUE_KEY = KEY_PREFIX + 'queue'
@@ -134,6 +141,109 @@ export async function saveRecord(collection: string, record: DataRecord): Promis
   await wait()
   upsert(collection, record)
   return 'uploaded'
+}
+
+// ---------- schools, surveys, shipments ----------
+//
+// Uploaded collections (saved with saveRecord):
+//   'surveys'   { id, schoolId, ...Survey }  one record per survey; the latest surveyedAt wins
+//   'shipments' Shipment                     replaces the seed shipment with the same id
+
+export type SurveyRecord = DataRecord & Survey & { schoolId: string }
+export type ShipmentRecord = DataRecord & Shipment
+
+export interface SchoolView extends School {
+  survey: Survey | null
+  /** Readiness tier from the survey, or null if not assessed. */
+  tier: Tier | null
+  /** Inputs for needScore(), so screens can re-rank with their own weights. Null if not assessed. */
+  need: NeedInput | null
+  /** Need score (0-100) with the default weights. Null if not assessed. */
+  needScore: number | null
+  status: SchoolStatus
+  shipment: Shipment | null
+}
+
+const seedSurveys = demoState.surveys as Record<string, Survey>
+const seedShipments = demoState.shipments as Shipment[]
+
+/** Seed shipments plus uploaded ones (an uploaded shipment replaces a seed one with the same id). */
+export async function getShipments(): Promise<Shipment[]> {
+  const uploaded = await getRecords<ShipmentRecord>('shipments')
+  const byId = new Map<string, Shipment>(seedShipments.map((s) => [s.id, s]))
+  uploaded.forEach((s) => byId.set(s.id, s))
+  return [...byId.values()]
+}
+
+/** The latest survey of each school: seed surveys plus uploaded ones. */
+export async function getLatestSurveys(): Promise<Map<string, Survey>> {
+  const uploaded = await getRecords<SurveyRecord>('surveys')
+  const latest = new Map<string, Survey>(Object.entries(seedSurveys))
+  for (const u of uploaded) {
+    const current = latest.get(u.schoolId)
+    if (!current || u.surveyedAt >= current.surveyedAt) latest.set(u.schoolId, u)
+  }
+  return latest
+}
+
+const SHIPMENT_STATUS: Record<ShipmentStatus, SchoolStatus> = {
+  approved: 'kit approved',
+  'in transit': 'in transit',
+  delivered: 'delivered',
+  verified: 'verified',
+}
+
+/** Every school with its latest survey, tier, need score, status and shipment. */
+export async function getSchools(): Promise<SchoolView[]> {
+  const [surveys, shipments] = await Promise.all([getLatestSurveys(), getShipments()])
+
+  // One shipment per school: the most recently approved.
+  const shipmentOf = new Map<string, Shipment>()
+  for (const sh of shipments) {
+    const current = shipmentOf.get(sh.schoolId)
+    if (!current || sh.approvedAt >= current.approvedAt) shipmentOf.set(sh.schoolId, sh)
+  }
+
+  const schools = schoolsSeed.schools as School[]
+  const isEquipped = (s: School) => {
+    const st = shipmentOf.get(s.id)?.status
+    return st === 'delivered' || st === 'verified'
+  }
+  const equippedPoints = schools.filter(isEquipped)
+
+  return schools.map((school) => {
+    const survey = surveys.get(school.id) ?? null
+    const shipment = shipmentOf.get(school.id) ?? null
+    const status: SchoolStatus = shipment ? SHIPMENT_STATUS[shipment.status] : survey ? 'assessed' : 'unassessed'
+
+    let tier: Tier | null = null
+    let need: NeedInput | null = null
+    let score: number | null = null
+    if (survey) {
+      tier = tierFromSurvey(survey.power, survey.signal)
+      need = {
+        pupils: survey.pupils,
+        // The survey does not count existing devices; only delivered kits count.
+        devices: isEquipped(school) && shipment ? shipment.devices.length : 0,
+        tier,
+        distanceToEquippedKm: nearestKm(school, equippedPoints),
+      }
+      score = needScore(need)
+    }
+    return { ...school, survey, tier, need, needScore: score, status, shipment }
+  })
+}
+
+// ---------- partners and kits (seed data) ----------
+
+export async function getPartners(): Promise<Partner[]> {
+  await wait()
+  return partnersSeed.partners as Partner[]
+}
+
+export async function getKits(): Promise<Kit[]> {
+  await wait()
+  return kitsSeed.kits as Kit[]
 }
 
 // ---------- demo reset ----------

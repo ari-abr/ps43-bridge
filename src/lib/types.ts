@@ -23,6 +23,9 @@ export interface Survey {
 
 export type ShipmentStatus = 'approved' | 'in transit' | 'delivered' | 'verified'
 
+/** Where a school is in the journey, from its surveys and shipments. */
+export type SchoolStatus = 'unassessed' | 'assessed' | 'kit approved' | 'in transit' | 'delivered' | 'verified'
+
 export interface Device {
   id: string // printed as a QR code on the device
   type: 'laptop' | 'server'
