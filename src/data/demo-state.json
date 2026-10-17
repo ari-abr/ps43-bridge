@@ -1,0 +1,728 @@
+{
+ "note": "DEMO DATA: made-up survey answers and shipments for the demo. Schools not listed in \"surveys\" are unsurveyed (grey).",
+ "surveys": {
+  "sch-006": {
+   "power": "none",
+   "signal": "2G",
+   "pupils": 499,
+   "teachers": 17,
+   "secureRoom": true,
+   "surveyedAt": "2026-08-31"
+  },
+  "sch-060": {
+   "power": "none",
+   "signal": "2G",
+   "pupils": 443,
+   "teachers": 12,
+   "secureRoom": false,
+   "surveyedAt": "2026-08-04"
+  },
+  "sch-031": {
+   "power": "none",
+   "signal": "3G",
+   "pupils": 197,
+   "teachers": 5,
+   "secureRoom": true,
+   "surveyedAt": "2026-09-15"
+  },
+  "sch-012": {
+   "power": "none",
+   "signal": "2G",
+   "pupils": 615,
+   "teachers": 11,
+   "secureRoom": false,
+   "surveyedAt": "2026-09-08"
+  },
+  "sch-048": {
+   "power": "solar possible",
+   "signal": "none",
+   "pupils": 400,
+   "teachers": 11,
+   "secureRoom": false,
+   "surveyedAt": "2026-08-17"
+  },
+  "sch-084": {
+   "power": "solar possible",
+   "signal": "3G",
+   "pupils": 265,
+   "teachers": 5,
+   "secureRoom": false,
+   "surveyedAt": "2026-08-11"
+  },
+  "sch-099": {
+   "power": "solar possible",
+   "signal": "2G",
+   "pupils": 164,
+   "teachers": 3,
+   "secureRoom": true,
+   "surveyedAt": "2026-08-13"
+  },
+  "sch-087": {
+   "power": "unreliable grid",
+   "signal": "none",
+   "pupils": 608,
+   "teachers": 14,
+   "secureRoom": true,
+   "surveyedAt": "2026-08-10"
+  },
+  "sch-016": {
+   "power": "reliable grid",
+   "signal": "none",
+   "pupils": 346,
+   "teachers": 7,
+   "secureRoom": true,
+   "surveyedAt": "2026-08-29"
+  },
+  "sch-070": {
+   "power": "reliable grid",
+   "signal": "none",
+   "pupils": 84,
+   "teachers": 2,
+   "secureRoom": true,
+   "surveyedAt": "2026-09-13"
+  },
+  "sch-074": {
+   "power": "unreliable grid",
+   "signal": "3G",
+   "pupils": 247,
+   "teachers": 7,
+   "secureRoom": true,
+   "surveyedAt": "2026-08-29"
+  },
+  "sch-097": {
+   "power": "reliable grid",
+   "signal": "none",
+   "pupils": 369,
+   "teachers": 8,
+   "secureRoom": true,
+   "surveyedAt": "2026-08-05"
+  },
+  "sch-072": {
+   "power": "reliable grid",
+   "signal": "3G",
+   "pupils": 260,
+   "teachers": 7,
+   "secureRoom": true,
+   "surveyedAt": "2026-08-08"
+  },
+  "sch-032": {
+   "power": "reliable grid",
+   "signal": "3G",
+   "pupils": 227,
+   "teachers": 4,
+   "secureRoom": true,
+   "surveyedAt": "2026-08-25"
+  },
+  "sch-093": {
+   "power": "reliable grid",
+   "signal": "4G",
+   "pupils": 527,
+   "teachers": 15,
+   "secureRoom": true,
+   "surveyedAt": "2026-08-27"
+  },
+  "sch-177": {
+   "power": "none",
+   "signal": "2G",
+   "pupils": 255,
+   "teachers": 6,
+   "secureRoom": false,
+   "surveyedAt": "2026-08-04"
+  },
+  "sch-155": {
+   "power": "none",
+   "signal": "2G",
+   "pupils": 209,
+   "teachers": 5,
+   "secureRoom": false,
+   "surveyedAt": "2026-08-04"
+  },
+  "sch-170": {
+   "power": "none",
+   "signal": "3G",
+   "pupils": 157,
+   "teachers": 3,
+   "secureRoom": false,
+   "surveyedAt": "2026-08-27"
+  },
+  "sch-136": {
+   "power": "none",
+   "signal": "3G",
+   "pupils": 158,
+   "teachers": 5,
+   "secureRoom": false,
+   "surveyedAt": "2026-09-07"
+  },
+  "sch-140": {
+   "power": "solar possible",
+   "signal": "3G",
+   "pupils": 341,
+   "teachers": 9,
+   "secureRoom": false,
+   "surveyedAt": "2026-09-13"
+  },
+  "sch-151": {
+   "power": "solar possible",
+   "signal": "3G",
+   "pupils": 558,
+   "teachers": 13,
+   "secureRoom": false,
+   "surveyedAt": "2026-08-15"
+  },
+  "sch-172": {
+   "power": "solar possible",
+   "signal": "none",
+   "pupils": 501,
+   "teachers": 10,
+   "secureRoom": true,
+   "surveyedAt": "2026-09-07"
+  },
+  "sch-104": {
+   "power": "solar possible",
+   "signal": "3G",
+   "pupils": 166,
+   "teachers": 6,
+   "secureRoom": true,
+   "surveyedAt": "2026-09-03"
+  },
+  "sch-173": {
+   "power": "reliable grid",
+   "signal": "none",
+   "pupils": 520,
+   "teachers": 10,
+   "secureRoom": true,
+   "surveyedAt": "2026-09-08"
+  },
+  "sch-109": {
+   "power": "reliable grid",
+   "signal": "2G",
+   "pupils": 367,
+   "teachers": 12,
+   "secureRoom": true,
+   "surveyedAt": "2026-08-26"
+  },
+  "sch-158": {
+   "power": "unreliable grid",
+   "signal": "3G",
+   "pupils": 556,
+   "teachers": 12,
+   "secureRoom": false,
+   "surveyedAt": "2026-09-05"
+  },
+  "sch-120": {
+   "power": "unreliable grid",
+   "signal": "2G",
+   "pupils": 478,
+   "teachers": 12,
+   "secureRoom": true,
+   "surveyedAt": "2026-08-30"
+  },
+  "sch-147": {
+   "power": "reliable grid",
+   "signal": "4G",
+   "pupils": 191,
+   "teachers": 4,
+   "secureRoom": true,
+   "surveyedAt": "2026-08-23"
+  },
+  "sch-118": {
+   "power": "reliable grid",
+   "signal": "4G",
+   "pupils": 319,
+   "teachers": 9,
+   "secureRoom": true,
+   "surveyedAt": "2026-08-31"
+  },
+  "sch-190": {
+   "power": "reliable grid",
+   "signal": "4G",
+   "pupils": 299,
+   "teachers": 10,
+   "secureRoom": true,
+   "surveyedAt": "2026-09-12"
+  },
+  "sch-260": {
+   "power": "none",
+   "signal": "2G",
+   "pupils": 395,
+   "teachers": 14,
+   "secureRoom": false,
+   "surveyedAt": "2026-08-06"
+  },
+  "sch-283": {
+   "power": "none",
+   "signal": "3G",
+   "pupils": 147,
+   "teachers": 4,
+   "secureRoom": false,
+   "surveyedAt": "2026-08-23"
+  },
+  "sch-237": {
+   "power": "none",
+   "signal": "3G",
+   "pupils": 196,
+   "teachers": 4,
+   "secureRoom": false,
+   "surveyedAt": "2026-09-11"
+  },
+  "sch-294": {
+   "power": "none",
+   "signal": "2G",
+   "pupils": 283,
+   "teachers": 7,
+   "secureRoom": false,
+   "surveyedAt": "2026-09-14"
+  },
+  "sch-214": {
+   "power": "solar possible",
+   "signal": "2G",
+   "pupils": 615,
+   "teachers": 15,
+   "secureRoom": false,
+   "surveyedAt": "2026-08-09"
+  },
+  "sch-250": {
+   "power": "unreliable grid",
+   "signal": "none",
+   "pupils": 493,
+   "teachers": 11,
+   "secureRoom": true,
+   "surveyedAt": "2026-08-09"
+  },
+  "sch-213": {
+   "power": "unreliable grid",
+   "signal": "none",
+   "pupils": 238,
+   "teachers": 9,
+   "secureRoom": false,
+   "surveyedAt": "2026-08-06"
+  },
+  "sch-235": {
+   "power": "solar possible",
+   "signal": "none",
+   "pupils": 294,
+   "teachers": 6,
+   "secureRoom": false,
+   "surveyedAt": "2026-08-24"
+  },
+  "sch-201": {
+   "power": "reliable grid",
+   "signal": "2G",
+   "pupils": 469,
+   "teachers": 17,
+   "secureRoom": true,
+   "surveyedAt": "2026-08-01"
+  },
+  "sch-246": {
+   "power": "unreliable grid",
+   "signal": "3G",
+   "pupils": 179,
+   "teachers": 4,
+   "secureRoom": true,
+   "surveyedAt": "2026-08-22"
+  },
+  "sch-210": {
+   "power": "unreliable grid",
+   "signal": "2G",
+   "pupils": 427,
+   "teachers": 12,
+   "secureRoom": true,
+   "surveyedAt": "2026-09-12"
+  },
+  "sch-205": {
+   "power": "reliable grid",
+   "signal": "none",
+   "pupils": 451,
+   "teachers": 10,
+   "secureRoom": true,
+   "surveyedAt": "2026-08-19"
+  },
+  "sch-262": {
+   "power": "reliable grid",
+   "signal": "4G",
+   "pupils": 252,
+   "teachers": 6,
+   "secureRoom": true,
+   "surveyedAt": "2026-08-20"
+  },
+  "sch-244": {
+   "power": "reliable grid",
+   "signal": "4G",
+   "pupils": 276,
+   "teachers": 6,
+   "secureRoom": true,
+   "surveyedAt": "2026-08-24"
+  },
+  "sch-298": {
+   "power": "reliable grid",
+   "signal": "3G",
+   "pupils": 290,
+   "teachers": 7,
+   "secureRoom": true,
+   "surveyedAt": "2026-08-14"
+  }
+ },
+ "shipments": [
+  {
+   "id": "ship-01",
+   "schoolId": "sch-031",
+   "kitId": "kit-tier-0",
+   "tier": 0,
+   "transporterId": "partner-02",
+   "status": "approved",
+   "approvedAt": "2026-09-19",
+   "devices": []
+  },
+  {
+   "id": "ship-02",
+   "schoolId": "sch-140",
+   "kitId": "kit-tier-1",
+   "tier": 1,
+   "transporterId": "partner-06",
+   "status": "in transit",
+   "approvedAt": "2026-09-18",
+   "devices": [
+    {
+     "id": "DEV-02-01",
+     "type": "server"
+    },
+    {
+     "id": "DEV-02-02",
+     "type": "laptop"
+    },
+    {
+     "id": "DEV-02-03",
+     "type": "laptop"
+    },
+    {
+     "id": "DEV-02-04",
+     "type": "laptop"
+    },
+    {
+     "id": "DEV-02-05",
+     "type": "laptop"
+    },
+    {
+     "id": "DEV-02-06",
+     "type": "laptop"
+    },
+    {
+     "id": "DEV-02-07",
+     "type": "laptop"
+    },
+    {
+     "id": "DEV-02-08",
+     "type": "laptop"
+    },
+    {
+     "id": "DEV-02-09",
+     "type": "laptop"
+    }
+   ],
+   "shippedAt": "2026-09-22"
+  },
+  {
+   "id": "ship-03",
+   "schoolId": "sch-210",
+   "kitId": "kit-tier-2",
+   "tier": 2,
+   "transporterId": "partner-04",
+   "status": "delivered",
+   "approvedAt": "2026-09-22",
+   "devices": [
+    {
+     "id": "DEV-03-01",
+     "type": "server"
+    },
+    {
+     "id": "DEV-03-02",
+     "type": "laptop"
+    },
+    {
+     "id": "DEV-03-03",
+     "type": "laptop"
+    },
+    {
+     "id": "DEV-03-04",
+     "type": "laptop"
+    },
+    {
+     "id": "DEV-03-05",
+     "type": "laptop"
+    },
+    {
+     "id": "DEV-03-06",
+     "type": "laptop"
+    },
+    {
+     "id": "DEV-03-07",
+     "type": "laptop"
+    },
+    {
+     "id": "DEV-03-08",
+     "type": "laptop"
+    },
+    {
+     "id": "DEV-03-09",
+     "type": "laptop"
+    },
+    {
+     "id": "DEV-03-10",
+     "type": "laptop"
+    },
+    {
+     "id": "DEV-03-11",
+     "type": "laptop"
+    },
+    {
+     "id": "DEV-03-12",
+     "type": "laptop"
+    },
+    {
+     "id": "DEV-03-13",
+     "type": "laptop"
+    },
+    {
+     "id": "DEV-03-14",
+     "type": "laptop"
+    },
+    {
+     "id": "DEV-03-15",
+     "type": "laptop"
+    },
+    {
+     "id": "DEV-03-16",
+     "type": "laptop"
+    }
+   ],
+   "shippedAt": "2026-09-27",
+   "deliveredAt": "2026-10-05"
+  },
+  {
+   "id": "ship-04",
+   "schoolId": "sch-012",
+   "kitId": "kit-tier-0",
+   "tier": 0,
+   "transporterId": "partner-02",
+   "status": "verified",
+   "approvedAt": "2026-09-22",
+   "devices": [],
+   "shippedAt": "2026-09-27",
+   "deliveredAt": "2026-10-01",
+   "verifiedAt": "2026-10-06"
+  },
+  {
+   "id": "ship-05",
+   "schoolId": "sch-136",
+   "kitId": "kit-tier-0",
+   "tier": 0,
+   "transporterId": "partner-06",
+   "status": "approved",
+   "approvedAt": "2026-09-20",
+   "devices": []
+  },
+  {
+   "id": "ship-06",
+   "schoolId": "sch-205",
+   "kitId": "kit-tier-2",
+   "tier": 2,
+   "transporterId": "partner-04",
+   "status": "in transit",
+   "approvedAt": "2026-09-21",
+   "devices": [
+    {
+     "id": "DEV-06-01",
+     "type": "server"
+    },
+    {
+     "id": "DEV-06-02",
+     "type": "laptop"
+    },
+    {
+     "id": "DEV-06-03",
+     "type": "laptop"
+    },
+    {
+     "id": "DEV-06-04",
+     "type": "laptop"
+    },
+    {
+     "id": "DEV-06-05",
+     "type": "laptop"
+    },
+    {
+     "id": "DEV-06-06",
+     "type": "laptop"
+    },
+    {
+     "id": "DEV-06-07",
+     "type": "laptop"
+    },
+    {
+     "id": "DEV-06-08",
+     "type": "laptop"
+    },
+    {
+     "id": "DEV-06-09",
+     "type": "laptop"
+    },
+    {
+     "id": "DEV-06-10",
+     "type": "laptop"
+    },
+    {
+     "id": "DEV-06-11",
+     "type": "laptop"
+    },
+    {
+     "id": "DEV-06-12",
+     "type": "laptop"
+    },
+    {
+     "id": "DEV-06-13",
+     "type": "laptop"
+    },
+    {
+     "id": "DEV-06-14",
+     "type": "laptop"
+    },
+    {
+     "id": "DEV-06-15",
+     "type": "laptop"
+    },
+    {
+     "id": "DEV-06-16",
+     "type": "laptop"
+    }
+   ],
+   "shippedAt": "2026-09-25"
+  },
+  {
+   "id": "ship-07",
+   "schoolId": "sch-087",
+   "kitId": "kit-tier-1",
+   "tier": 1,
+   "transporterId": "partner-02",
+   "status": "delivered",
+   "approvedAt": "2026-09-17",
+   "devices": [
+    {
+     "id": "DEV-07-01",
+     "type": "server"
+    },
+    {
+     "id": "DEV-07-02",
+     "type": "laptop"
+    },
+    {
+     "id": "DEV-07-03",
+     "type": "laptop"
+    },
+    {
+     "id": "DEV-07-04",
+     "type": "laptop"
+    },
+    {
+     "id": "DEV-07-05",
+     "type": "laptop"
+    },
+    {
+     "id": "DEV-07-06",
+     "type": "laptop"
+    },
+    {
+     "id": "DEV-07-07",
+     "type": "laptop"
+    },
+    {
+     "id": "DEV-07-08",
+     "type": "laptop"
+    },
+    {
+     "id": "DEV-07-09",
+     "type": "laptop"
+    }
+   ],
+   "shippedAt": "2026-09-24",
+   "deliveredAt": "2026-09-29"
+  },
+  {
+   "id": "ship-08",
+   "schoolId": "sch-120",
+   "kitId": "kit-tier-2",
+   "tier": 2,
+   "transporterId": "partner-06",
+   "status": "verified",
+   "approvedAt": "2026-09-20",
+   "devices": [
+    {
+     "id": "DEV-08-01",
+     "type": "server"
+    },
+    {
+     "id": "DEV-08-02",
+     "type": "laptop"
+    },
+    {
+     "id": "DEV-08-03",
+     "type": "laptop"
+    },
+    {
+     "id": "DEV-08-04",
+     "type": "laptop"
+    },
+    {
+     "id": "DEV-08-05",
+     "type": "laptop"
+    },
+    {
+     "id": "DEV-08-06",
+     "type": "laptop"
+    },
+    {
+     "id": "DEV-08-07",
+     "type": "laptop"
+    },
+    {
+     "id": "DEV-08-08",
+     "type": "laptop"
+    },
+    {
+     "id": "DEV-08-09",
+     "type": "laptop"
+    },
+    {
+     "id": "DEV-08-10",
+     "type": "laptop"
+    },
+    {
+     "id": "DEV-08-11",
+     "type": "laptop"
+    },
+    {
+     "id": "DEV-08-12",
+     "type": "laptop"
+    },
+    {
+     "id": "DEV-08-13",
+     "type": "laptop"
+    },
+    {
+     "id": "DEV-08-14",
+     "type": "laptop"
+    },
+    {
+     "id": "DEV-08-15",
+     "type": "laptop"
+    },
+    {
+     "id": "DEV-08-16",
+     "type": "laptop"
+    }
+   ],
+   "shippedAt": "2026-09-26",
+   "deliveredAt": "2026-10-04",
+   "verifiedAt": "2026-10-06"
+  }
+ ]
+}

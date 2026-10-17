@@ -1,0 +1,140 @@
+{
+ "note": "DEMO DATA: all partners are fictional.",
+ "trustLevels": [
+  {
+   "level": 1,
+   "label": "Referred"
+  },
+  {
+   "level": 2,
+   "label": "Checked"
+  },
+  {
+   "level": 3,
+   "label": "Vouched"
+  },
+  {
+   "level": 4,
+   "label": "Proven"
+  },
+  {
+   "level": 5,
+   "label": "Trusted"
+  }
+ ],
+ "partners": [
+  {
+   "id": "partner-01",
+   "name": "Wouri Refurb Works",
+   "type": "refurbisher",
+   "city": "Douala",
+   "lat": 4.0511,
+   "lng": 9.7679,
+   "supplies": [
+    "refurbished laptops",
+    "Raspberry Pi servers",
+    "repairs"
+   ],
+   "trust": 4,
+   "trustLabel": "Proven"
+  },
+  {
+   "id": "partner-02",
+   "name": "Littoral Roadrunner Freight",
+   "type": "transporter",
+   "city": "Douala",
+   "lat": 4.0435,
+   "lng": 9.7061,
+   "supplies": [
+    "road freight",
+    "kit delivery"
+   ],
+   "trust": 2,
+   "trustLabel": "Checked"
+  },
+  {
+   "id": "partner-03",
+   "name": "Sanaga Solar Services",
+   "type": "solar installer",
+   "city": "Yaoundé",
+   "lat": 3.848,
+   "lng": 11.5021,
+   "supplies": [
+    "solar panels",
+    "batteries",
+    "installation"
+   ],
+   "trust": 3,
+   "trustLabel": "Vouched"
+  },
+  {
+   "id": "partner-04",
+   "name": "Mfoundi Cargo Link",
+   "type": "transporter",
+   "city": "Yaoundé",
+   "lat": 3.8667,
+   "lng": 11.5167,
+   "supplies": [
+    "road freight",
+    "kit delivery"
+   ],
+   "trust": 4,
+   "trustLabel": "Proven"
+  },
+  {
+   "id": "partner-05",
+   "name": "Capital Laptop Giving Circle",
+   "type": "laptop donor",
+   "city": "Yaoundé",
+   "lat": 3.8721,
+   "lng": 11.4935,
+   "supplies": [
+    "donated laptops"
+   ],
+   "trust": 5,
+   "trustLabel": "Trusted"
+  },
+  {
+   "id": "partner-06",
+   "name": "Highland Haulage",
+   "type": "transporter",
+   "city": "Bafoussam",
+   "lat": 5.4737,
+   "lng": 10.4179,
+   "supplies": [
+    "road freight",
+    "kit delivery"
+   ],
+   "trust": 5,
+   "trustLabel": "Trusted"
+  },
+  {
+   "id": "partner-07",
+   "name": "Grassfields Laptop Donors",
+   "type": "laptop donor",
+   "city": "Bafoussam",
+   "lat": 5.4812,
+   "lng": 10.4263,
+   "supplies": [
+    "donated laptops",
+    "chargers"
+   ],
+   "trust": 3,
+   "trustLabel": "Vouched"
+  },
+  {
+   "id": "partner-08",
+   "name": "Noun Valley Solar",
+   "type": "solar installer",
+   "city": "Foumban",
+   "lat": 5.7266,
+   "lng": 10.8986,
+   "supplies": [
+    "solar panels",
+    "installation"
+   ],
+   "trust": 1,
+   "trustLabel": "Referred"
+  }
+ ]
+}

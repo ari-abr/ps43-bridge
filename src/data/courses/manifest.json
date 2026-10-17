@@ -1,0 +1,13 @@
+{
+ "packs": [
+  {
+   "id": "times-tables",
+   "title": "Times Tables",
+   "latestVersion": 2,
+   "files": {
+    "1": "times-tables-v1.json",
+    "2": "times-tables-v2.json"
+   }
+  }
+ ]
+}

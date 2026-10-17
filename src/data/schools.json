@@ -1,0 +1,2405 @@
+{
+ "note": "DEMO DATA: fictional names for a hackathon demo. Coordinates come from OpenStreetMap.",
+ "schools": [
+  {
+   "id": "sch-001",
+   "osmId": "node/13406406947",
+   "name": "Ecole Bilingue Djatiba",
+   "region": "Littoral",
+   "lat": 4.02788,
+   "lng": 9.72318
+  },
+  {
+   "id": "sch-002",
+   "osmId": "node/3074851761",
+   "name": "Presbyterian Primary School Lobekou",
+   "region": "Littoral",
+   "lat": 4.04922,
+   "lng": 9.73557
+  },
+  {
+   "id": "sch-003",
+   "osmId": "node/3074851763",
+   "name": "Ecole Publique Fonkou",
+   "region": "Littoral",
+   "lat": 4.02443,
+   "lng": 9.70895
+  },
+  {
+   "id": "sch-004",
+   "osmId": "node/3074851771",
+   "name": "Government Primary School Ndoya",
+   "region": "Littoral",
+   "lat": 4.01934,
+   "lng": 9.76895
+  },
+  {
+   "id": "sch-005",
+   "osmId": "node/3074851773",
+   "name": "Community Primary School Nkolton",
+   "region": "Littoral",
+   "lat": 4.03046,
+   "lng": 9.68813
+  },
+  {
+   "id": "sch-006",
+   "osmId": "node/3074851778",
+   "name": "Government Primary School Kumkou",
+   "region": "Littoral",
+   "lat": 4.05341,
+   "lng": 9.72098
+  },
+  {
+   "id": "sch-007",
+   "osmId": "node/3074851786",
+   "name": "Ecole Primaire Catholique Fonkou",
+   "region": "Littoral",
+   "lat": 4.04399,
+   "lng": 9.7351
+  },
+  {
+   "id": "sch-008",
+   "osmId": "node/3074851788",
+   "name": "Government Primary School Ekonndé",
+   "region": "Littoral",
+   "lat": 4.03024,
+   "lng": 9.69573
+  },
+  {
+   "id": "sch-009",
+   "osmId": "node/3074851794",
+   "name": "Community Primary School Ndonkam",
+   "region": "Littoral",
+   "lat": 3.9813,
+   "lng": 9.76754
+  },
+  {
+   "id": "sch-010",
+   "osmId": "node/3074851801",
+   "name": "Government Primary School Kumndé",
+   "region": "Littoral",
+   "lat": 4.02131,
+   "lng": 9.77298
+  },
+  {
+   "id": "sch-011",
+   "osmId": "node/3074851815",
+   "name": "Ecole Publique Nkolgou",
+   "region": "Littoral",
+   "lat": 4.01374,
+   "lng": 9.77013
+  },
+  {
+   "id": "sch-012",
+   "osmId": "node/3074851818",
+   "name": "Ecole Bilingue Mbemba",
+   "region": "Littoral",
+   "lat": 4.0894,
+   "lng": 9.75476
+  },
+  {
+   "id": "sch-013",
+   "osmId": "node/3074851827",
+   "name": "Ecole Primaire Catholique Mbemang",
+   "region": "Littoral",
+   "lat": 3.98962,
+   "lng": 9.76488
+  },
+  {
+   "id": "sch-014",
+   "osmId": "node/3074851829",
+   "name": "Ecole Bilingue Nkolgou",
+   "region": "Littoral",
+   "lat": 4.07638,
+   "lng": 9.8036
+  },
+  {
+   "id": "sch-015",
+   "osmId": "node/3074852436",
+   "name": "Ecole Publique Banagou",
+   "region": "Littoral",
+   "lat": 4.04078,
+   "lng": 9.73104
+  },
+  {
+   "id": "sch-016",
+   "osmId": "node/3074852443",
+   "name": "Ecole Primaire Catholique Ndomba",
+   "region": "Littoral",
+   "lat": 4.03847,
+   "lng": 9.77209
+  },
+  {
+   "id": "sch-017",
+   "osmId": "node/3074852451",
+   "name": "Government Primary School Mbeya",
+   "region": "Littoral",
+   "lat": 4.05251,
+   "lng": 9.73444
+  },
+  {
+   "id": "sch-018",
+   "osmId": "node/3074852463",
+   "name": "Presbyterian Primary School Tolonkam",
+   "region": "Littoral",
+   "lat": 3.99732,
+   "lng": 9.74715
+  },
+  {
+   "id": "sch-019",
+   "osmId": "node/3074852475",
+   "name": "Government Primary School Banalan",
+   "region": "Littoral",
+   "lat": 4.08678,
+   "lng": 9.75478
+  },
+  {
+   "id": "sch-020",
+   "osmId": "node/3074852477",
+   "name": "Ecole Publique Mvogbele",
+   "region": "Littoral",
+   "lat": 4.00624,
+   "lng": 9.76295
+  },
+  {
+   "id": "sch-021",
+   "osmId": "node/3074852482",
+   "name": "Ecole Publique Sangaya",
+   "region": "Littoral",
+   "lat": 4.06404,
+   "lng": 9.73833
+  },
+  {
+   "id": "sch-022",
+   "osmId": "node/3074852484",
+   "name": "Government Primary School Fongou",
+   "region": "Littoral",
+   "lat": 4.03929,
+   "lng": 9.77118
+  },
+  {
+   "id": "sch-023",
+   "osmId": "node/3074852493",
+   "name": "Ecole Bilingue Mvogton",
+   "region": "Littoral",
+   "lat": 4.04484,
+   "lng": 9.75379
+  },
+  {
+   "id": "sch-024",
+   "osmId": "node/3074852494",
+   "name": "Presbyterian Primary School Fonmba",
+   "region": "Littoral",
+   "lat": 4.02513,
+   "lng": 9.74157
+  },
+  {
+   "id": "sch-025",
+   "osmId": "node/3074852499",
+   "name": "Presbyterian Primary School Ndondé",
+   "region": "Littoral",
+   "lat": 4.05803,
+   "lng": 9.74061
+  },
+  {
+   "id": "sch-026",
+   "osmId": "node/3074852501",
+   "name": "Community Primary School Ekonmba",
+   "region": "Littoral",
+   "lat": 4.04325,
+   "lng": 9.75494
+  },
+  {
+   "id": "sch-027",
+   "osmId": "node/3074852507",
+   "name": "Presbyterian Primary School Tolomang",
+   "region": "Littoral",
+   "lat": 4.10057,
+   "lng": 9.75466
+  },
+  {
+   "id": "sch-028",
+   "osmId": "node/3074852511",
+   "name": "Presbyterian Primary School Fonbele",
+   "region": "Littoral",
+   "lat": 3.99309,
+   "lng": 9.75688
+  },
+  {
+   "id": "sch-029",
+   "osmId": "node/3074852516",
+   "name": "Ecole Publique Tolotiba",
+   "region": "Littoral",
+   "lat": 3.99466,
+   "lng": 9.77033
+  },
+  {
+   "id": "sch-030",
+   "osmId": "node/3074852637",
+   "name": "Community Primary School Djakou",
+   "region": "Littoral",
+   "lat": 4.02534,
+   "lng": 9.69165
+  },
+  {
+   "id": "sch-031",
+   "osmId": "node/3074852643",
+   "name": "Presbyterian Primary School Mbemang",
+   "region": "Littoral",
+   "lat": 4.04554,
+   "lng": 9.73687
+  },
+  {
+   "id": "sch-032",
+   "osmId": "node/3074852649",
+   "name": "Government Primary School Djaton",
+   "region": "Littoral",
+   "lat": 4.04837,
+   "lng": 9.70027
+  },
+  {
+   "id": "sch-033",
+   "osmId": "node/3074852653",
+   "name": "Community Primary School Tolokou",
+   "region": "Littoral",
+   "lat": 4.00009,
+   "lng": 9.76124
+  },
+  {
+   "id": "sch-034",
+   "osmId": "node/3074852661",
+   "name": "Government Primary School Ndondé",
+   "region": "Littoral",
+   "lat": 4.07729,
+   "lng": 9.74646
+  },
+  {
+   "id": "sch-035",
+   "osmId": "node/3074852687",
+   "name": "Ecole Bilingue Tolosso",
+   "region": "Littoral",
+   "lat": 4.09833,
+   "lng": 9.74697
+  },
+  {
+   "id": "sch-036",
+   "osmId": "node/3074852717",
+   "name": "Presbyterian Primary School Tolokou",
+   "region": "Littoral",
+   "lat": 4.05467,
+   "lng": 9.73123
+  },
+  {
+   "id": "sch-037",
+   "osmId": "node/3074852722",
+   "name": "Ecole Publique Ekonya",
+   "region": "Littoral",
+   "lat": 4.05158,
+   "lng": 9.70208
+  },
+  {
+   "id": "sch-038",
+   "osmId": "node/3074852726",
+   "name": "Government Primary School Djabele",
+   "region": "Littoral",
+   "lat": 4.01049,
+   "lng": 9.73015
+  },
+  {
+   "id": "sch-039",
+   "osmId": "node/3074852727",
+   "name": "Ecole Publique Lobesso",
+   "region": "Littoral",
+   "lat": 4.04832,
+   "lng": 9.7484
+  },
+  {
+   "id": "sch-040",
+   "osmId": "node/3074852834",
+   "name": "Ecole Publique Banankam",
+   "region": "Littoral",
+   "lat": 4.05857,
+   "lng": 9.70165
+  },
+  {
+   "id": "sch-041",
+   "osmId": "node/3074852839",
+   "name": "Ecole Publique Ekonton",
+   "region": "Littoral",
+   "lat": 4.0619,
+   "lng": 9.76634
+  },
+  {
+   "id": "sch-042",
+   "osmId": "node/3074852846",
+   "name": "Presbyterian Primary School Sangaton",
+   "region": "Littoral",
+   "lat": 4.0317,
+   "lng": 9.79521
+  },
+  {
+   "id": "sch-043",
+   "osmId": "node/3074852862",
+   "name": "Community Primary School Djabele",
+   "region": "Littoral",
+   "lat": 4.0514,
+   "lng": 9.71776
+  },
+  {
+   "id": "sch-044",
+   "osmId": "node/3074852866",
+   "name": "Community Primary School Djasso",
+   "region": "Littoral",
+   "lat": 3.99988,
+   "lng": 9.75188
+  },
+  {
+   "id": "sch-045",
+   "osmId": "node/3074852877",
+   "name": "Presbyterian Primary School Kumgou",
+   "region": "Littoral",
+   "lat": 4.06594,
+   "lng": 9.71473
+  },
+  {
+   "id": "sch-046",
+   "osmId": "node/3074852883",
+   "name": "Ecole Primaire Catholique Fonton",
+   "region": "Littoral",
+   "lat": 4.00026,
+   "lng": 9.7523
+  },
+  {
+   "id": "sch-047",
+   "osmId": "node/3074852888",
+   "name": "Ecole Bilingue Nkollan",
+   "region": "Littoral",
+   "lat": 4.0296,
+   "lng": 9.70978
+  },
+  {
+   "id": "sch-048",
+   "osmId": "node/3074852889",
+   "name": "Presbyterian Primary School Ekonbele",
+   "region": "Littoral",
+   "lat": 3.99623,
+   "lng": 9.76866
+  },
+  {
+   "id": "sch-049",
+   "osmId": "node/3074852891",
+   "name": "Community Primary School Fonmang",
+   "region": "Littoral",
+   "lat": 3.99539,
+   "lng": 9.7725
+  },
+  {
+   "id": "sch-050",
+   "osmId": "node/3074852898",
+   "name": "Community Primary School Mvognkam",
+   "region": "Littoral",
+   "lat": 4.03325,
+   "lng": 9.70777
+  },
+  {
+   "id": "sch-051",
+   "osmId": "node/3074852904",
+   "name": "Ecole Primaire Catholique Fonbele",
+   "region": "Littoral",
+   "lat": 3.9955,
+   "lng": 9.7797
+  },
+  {
+   "id": "sch-052",
+   "osmId": "node/3074852910",
+   "name": "Government Primary School Banasso",
+   "region": "Littoral",
+   "lat": 3.98155,
+   "lng": 9.80386
+  },
+  {
+   "id": "sch-053",
+   "osmId": "node/3074852914",
+   "name": "Presbyterian Primary School Kumkou",
+   "region": "Littoral",
+   "lat": 4.05671,
+   "lng": 9.76079
+  },
+  {
+   "id": "sch-054",
+   "osmId": "node/3074852916",
+   "name": "Ecole Bilingue Banaton",
+   "region": "Littoral",
+   "lat": 4.01023,
+   "lng": 9.7259
+  },
+  {
+   "id": "sch-055",
+   "osmId": "node/3074852959",
+   "name": "Government Primary School Fongou 3",
+   "region": "Littoral",
+   "lat": 4.02642,
+   "lng": 9.7027
+  },
+  {
+   "id": "sch-056",
+   "osmId": "node/3074852964",
+   "name": "Presbyterian Primary School Mbeton",
+   "region": "Littoral",
+   "lat": 4.04518,
+   "lng": 9.75422
+  },
+  {
+   "id": "sch-057",
+   "osmId": "node/3074852966",
+   "name": "Ecole Publique Mbebele",
+   "region": "Littoral",
+   "lat": 4.0513,
+   "lng": 9.74744
+  },
+  {
+   "id": "sch-058",
+   "osmId": "node/3074974188",
+   "name": "Government Primary School Nkoltiba",
+   "region": "Littoral",
+   "lat": 4.02774,
+   "lng": 9.74155
+  },
+  {
+   "id": "sch-059",
+   "osmId": "node/3255758495",
+   "name": "Ecole Bilingue Nkolndé",
+   "region": "Littoral",
+   "lat": 4.0066,
+   "lng": 9.74731
+  },
+  {
+   "id": "sch-060",
+   "osmId": "node/4394185964",
+   "name": "Government Primary School Banagou",
+   "region": "Littoral",
+   "lat": 4.07935,
+   "lng": 9.79023
+  },
+  {
+   "id": "sch-061",
+   "osmId": "node/4444144974",
+   "name": "Ecole Publique Lobeya",
+   "region": "Littoral",
+   "lat": 4.08368,
+   "lng": 9.65319
+  },
+  {
+   "id": "sch-062",
+   "osmId": "node/4446073923",
+   "name": "Ecole Primaire Catholique Djabele",
+   "region": "Littoral",
+   "lat": 3.99884,
+   "lng": 9.76089
+  },
+  {
+   "id": "sch-063",
+   "osmId": "node/4446073924",
+   "name": "Presbyterian Primary School Kumndé",
+   "region": "Littoral",
+   "lat": 3.99832,
+   "lng": 9.7604
+  },
+  {
+   "id": "sch-064",
+   "osmId": "node/4447581357",
+   "name": "Government Primary School Kumgou",
+   "region": "Littoral",
+   "lat": 4.02663,
+   "lng": 9.79264
+  },
+  {
+   "id": "sch-065",
+   "osmId": "node/4447581360",
+   "name": "Ecole Bilingue Lobendé",
+   "region": "Littoral",
+   "lat": 4.02763,
+   "lng": 9.79163
+  },
+  {
+   "id": "sch-066",
+   "osmId": "node/4468111252",
+   "name": "Community Primary School Fonmang 8",
+   "region": "Littoral",
+   "lat": 4.06628,
+   "lng": 9.65386
+  },
+  {
+   "id": "sch-067",
+   "osmId": "node/4468113300",
+   "name": "Presbyterian Primary School Djalan",
+   "region": "Littoral",
+   "lat": 4.08615,
+   "lng": 9.65483
+  },
+  {
+   "id": "sch-068",
+   "osmId": "node/8148533717",
+   "name": "Community Primary School Mbendé",
+   "region": "Littoral",
+   "lat": 4.07052,
+   "lng": 9.72411
+  },
+  {
+   "id": "sch-069",
+   "osmId": "node/9425491617",
+   "name": "Government Primary School Banamba",
+   "region": "Littoral",
+   "lat": 4.0838,
+   "lng": 9.7798
+  },
+  {
+   "id": "sch-070",
+   "osmId": "way/298313616",
+   "name": "Presbyterian Primary School Ekonya",
+   "region": "Littoral",
+   "lat": 4.10311,
+   "lng": 9.64577
+  },
+  {
+   "id": "sch-071",
+   "osmId": "way/298436008",
+   "name": "Presbyterian Primary School Banalan",
+   "region": "Littoral",
+   "lat": 4.07931,
+   "lng": 9.66305
+  },
+  {
+   "id": "sch-072",
+   "osmId": "way/299451362",
+   "name": "Ecole Bilingue Mvogmba",
+   "region": "Littoral",
+   "lat": 4.07615,
+   "lng": 9.67595
+  },
+  {
+   "id": "sch-073",
+   "osmId": "way/299769315",
+   "name": "Community Primary School Tolosso",
+   "region": "Littoral",
+   "lat": 4.06081,
+   "lng": 9.72278
+  },
+  {
+   "id": "sch-074",
+   "osmId": "way/300246918",
+   "name": "Presbyterian Primary School Djasso",
+   "region": "Littoral",
+   "lat": 4.08634,
+   "lng": 9.75214
+  },
+  {
+   "id": "sch-075",
+   "osmId": "way/300454187",
+   "name": "Community Primary School Tolondé",
+   "region": "Littoral",
+   "lat": 4.08584,
+   "lng": 9.7684
+  },
+  {
+   "id": "sch-076",
+   "osmId": "way/303078213",
+   "name": "Ecole Primaire Catholique Lobemang",
+   "region": "Littoral",
+   "lat": 4.0924,
+   "lng": 9.65718
+  },
+  {
+   "id": "sch-077",
+   "osmId": "way/303080395",
+   "name": "Ecole Primaire Catholique Mbetiba",
+   "region": "Littoral",
+   "lat": 4.08743,
+   "lng": 9.67344
+  },
+  {
+   "id": "sch-078",
+   "osmId": "way/303161508",
+   "name": "Ecole Primaire Catholique Banatiba",
+   "region": "Littoral",
+   "lat": 4.08739,
+   "lng": 9.66997
+  },
+  {
+   "id": "sch-079",
+   "osmId": "way/303162874",
+   "name": "Ecole Primaire Catholique Mvogmba",
+   "region": "Littoral",
+   "lat": 4.08728,
+   "lng": 9.66834
+  },
+  {
+   "id": "sch-080",
+   "osmId": "way/303164867",
+   "name": "Ecole Bilingue Sangagou",
+   "region": "Littoral",
+   "lat": 4.08343,
+   "lng": 9.65918
+  },
+  {
+   "id": "sch-081",
+   "osmId": "way/303167263",
+   "name": "Government Primary School Kumya",
+   "region": "Littoral",
+   "lat": 4.06578,
+   "lng": 9.66659
+  },
+  {
+   "id": "sch-082",
+   "osmId": "way/303169449",
+   "name": "Ecole Primaire Catholique Ekongou",
+   "region": "Littoral",
+   "lat": 4.07209,
+   "lng": 9.66874
+  },
+  {
+   "id": "sch-083",
+   "osmId": "way/303172390",
+   "name": "Ecole Bilingue Nkolton",
+   "region": "Littoral",
+   "lat": 4.07325,
+   "lng": 9.66623
+  },
+  {
+   "id": "sch-084",
+   "osmId": "way/303174644",
+   "name": "Presbyterian Primary School Mbetiba",
+   "region": "Littoral",
+   "lat": 4.08024,
+   "lng": 9.66082
+  },
+  {
+   "id": "sch-085",
+   "osmId": "way/303223910",
+   "name": "Ecole Publique Nkolndé",
+   "region": "Littoral",
+   "lat": 4.08484,
+   "lng": 9.67126
+  },
+  {
+   "id": "sch-086",
+   "osmId": "way/335380665",
+   "name": "Ecole Publique Ekonlan",
+   "region": "Littoral",
+   "lat": 4.01155,
+   "lng": 9.74845
+  },
+  {
+   "id": "sch-087",
+   "osmId": "way/368957382",
+   "name": "Ecole Bilingue Nkolmang",
+   "region": "Littoral",
+   "lat": 4.12953,
+   "lng": 9.58039
+  },
+  {
+   "id": "sch-088",
+   "osmId": "way/368958188",
+   "name": "Community Primary School Ekonya",
+   "region": "Littoral",
+   "lat": 4.18448,
+   "lng": 9.59822
+  },
+  {
+   "id": "sch-089",
+   "osmId": "way/368958691",
+   "name": "Government Primary School Ekonmang",
+   "region": "Littoral",
+   "lat": 4.17925,
+   "lng": 9.65628
+  },
+  {
+   "id": "sch-090",
+   "osmId": "way/368958970",
+   "name": "Ecole Publique Mvognkam",
+   "region": "Littoral",
+   "lat": 4.16921,
+   "lng": 9.67363
+  },
+  {
+   "id": "sch-091",
+   "osmId": "way/441137898",
+   "name": "Presbyterian Primary School Sangankam",
+   "region": "Littoral",
+   "lat": 4.0948,
+   "lng": 9.77651
+  },
+  {
+   "id": "sch-092",
+   "osmId": "way/441708705",
+   "name": "Community Primary School Sangasso",
+   "region": "Littoral",
+   "lat": 4.07968,
+   "lng": 9.78412
+  },
+  {
+   "id": "sch-093",
+   "osmId": "way/450614578",
+   "name": "Ecole Primaire Catholique Ekongou 9",
+   "region": "Littoral",
+   "lat": 4.08484,
+   "lng": 9.7359
+  },
+  {
+   "id": "sch-094",
+   "osmId": "way/454357963",
+   "name": "Ecole Primaire Catholique Nkolya",
+   "region": "Littoral",
+   "lat": 4.03076,
+   "lng": 9.79972
+  },
+  {
+   "id": "sch-095",
+   "osmId": "way/454412802",
+   "name": "Ecole Publique Mbetiba",
+   "region": "Littoral",
+   "lat": 4.03613,
+   "lng": 9.73305
+  },
+  {
+   "id": "sch-096",
+   "osmId": "way/585902038",
+   "name": "Ecole Publique Djagou",
+   "region": "Littoral",
+   "lat": 4.71856,
+   "lng": 9.73573
+  },
+  {
+   "id": "sch-097",
+   "osmId": "way/753058632",
+   "name": "Ecole Bilingue Djalan",
+   "region": "Littoral",
+   "lat": 4.02172,
+   "lng": 9.74639
+  },
+  {
+   "id": "sch-098",
+   "osmId": "way/855780552",
+   "name": "Ecole Publique Mvogtiba",
+   "region": "Littoral",
+   "lat": 3.98357,
+   "lng": 9.78069
+  },
+  {
+   "id": "sch-099",
+   "osmId": "way/889376079",
+   "name": "Ecole Primaire Catholique Sangasso",
+   "region": "Littoral",
+   "lat": 4.00535,
+   "lng": 9.76424
+  },
+  {
+   "id": "sch-100",
+   "osmId": "way/889380725",
+   "name": "Presbyterian Primary School Nkolndé",
+   "region": "Littoral",
+   "lat": 4.00582,
+   "lng": 9.77341
+  },
+  {
+   "id": "sch-101",
+   "osmId": "node/2248417171",
+   "name": "Government Primary School Nkolsso",
+   "region": "West",
+   "lat": 5.35351,
+   "lng": 10.28002
+  },
+  {
+   "id": "sch-102",
+   "osmId": "node/5119827696",
+   "name": "Community Primary School Fonton",
+   "region": "West",
+   "lat": 5.73381,
+   "lng": 10.89492
+  },
+  {
+   "id": "sch-103",
+   "osmId": "node/6224341287",
+   "name": "Ecole Publique Mbelan",
+   "region": "West",
+   "lat": 5.4861,
+   "lng": 10.049
+  },
+  {
+   "id": "sch-104",
+   "osmId": "node/6581098485",
+   "name": "Ecole Bilingue Mbeton",
+   "region": "West",
+   "lat": 5.15459,
+   "lng": 10.52514
+  },
+  {
+   "id": "sch-105",
+   "osmId": "node/6620894088",
+   "name": "Ecole Bilingue Ndoya",
+   "region": "West",
+   "lat": 5.49742,
+   "lng": 10.42687
+  },
+  {
+   "id": "sch-106",
+   "osmId": "node/6639999185",
+   "name": "Community Primary School Banalan",
+   "region": "West",
+   "lat": 5.49027,
+   "lng": 10.43362
+  },
+  {
+   "id": "sch-107",
+   "osmId": "node/6898098985",
+   "name": "Ecole Publique Banagou",
+   "region": "West",
+   "lat": 5.62396,
+   "lng": 10.25015
+  },
+  {
+   "id": "sch-108",
+   "osmId": "node/8388106156",
+   "name": "Community Primary School Ndonkam",
+   "region": "West",
+   "lat": 5.37509,
+   "lng": 10.1375
+  },
+  {
+   "id": "sch-109",
+   "osmId": "node/8410788991",
+   "name": "Presbyterian Primary School Sangaya",
+   "region": "West",
+   "lat": 5.44762,
+   "lng": 10.17553
+  },
+  {
+   "id": "sch-110",
+   "osmId": "node/8697384360",
+   "name": "Ecole Primaire Catholique Mvogya",
+   "region": "West",
+   "lat": 5.25731,
+   "lng": 10.39462
+  },
+  {
+   "id": "sch-111",
+   "osmId": "node/8985840918",
+   "name": "Community Primary School Mbelan",
+   "region": "West",
+   "lat": 5.25488,
+   "lng": 10.38673
+  },
+  {
+   "id": "sch-112",
+   "osmId": "node/8985934217",
+   "name": "Government Primary School Tologou",
+   "region": "West",
+   "lat": 5.28155,
+   "lng": 10.45063
+  },
+  {
+   "id": "sch-113",
+   "osmId": "way/1153642625",
+   "name": "Presbyterian Primary School Mbetiba",
+   "region": "West",
+   "lat": 5.16144,
+   "lng": 10.17332
+  },
+  {
+   "id": "sch-114",
+   "osmId": "way/1156508917",
+   "name": "Community Primary School Mbesso",
+   "region": "West",
+   "lat": 5.1622,
+   "lng": 10.168
+  },
+  {
+   "id": "sch-115",
+   "osmId": "way/1156850145",
+   "name": "Presbyterian Primary School Banagou",
+   "region": "West",
+   "lat": 5.15279,
+   "lng": 10.1834
+  },
+  {
+   "id": "sch-116",
+   "osmId": "way/1158082351",
+   "name": "Government Primary School Ekonlan",
+   "region": "West",
+   "lat": 5.15267,
+   "lng": 10.16578
+  },
+  {
+   "id": "sch-117",
+   "osmId": "way/219927963",
+   "name": "Community Primary School Nkolndé",
+   "region": "West",
+   "lat": 5.48121,
+   "lng": 10.42332
+  },
+  {
+   "id": "sch-118",
+   "osmId": "way/219927966",
+   "name": "Government Primary School Djaton",
+   "region": "West",
+   "lat": 5.46727,
+   "lng": 10.42037
+  },
+  {
+   "id": "sch-119",
+   "osmId": "way/219983287",
+   "name": "Ecole Bilingue Sangandé",
+   "region": "West",
+   "lat": 5.37344,
+   "lng": 10.36091
+  },
+  {
+   "id": "sch-120",
+   "osmId": "way/231100123",
+   "name": "Community Primary School Banaton",
+   "region": "West",
+   "lat": 5.62299,
+   "lng": 10.3445
+  },
+  {
+   "id": "sch-121",
+   "osmId": "way/257708671",
+   "name": "Presbyterian Primary School Mbendé",
+   "region": "West",
+   "lat": 5.16255,
+   "lng": 10.43226
+  },
+  {
+   "id": "sch-122",
+   "osmId": "way/283036205",
+   "name": "Ecole Primaire Catholique Mvogya 9",
+   "region": "West",
+   "lat": 5.47366,
+   "lng": 10.32295
+  },
+  {
+   "id": "sch-123",
+   "osmId": "way/323118821",
+   "name": "Government Primary School Tolonkam",
+   "region": "West",
+   "lat": 5.07443,
+   "lng": 10.46115
+  },
+  {
+   "id": "sch-124",
+   "osmId": "way/367618770",
+   "name": "Presbyterian Primary School Ndobele",
+   "region": "West",
+   "lat": 5.3929,
+   "lng": 10.29462
+  },
+  {
+   "id": "sch-125",
+   "osmId": "way/371475045",
+   "name": "Ecole Bilingue Mvoggou",
+   "region": "West",
+   "lat": 5.27506,
+   "lng": 10.1886
+  },
+  {
+   "id": "sch-126",
+   "osmId": "way/371479311",
+   "name": "Government Primary School Ekontiba",
+   "region": "West",
+   "lat": 5.28137,
+   "lng": 10.1772
+  },
+  {
+   "id": "sch-127",
+   "osmId": "way/373218985",
+   "name": "Presbyterian Primary School Sangamba",
+   "region": "West",
+   "lat": 5.46868,
+   "lng": 10.4216
+  },
+  {
+   "id": "sch-128",
+   "osmId": "way/377860475",
+   "name": "Ecole Bilingue Toloya",
+   "region": "West",
+   "lat": 5.38214,
+   "lng": 10.33344
+  },
+  {
+   "id": "sch-129",
+   "osmId": "way/380949624",
+   "name": "Ecole Publique Ndokou",
+   "region": "West",
+   "lat": 5.15297,
+   "lng": 10.16824
+  },
+  {
+   "id": "sch-130",
+   "osmId": "way/381194409",
+   "name": "Presbyterian Primary School Mbebele",
+   "region": "West",
+   "lat": 5.48122,
+   "lng": 10.42125
+  },
+  {
+   "id": "sch-131",
+   "osmId": "way/393361112",
+   "name": "Community Primary School Ndokou",
+   "region": "West",
+   "lat": 5.4365,
+   "lng": 10.04646
+  },
+  {
+   "id": "sch-132",
+   "osmId": "way/394023439",
+   "name": "Presbyterian Primary School Lobebele",
+   "region": "West",
+   "lat": 5.53827,
+   "lng": 10.18169
+  },
+  {
+   "id": "sch-133",
+   "osmId": "way/394107817",
+   "name": "Government Primary School Nkolnkam",
+   "region": "West",
+   "lat": 5.53944,
+   "lng": 10.1799
+  },
+  {
+   "id": "sch-134",
+   "osmId": "way/394732665",
+   "name": "Presbyterian Primary School Kumkou",
+   "region": "West",
+   "lat": 5.55913,
+   "lng": 10.18008
+  },
+  {
+   "id": "sch-135",
+   "osmId": "way/395283536",
+   "name": "Ecole Publique Banamba",
+   "region": "West",
+   "lat": 5.4883,
+   "lng": 10.44611
+  },
+  {
+   "id": "sch-136",
+   "osmId": "way/403507429",
+   "name": "Ecole Publique Ekonton",
+   "region": "West",
+   "lat": 5.32258,
+   "lng": 10.22568
+  },
+  {
+   "id": "sch-137",
+   "osmId": "way/424738567",
+   "name": "Presbyterian Primary School Mvoggou",
+   "region": "West",
+   "lat": 5.47065,
+   "lng": 10.42295
+  },
+  {
+   "id": "sch-138",
+   "osmId": "way/424919036",
+   "name": "Ecole Publique Ekonbele",
+   "region": "West",
+   "lat": 5.47621,
+   "lng": 10.43335
+  },
+  {
+   "id": "sch-139",
+   "osmId": "way/424947226",
+   "name": "Ecole Primaire Catholique Sangankam",
+   "region": "West",
+   "lat": 5.45773,
+   "lng": 10.44101
+  },
+  {
+   "id": "sch-140",
+   "osmId": "way/424947633",
+   "name": "Government Primary School Lobeton",
+   "region": "West",
+   "lat": 5.45245,
+   "lng": 10.42841
+  },
+  {
+   "id": "sch-141",
+   "osmId": "way/424949202",
+   "name": "Community Primary School Fonlan",
+   "region": "West",
+   "lat": 5.45234,
+   "lng": 10.41748
+  },
+  {
+   "id": "sch-142",
+   "osmId": "way/424953409",
+   "name": "Presbyterian Primary School Ndosso",
+   "region": "West",
+   "lat": 5.45965,
+   "lng": 10.4187
+  },
+  {
+   "id": "sch-143",
+   "osmId": "way/424954823",
+   "name": "Presbyterian Primary School Ndoton",
+   "region": "West",
+   "lat": 5.46572,
+   "lng": 10.4147
+  },
+  {
+   "id": "sch-144",
+   "osmId": "way/424954825",
+   "name": "Ecole Publique Fonnkam",
+   "region": "West",
+   "lat": 5.4713,
+   "lng": 10.40797
+  },
+  {
+   "id": "sch-145",
+   "osmId": "way/424992188",
+   "name": "Ecole Publique Fonton",
+   "region": "West",
+   "lat": 5.46057,
+   "lng": 10.42803
+  },
+  {
+   "id": "sch-146",
+   "osmId": "way/425061003",
+   "name": "Government Primary School Tolomang",
+   "region": "West",
+   "lat": 5.47142,
+   "lng": 10.43037
+  },
+  {
+   "id": "sch-147",
+   "osmId": "way/425069885",
+   "name": "Community Primary School Mvoglan",
+   "region": "West",
+   "lat": 5.47344,
+   "lng": 10.43724
+  },
+  {
+   "id": "sch-148",
+   "osmId": "way/425076235",
+   "name": "Ecole Bilingue Djamang",
+   "region": "West",
+   "lat": 5.47227,
+   "lng": 10.45123
+  },
+  {
+   "id": "sch-149",
+   "osmId": "way/425076237",
+   "name": "Ecole Publique Tolomba",
+   "region": "West",
+   "lat": 5.46924,
+   "lng": 10.44851
+  },
+  {
+   "id": "sch-150",
+   "osmId": "way/425079864",
+   "name": "Presbyterian Primary School Kumnkam",
+   "region": "West",
+   "lat": 5.48328,
+   "lng": 10.46863
+  },
+  {
+   "id": "sch-151",
+   "osmId": "way/425081066",
+   "name": "Ecole Primaire Catholique Kumbele",
+   "region": "West",
+   "lat": 5.48605,
+   "lng": 10.50268
+  },
+  {
+   "id": "sch-152",
+   "osmId": "way/425115508",
+   "name": "Government Primary School Kumton",
+   "region": "West",
+   "lat": 5.50125,
+   "lng": 10.41028
+  },
+  {
+   "id": "sch-153",
+   "osmId": "way/425139391",
+   "name": "Community Primary School Sangatiba",
+   "region": "West",
+   "lat": 5.48213,
+   "lng": 10.4158
+  },
+  {
+   "id": "sch-154",
+   "osmId": "way/425311764",
+   "name": "Government Primary School Ndolan",
+   "region": "West",
+   "lat": 5.50594,
+   "lng": 10.3971
+  },
+  {
+   "id": "sch-155",
+   "osmId": "way/425352729",
+   "name": "Community Primary School Ndokou 3",
+   "region": "West",
+   "lat": 5.50765,
+   "lng": 10.43847
+  },
+  {
+   "id": "sch-156",
+   "osmId": "way/425352730",
+   "name": "Presbyterian Primary School Tolomang",
+   "region": "West",
+   "lat": 5.50804,
+   "lng": 10.4336
+  },
+  {
+   "id": "sch-157",
+   "osmId": "way/425352733",
+   "name": "Government Primary School Ekonnkam",
+   "region": "West",
+   "lat": 5.49708,
+   "lng": 10.43904
+  },
+  {
+   "id": "sch-158",
+   "osmId": "way/448307564",
+   "name": "Government Primary School Kumbele",
+   "region": "West",
+   "lat": 5.45221,
+   "lng": 10.04974
+  },
+  {
+   "id": "sch-159",
+   "osmId": "way/448309016",
+   "name": "Presbyterian Primary School Ndomba",
+   "region": "West",
+   "lat": 5.4482,
+   "lng": 10.05805
+  },
+  {
+   "id": "sch-160",
+   "osmId": "way/448309017",
+   "name": "Ecole Primaire Catholique Mbeya",
+   "region": "West",
+   "lat": 5.4472,
+   "lng": 10.05697
+  },
+  {
+   "id": "sch-161",
+   "osmId": "way/480372182",
+   "name": "Ecole Publique Ekonbele 7",
+   "region": "West",
+   "lat": 5.56924,
+   "lng": 10.16543
+  },
+  {
+   "id": "sch-162",
+   "osmId": "way/480373025",
+   "name": "Ecole Primaire Catholique Mvogmang",
+   "region": "West",
+   "lat": 5.56306,
+   "lng": 10.15466
+  },
+  {
+   "id": "sch-163",
+   "osmId": "way/481797481",
+   "name": "Government Primary School Kumsso",
+   "region": "West",
+   "lat": 5.50321,
+   "lng": 10.10697
+  },
+  {
+   "id": "sch-164",
+   "osmId": "way/481799008",
+   "name": "Ecole Bilingue Lobeya",
+   "region": "West",
+   "lat": 5.47897,
+   "lng": 10.12048
+  },
+  {
+   "id": "sch-165",
+   "osmId": "way/482554777",
+   "name": "Ecole Primaire Catholique Lobemang",
+   "region": "West",
+   "lat": 5.44733,
+   "lng": 10.05254
+  },
+  {
+   "id": "sch-166",
+   "osmId": "way/484423911",
+   "name": "Community Primary School Sangalan",
+   "region": "West",
+   "lat": 5.51042,
+   "lng": 10.10403
+  },
+  {
+   "id": "sch-167",
+   "osmId": "way/485491760",
+   "name": "Community Primary School Mvogbele",
+   "region": "West",
+   "lat": 5.51015,
+   "lng": 10.08039
+  },
+  {
+   "id": "sch-168",
+   "osmId": "way/488452282",
+   "name": "Government Primary School Mbeton",
+   "region": "West",
+   "lat": 5.55741,
+   "lng": 10.07987
+  },
+  {
+   "id": "sch-169",
+   "osmId": "way/488461741",
+   "name": "Ecole Publique Banamba 7",
+   "region": "West",
+   "lat": 5.52294,
+   "lng": 10.10128
+  },
+  {
+   "id": "sch-170",
+   "osmId": "way/488465186",
+   "name": "Ecole Bilingue Banatiba",
+   "region": "West",
+   "lat": 5.5083,
+   "lng": 10.08617
+  },
+  {
+   "id": "sch-171",
+   "osmId": "way/533571669",
+   "name": "Presbyterian Primary School Lobemba",
+   "region": "West",
+   "lat": 5.16269,
+   "lng": 10.18293
+  },
+  {
+   "id": "sch-172",
+   "osmId": "way/556409160",
+   "name": "Government Primary School Mbemang",
+   "region": "West",
+   "lat": 5.38702,
+   "lng": 10.44501
+  },
+  {
+   "id": "sch-173",
+   "osmId": "way/667354019",
+   "name": "Community Primary School Mbeya",
+   "region": "West",
+   "lat": 5.62489,
+   "lng": 10.23486
+  },
+  {
+   "id": "sch-174",
+   "osmId": "way/669148356",
+   "name": "Ecole Primaire Catholique Ekonmang",
+   "region": "West",
+   "lat": 5.61704,
+   "lng": 10.19333
+  },
+  {
+   "id": "sch-175",
+   "osmId": "way/676746827",
+   "name": "Ecole Primaire Catholique Djandé",
+   "region": "West",
+   "lat": 5.49155,
+   "lng": 10.04856
+  },
+  {
+   "id": "sch-176",
+   "osmId": "way/677240859",
+   "name": "Ecole Bilingue Fongou",
+   "region": "West",
+   "lat": 5.41489,
+   "lng": 10.04295
+  },
+  {
+   "id": "sch-177",
+   "osmId": "way/677524845",
+   "name": "Presbyterian Primary School Mbelan",
+   "region": "West",
+   "lat": 5.4487,
+   "lng": 10.01322
+  },
+  {
+   "id": "sch-178",
+   "osmId": "way/678207442",
+   "name": "Community Primary School Lobekou",
+   "region": "West",
+   "lat": 5.58389,
+   "lng": 10.14419
+  },
+  {
+   "id": "sch-179",
+   "osmId": "way/678207443",
+   "name": "Ecole Publique Banamang",
+   "region": "West",
+   "lat": 5.58382,
+   "lng": 10.14191
+  },
+  {
+   "id": "sch-180",
+   "osmId": "way/678374507",
+   "name": "Ecole Primaire Catholique Mbendé",
+   "region": "West",
+   "lat": 5.63082,
+   "lng": 10.19934
+  },
+  {
+   "id": "sch-181",
+   "osmId": "way/678384536",
+   "name": "Community Primary School Kumlan",
+   "region": "West",
+   "lat": 5.53074,
+   "lng": 10.19057
+  },
+  {
+   "id": "sch-182",
+   "osmId": "way/678384544",
+   "name": "Ecole Publique Sangagou",
+   "region": "West",
+   "lat": 5.62899,
+   "lng": 10.2095
+  },
+  {
+   "id": "sch-183",
+   "osmId": "way/678391943",
+   "name": "Ecole Bilingue Lobendé",
+   "region": "West",
+   "lat": 5.55869,
+   "lng": 10.15233
+  },
+  {
+   "id": "sch-184",
+   "osmId": "way/678417108",
+   "name": "Presbyterian Primary School Fonkou",
+   "region": "West",
+   "lat": 5.60865,
+   "lng": 10.15337
+  },
+  {
+   "id": "sch-185",
+   "osmId": "way/679248480",
+   "name": "Ecole Primaire Catholique Sangagou",
+   "region": "West",
+   "lat": 5.47111,
+   "lng": 10.0864
+  },
+  {
+   "id": "sch-186",
+   "osmId": "way/679902925",
+   "name": "Community Primary School Sangatiba 8",
+   "region": "West",
+   "lat": 5.49146,
+   "lng": 10.04872
+  },
+  {
+   "id": "sch-187",
+   "osmId": "way/681208744",
+   "name": "Ecole Publique Mvogtiba",
+   "region": "West",
+   "lat": 5.43589,
+   "lng": 10.06278
+  },
+  {
+   "id": "sch-188",
+   "osmId": "way/701263539",
+   "name": "Ecole Primaire Catholique Ndondé",
+   "region": "West",
+   "lat": 5.45102,
+   "lng": 10.07033
+  },
+  {
+   "id": "sch-189",
+   "osmId": "way/758729063",
+   "name": "Ecole Primaire Catholique Djalan",
+   "region": "West",
+   "lat": 5.29344,
+   "lng": 10.16722
+  },
+  {
+   "id": "sch-190",
+   "osmId": "way/804975196",
+   "name": "Government Primary School Ndosso",
+   "region": "West",
+   "lat": 5.17684,
+   "lng": 10.34275
+  },
+  {
+   "id": "sch-191",
+   "osmId": "way/894953875",
+   "name": "Ecole Primaire Catholique Ekonton",
+   "region": "West",
+   "lat": 5.38102,
+   "lng": 10.41631
+  },
+  {
+   "id": "sch-192",
+   "osmId": "way/902733089",
+   "name": "Ecole Primaire Catholique Ekontiba",
+   "region": "West",
+   "lat": 5.48053,
+   "lng": 10.19128
+  },
+  {
+   "id": "sch-193",
+   "osmId": "way/902733092",
+   "name": "Ecole Bilingue Tolosso",
+   "region": "West",
+   "lat": 5.46617,
+   "lng": 10.21711
+  },
+  {
+   "id": "sch-194",
+   "osmId": "way/904160102",
+   "name": "Ecole Publique Tolondé",
+   "region": "West",
+   "lat": 5.38757,
+   "lng": 10.13187
+  },
+  {
+   "id": "sch-195",
+   "osmId": "way/904160107",
+   "name": "Ecole Publique Ndoya",
+   "region": "West",
+   "lat": 5.40482,
+   "lng": 10.14899
+  },
+  {
+   "id": "sch-196",
+   "osmId": "way/904182374",
+   "name": "Community Primary School Djakou",
+   "region": "West",
+   "lat": 5.40458,
+   "lng": 10.16908
+  },
+  {
+   "id": "sch-197",
+   "osmId": "way/905691528",
+   "name": "Ecole Primaire Catholique Mvogbele",
+   "region": "West",
+   "lat": 5.47177,
+   "lng": 10.17235
+  },
+  {
+   "id": "sch-198",
+   "osmId": "way/905691542",
+   "name": "Ecole Primaire Catholique Kumbele 5",
+   "region": "West",
+   "lat": 5.43497,
+   "lng": 10.21553
+  },
+  {
+   "id": "sch-199",
+   "osmId": "way/956549820",
+   "name": "Community Primary School Sangankam",
+   "region": "West",
+   "lat": 5.55849,
+   "lng": 10.38674
+  },
+  {
+   "id": "sch-200",
+   "osmId": "way/996708846",
+   "name": "Ecole Publique Nkolkou",
+   "region": "West",
+   "lat": 5.69604,
+   "lng": 10.36997
+  },
+  {
+   "id": "sch-201",
+   "osmId": "node/1007095732",
+   "name": "Government Primary School Djatiba",
+   "region": "Centre",
+   "lat": 4.08613,
+   "lng": 11.38393
+  },
+  {
+   "id": "sch-202",
+   "osmId": "node/1067272288",
+   "name": "Presbyterian Primary School Mbenkam",
+   "region": "Centre",
+   "lat": 3.92486,
+   "lng": 11.46197
+  },
+  {
+   "id": "sch-203",
+   "osmId": "node/11530148876",
+   "name": "Ecole Publique Nkolkou",
+   "region": "Centre",
+   "lat": 3.81203,
+   "lng": 11.49122
+  },
+  {
+   "id": "sch-204",
+   "osmId": "node/12724276014",
+   "name": "Ecole Publique Sangaton",
+   "region": "Centre",
+   "lat": 3.81825,
+   "lng": 11.20406
+  },
+  {
+   "id": "sch-205",
+   "osmId": "node/12730573476",
+   "name": "Presbyterian Primary School Fongou",
+   "region": "Centre",
+   "lat": 4.72797,
+   "lng": 12.83645
+  },
+  {
+   "id": "sch-206",
+   "osmId": "node/13283364931",
+   "name": "Ecole Bilingue Fonya",
+   "region": "Centre",
+   "lat": 4.01624,
+   "lng": 11.56694
+  },
+  {
+   "id": "sch-207",
+   "osmId": "node/13286798620",
+   "name": "Ecole Publique Mbeya",
+   "region": "Centre",
+   "lat": 3.92584,
+   "lng": 11.60923
+  },
+  {
+   "id": "sch-208",
+   "osmId": "node/13288300646",
+   "name": "Presbyterian Primary School Lobekou",
+   "region": "Centre",
+   "lat": 3.98153,
+   "lng": 11.5892
+  },
+  {
+   "id": "sch-209",
+   "osmId": "node/13288300674",
+   "name": "Presbyterian Primary School Lobeya",
+   "region": "Centre",
+   "lat": 3.94338,
+   "lng": 11.57436
+  },
+  {
+   "id": "sch-210",
+   "osmId": "node/13288300681",
+   "name": "Community Primary School Lobelan",
+   "region": "Centre",
+   "lat": 3.95864,
+   "lng": 11.58885
+  },
+  {
+   "id": "sch-211",
+   "osmId": "node/13288668517",
+   "name": "Presbyterian Primary School Ndomba",
+   "region": "Centre",
+   "lat": 3.92566,
+   "lng": 11.58777
+  },
+  {
+   "id": "sch-212",
+   "osmId": "node/13288668518",
+   "name": "Government Primary School Mbesso",
+   "region": "Centre",
+   "lat": 3.91951,
+   "lng": 11.57566
+  },
+  {
+   "id": "sch-213",
+   "osmId": "node/1375481574",
+   "name": "Presbyterian Primary School Mvogndé",
+   "region": "Centre",
+   "lat": 4.02607,
+   "lng": 11.50682
+  },
+  {
+   "id": "sch-214",
+   "osmId": "node/2040401655",
+   "name": "Ecole Primaire Catholique Tolotiba",
+   "region": "Centre",
+   "lat": 3.8273,
+   "lng": 11.48167
+  },
+  {
+   "id": "sch-215",
+   "osmId": "node/4395109992",
+   "name": "Presbyterian Primary School Ekonmang",
+   "region": "Centre",
+   "lat": 3.77867,
+   "lng": 11.529
+  },
+  {
+   "id": "sch-216",
+   "osmId": "node/4413539591",
+   "name": "Ecole Primaire Catholique Kumndé",
+   "region": "Centre",
+   "lat": 3.80315,
+   "lng": 11.49045
+  },
+  {
+   "id": "sch-217",
+   "osmId": "node/4500092306",
+   "name": "Ecole Bilingue Nkolnkam",
+   "region": "Centre",
+   "lat": 3.85625,
+   "lng": 11.49317
+  },
+  {
+   "id": "sch-218",
+   "osmId": "node/5136314668",
+   "name": "Community Primary School Kumgou",
+   "region": "Centre",
+   "lat": 3.85101,
+   "lng": 11.5015
+  },
+  {
+   "id": "sch-219",
+   "osmId": "node/5748984223",
+   "name": "Government Primary School Tolondé",
+   "region": "Centre",
+   "lat": 3.94891,
+   "lng": 11.52226
+  },
+  {
+   "id": "sch-220",
+   "osmId": "node/5774855575",
+   "name": "Government Primary School Djagou",
+   "region": "Centre",
+   "lat": 3.8249,
+   "lng": 11.47576
+  },
+  {
+   "id": "sch-221",
+   "osmId": "node/5776915770",
+   "name": "Ecole Publique Banamba",
+   "region": "Centre",
+   "lat": 3.86336,
+   "lng": 11.50254
+  },
+  {
+   "id": "sch-222",
+   "osmId": "node/6339845082",
+   "name": "Ecole Publique Lobemang",
+   "region": "Centre",
+   "lat": 3.89424,
+   "lng": 11.51155
+  },
+  {
+   "id": "sch-223",
+   "osmId": "node/6524008185",
+   "name": "Presbyterian Primary School Tolobele",
+   "region": "Centre",
+   "lat": 4.16324,
+   "lng": 11.53976
+  },
+  {
+   "id": "sch-224",
+   "osmId": "node/6654436354",
+   "name": "Ecole Primaire Catholique Tolokou",
+   "region": "Centre",
+   "lat": 3.77825,
+   "lng": 12.25773
+  },
+  {
+   "id": "sch-225",
+   "osmId": "node/7163203061",
+   "name": "Government Primary School Nkolkou",
+   "region": "Centre",
+   "lat": 3.87306,
+   "lng": 11.48011
+  },
+  {
+   "id": "sch-226",
+   "osmId": "node/7163230795",
+   "name": "Ecole Bilingue Mvogndé",
+   "region": "Centre",
+   "lat": 3.87974,
+   "lng": 11.45818
+  },
+  {
+   "id": "sch-227",
+   "osmId": "node/7163278078",
+   "name": "Presbyterian Primary School Lobemang",
+   "region": "Centre",
+   "lat": 3.87095,
+   "lng": 11.42512
+  },
+  {
+   "id": "sch-228",
+   "osmId": "node/7171343095",
+   "name": "Community Primary School Kumsso",
+   "region": "Centre",
+   "lat": 3.88189,
+   "lng": 11.55936
+  },
+  {
+   "id": "sch-229",
+   "osmId": "node/7174928455",
+   "name": "Ecole Bilingue Djaton",
+   "region": "Centre",
+   "lat": 3.90958,
+   "lng": 11.5478
+  },
+  {
+   "id": "sch-230",
+   "osmId": "node/7380363489",
+   "name": "Government Primary School Ndonkam",
+   "region": "Centre",
+   "lat": 3.95293,
+   "lng": 11.51669
+  },
+  {
+   "id": "sch-231",
+   "osmId": "node/9780646409",
+   "name": "Ecole Bilingue Lobekou",
+   "region": "Centre",
+   "lat": 3.90733,
+   "lng": 11.44875
+  },
+  {
+   "id": "sch-232",
+   "osmId": "relation/17816152",
+   "name": "Government Primary School Mvogsso",
+   "region": "Centre",
+   "lat": 3.54369,
+   "lng": 11.02866
+  },
+  {
+   "id": "sch-233",
+   "osmId": "way/1323261345",
+   "name": "Presbyterian Primary School Ndogou",
+   "region": "Centre",
+   "lat": 3.80138,
+   "lng": 11.52143
+  },
+  {
+   "id": "sch-234",
+   "osmId": "way/191248677",
+   "name": "Community Primary School Nkolmang",
+   "region": "Centre",
+   "lat": 3.84412,
+   "lng": 11.54497
+  },
+  {
+   "id": "sch-235",
+   "osmId": "way/191803279",
+   "name": "Ecole Publique Banasso",
+   "region": "Centre",
+   "lat": 3.93227,
+   "lng": 11.51394
+  },
+  {
+   "id": "sch-236",
+   "osmId": "way/192736509",
+   "name": "Ecole Publique Kumya",
+   "region": "Centre",
+   "lat": 3.88657,
+   "lng": 11.4613
+  },
+  {
+   "id": "sch-237",
+   "osmId": "way/192812328",
+   "name": "Government Primary School Fonsso",
+   "region": "Centre",
+   "lat": 3.87656,
+   "lng": 11.52103
+  },
+  {
+   "id": "sch-238",
+   "osmId": "way/192813916",
+   "name": "Ecole Publique Nkolgou",
+   "region": "Centre",
+   "lat": 3.87751,
+   "lng": 11.55061
+  },
+  {
+   "id": "sch-239",
+   "osmId": "way/192829791",
+   "name": "Community Primary School Sangaya",
+   "region": "Centre",
+   "lat": 3.87069,
+   "lng": 11.55526
+  },
+  {
+   "id": "sch-240",
+   "osmId": "way/192844201",
+   "name": "Ecole Bilingue Fonsso",
+   "region": "Centre",
+   "lat": 3.85643,
+   "lng": 11.4933
+  },
+  {
+   "id": "sch-241",
+   "osmId": "way/192847098",
+   "name": "Ecole Primaire Catholique Mvogsso",
+   "region": "Centre",
+   "lat": 3.85773,
+   "lng": 11.48054
+  },
+  {
+   "id": "sch-242",
+   "osmId": "way/192848230",
+   "name": "Community Primary School Djabele",
+   "region": "Centre",
+   "lat": 3.85328,
+   "lng": 11.4836
+  },
+  {
+   "id": "sch-243",
+   "osmId": "way/192849108",
+   "name": "Government Primary School Kumkou",
+   "region": "Centre",
+   "lat": 3.85364,
+   "lng": 11.47401
+  },
+  {
+   "id": "sch-244",
+   "osmId": "way/192880708",
+   "name": "Presbyterian Primary School Ekongou",
+   "region": "Centre",
+   "lat": 3.84407,
+   "lng": 11.53373
+  },
+  {
+   "id": "sch-245",
+   "osmId": "way/193504335",
+   "name": "Community Primary School Ndokou",
+   "region": "Centre",
+   "lat": 3.84077,
+   "lng": 11.53868
+  },
+  {
+   "id": "sch-246",
+   "osmId": "way/193542804",
+   "name": "Ecole Publique Sangalan",
+   "region": "Centre",
+   "lat": 3.81861,
+   "lng": 11.49167
+  },
+  {
+   "id": "sch-247",
+   "osmId": "way/193566607",
+   "name": "Ecole Primaire Catholique Mvogndé",
+   "region": "Centre",
+   "lat": 3.7954,
+   "lng": 11.47927
+  },
+  {
+   "id": "sch-248",
+   "osmId": "way/193577341",
+   "name": "Ecole Primaire Catholique Mvogndé 6",
+   "region": "Centre",
+   "lat": 3.79829,
+   "lng": 11.52404
+  },
+  {
+   "id": "sch-249",
+   "osmId": "way/204120172",
+   "name": "Presbyterian Primary School Kumtiba",
+   "region": "Centre",
+   "lat": 3.86149,
+   "lng": 11.55745
+  },
+  {
+   "id": "sch-250",
+   "osmId": "way/205367069",
+   "name": "Community Primary School Kumtiba",
+   "region": "Centre",
+   "lat": 3.83242,
+   "lng": 11.46449
+  },
+  {
+   "id": "sch-251",
+   "osmId": "way/205659732",
+   "name": "Community Primary School Banabele",
+   "region": "Centre",
+   "lat": 3.8419,
+   "lng": 11.56106
+  },
+  {
+   "id": "sch-252",
+   "osmId": "way/219457694",
+   "name": "Ecole Publique Lobebele",
+   "region": "Centre",
+   "lat": 3.9455,
+   "lng": 11.51464
+  },
+  {
+   "id": "sch-253",
+   "osmId": "way/219573348",
+   "name": "Ecole Primaire Catholique Ndomba",
+   "region": "Centre",
+   "lat": 3.803,
+   "lng": 11.51946
+  },
+  {
+   "id": "sch-254",
+   "osmId": "way/219665264",
+   "name": "Ecole Publique Mvogbele",
+   "region": "Centre",
+   "lat": 3.82994,
+   "lng": 11.46103
+  },
+  {
+   "id": "sch-255",
+   "osmId": "way/219665307",
+   "name": "Ecole Primaire Catholique Ndomang",
+   "region": "Centre",
+   "lat": 3.85715,
+   "lng": 11.48338
+  },
+  {
+   "id": "sch-256",
+   "osmId": "way/219665331",
+   "name": "Government Primary School Fongou",
+   "region": "Centre",
+   "lat": 3.86015,
+   "lng": 11.45886
+  },
+  {
+   "id": "sch-257",
+   "osmId": "way/219833714",
+   "name": "Ecole Publique Mbendé",
+   "region": "Centre",
+   "lat": 3.84547,
+   "lng": 11.50231
+  },
+  {
+   "id": "sch-258",
+   "osmId": "way/219833715",
+   "name": "Community Primary School Ekonmang",
+   "region": "Centre",
+   "lat": 3.86659,
+   "lng": 11.52872
+  },
+  {
+   "id": "sch-259",
+   "osmId": "way/219833721",
+   "name": "Ecole Primaire Catholique Fonmang",
+   "region": "Centre",
+   "lat": 3.84108,
+   "lng": 11.49093
+  },
+  {
+   "id": "sch-260",
+   "osmId": "way/219833734",
+   "name": "Community Primary School Sangamba",
+   "region": "Centre",
+   "lat": 3.85656,
+   "lng": 11.49376
+  },
+  {
+   "id": "sch-261",
+   "osmId": "way/219833735",
+   "name": "Community Primary School Kumya",
+   "region": "Centre",
+   "lat": 3.83689,
+   "lng": 11.48727
+  },
+  {
+   "id": "sch-262",
+   "osmId": "way/219833738",
+   "name": "Ecole Primaire Catholique Kummang",
+   "region": "Centre",
+   "lat": 3.83799,
+   "lng": 11.4873
+  },
+  {
+   "id": "sch-263",
+   "osmId": "way/219833752",
+   "name": "Ecole Primaire Catholique Kumlan",
+   "region": "Centre",
+   "lat": 3.84469,
+   "lng": 11.49413
+  },
+  {
+   "id": "sch-264",
+   "osmId": "way/219833785",
+   "name": "Ecole Publique Ekonndé",
+   "region": "Centre",
+   "lat": 3.87512,
+   "lng": 11.52113
+  },
+  {
+   "id": "sch-265",
+   "osmId": "way/219833786",
+   "name": "Presbyterian Primary School Fonmang",
+   "region": "Centre",
+   "lat": 3.89206,
+   "lng": 11.49659
+  },
+  {
+   "id": "sch-266",
+   "osmId": "way/219833790",
+   "name": "Government Primary School Banamba",
+   "region": "Centre",
+   "lat": 3.88158,
+   "lng": 11.48893
+  },
+  {
+   "id": "sch-267",
+   "osmId": "way/219833858",
+   "name": "Ecole Primaire Catholique Sangamang",
+   "region": "Centre",
+   "lat": 3.87455,
+   "lng": 11.49508
+  },
+  {
+   "id": "sch-268",
+   "osmId": "way/219956420",
+   "name": "Government Primary School Mvogndé",
+   "region": "Centre",
+   "lat": 3.84369,
+   "lng": 11.53556
+  },
+  {
+   "id": "sch-269",
+   "osmId": "way/219956430",
+   "name": "Government Primary School Lobemang",
+   "region": "Centre",
+   "lat": 3.90876,
+   "lng": 11.54515
+  },
+  {
+   "id": "sch-270",
+   "osmId": "way/219956431",
+   "name": "Ecole Bilingue Ndondé",
+   "region": "Centre",
+   "lat": 3.87462,
+   "lng": 11.54494
+  },
+  {
+   "id": "sch-271",
+   "osmId": "way/219956440",
+   "name": "Community Primary School Fonsso",
+   "region": "Centre",
+   "lat": 3.86588,
+   "lng": 11.54646
+  },
+  {
+   "id": "sch-272",
+   "osmId": "way/219956442",
+   "name": "Ecole Primaire Catholique Nkolsso",
+   "region": "Centre",
+   "lat": 3.84658,
+   "lng": 11.54584
+  },
+  {
+   "id": "sch-273",
+   "osmId": "way/219956451",
+   "name": "Ecole Publique Djasso",
+   "region": "Centre",
+   "lat": 3.90443,
+   "lng": 11.54247
+  },
+  {
+   "id": "sch-274",
+   "osmId": "way/219988747",
+   "name": "Community Primary School Tolondé",
+   "region": "Centre",
+   "lat": 3.8628,
+   "lng": 11.57079
+  },
+  {
+   "id": "sch-275",
+   "osmId": "way/219988749",
+   "name": "Government Primary School Sangalan",
+   "region": "Centre",
+   "lat": 3.90658,
+   "lng": 11.56826
+  },
+  {
+   "id": "sch-276",
+   "osmId": "way/219988799",
+   "name": "Community Primary School Fonlan",
+   "region": "Centre",
+   "lat": 3.86327,
+   "lng": 11.553
+  },
+  {
+   "id": "sch-277",
+   "osmId": "way/219988800",
+   "name": "Community Primary School Mbebele",
+   "region": "Centre",
+   "lat": 3.89628,
+   "lng": 11.56715
+  },
+  {
+   "id": "sch-278",
+   "osmId": "way/219988801",
+   "name": "Ecole Publique Nkolton",
+   "region": "Centre",
+   "lat": 3.88127,
+   "lng": 11.55163
+  },
+  {
+   "id": "sch-279",
+   "osmId": "way/221650420",
+   "name": "Ecole Publique Sangaton 4",
+   "region": "Centre",
+   "lat": 3.82516,
+   "lng": 11.50061
+  },
+  {
+   "id": "sch-280",
+   "osmId": "way/221900259",
+   "name": "Community Primary School Sangabele",
+   "region": "Centre",
+   "lat": 3.83046,
+   "lng": 11.5298
+  },
+  {
+   "id": "sch-281",
+   "osmId": "way/222859465",
+   "name": "Presbyterian Primary School Nkolmang",
+   "region": "Centre",
+   "lat": 3.841,
+   "lng": 11.50025
+  },
+  {
+   "id": "sch-282",
+   "osmId": "way/244997602",
+   "name": "Government Primary School Sangakou",
+   "region": "Centre",
+   "lat": 4.60458,
+   "lng": 11.26105
+  },
+  {
+   "id": "sch-283",
+   "osmId": "way/260622681",
+   "name": "Presbyterian Primary School Lobendé",
+   "region": "Centre",
+   "lat": 3.49833,
+   "lng": 11.33368
+  },
+  {
+   "id": "sch-284",
+   "osmId": "way/281271657",
+   "name": "Presbyterian Primary School Nkoltiba",
+   "region": "Centre",
+   "lat": 4.3684,
+   "lng": 11.43591
+  },
+  {
+   "id": "sch-285",
+   "osmId": "way/292320705",
+   "name": "Ecole Primaire Catholique Lobebele",
+   "region": "Centre",
+   "lat": 3.96979,
+   "lng": 11.59648
+  },
+  {
+   "id": "sch-286",
+   "osmId": "way/301324405",
+   "name": "Ecole Primaire Catholique Lobendé",
+   "region": "Centre",
+   "lat": 3.5378,
+   "lng": 11.27315
+  },
+  {
+   "id": "sch-287",
+   "osmId": "way/325689151",
+   "name": "Government Primary School Tolokou",
+   "region": "Centre",
+   "lat": 4.75534,
+   "lng": 11.25947
+  },
+  {
+   "id": "sch-288",
+   "osmId": "way/326532174",
+   "name": "Ecole Publique Djaton",
+   "region": "Centre",
+   "lat": 4.72631,
+   "lng": 11.21433
+  },
+  {
+   "id": "sch-289",
+   "osmId": "way/332115340",
+   "name": "Ecole Primaire Catholique Mbeton",
+   "region": "Centre",
+   "lat": 6.05115,
+   "lng": 12.47258
+  },
+  {
+   "id": "sch-290",
+   "osmId": "way/332250154",
+   "name": "Community Primary School Mvogkou",
+   "region": "Centre",
+   "lat": 4.74926,
+   "lng": 11.24325
+  },
+  {
+   "id": "sch-291",
+   "osmId": "way/345255402",
+   "name": "Community Primary School Mbetiba",
+   "region": "Centre",
+   "lat": 4.63297,
+   "lng": 11.26442
+  },
+  {
+   "id": "sch-292",
+   "osmId": "way/345976079",
+   "name": "Ecole Publique Djaya",
+   "region": "Centre",
+   "lat": 3.59007,
+   "lng": 11.3038
+  },
+  {
+   "id": "sch-293",
+   "osmId": "way/345976082",
+   "name": "Community Primary School Lobesso",
+   "region": "Centre",
+   "lat": 3.59585,
+   "lng": 11.30484
+  },
+  {
+   "id": "sch-294",
+   "osmId": "way/345976091",
+   "name": "Community Primary School Ndotiba",
+   "region": "Centre",
+   "lat": 3.59889,
+   "lng": 11.30541
+  },
+  {
+   "id": "sch-295",
+   "osmId": "way/354331986",
+   "name": "Ecole Bilingue Mvogndé 2",
+   "region": "Centre",
+   "lat": 4.41088,
+   "lng": 11.37876
+  },
+  {
+   "id": "sch-296",
+   "osmId": "way/354603221",
+   "name": "Ecole Bilingue Sangabele",
+   "region": "Centre",
+   "lat": 4.35963,
+   "lng": 11.43832
+  },
+  {
+   "id": "sch-297",
+   "osmId": "way/365111275",
+   "name": "Ecole Bilingue Banakou",
+   "region": "Centre",
+   "lat": 4.69138,
+   "lng": 10.90211
+  },
+  {
+   "id": "sch-298",
+   "osmId": "way/440618693",
+   "name": "Government Primary School Tolobele",
+   "region": "Centre",
+   "lat": 3.39764,
+   "lng": 11.46765
+  },
+  {
+   "id": "sch-299",
+   "osmId": "way/516136193",
+   "name": "Government Primary School Nkolkou 5",
+   "region": "Centre",
+   "lat": 3.78499,
+   "lng": 11.40278
+  },
+  {
+   "id": "sch-300",
+   "osmId": "way/570043913",
+   "name": "Community Primary School Ndoton",
+   "region": "Centre",
+   "lat": 3.2624,
+   "lng": 11.21329
+  }
+ ]
+}

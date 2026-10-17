@@ -1,0 +1,122 @@
+{
+ "note": "DEMO DATA: fictional names for a hackathon demo. Coordinates come from OpenStreetMap.",
+ "kits": [
+  {
+   "id": "kit-tier-0",
+   "tier": 0,
+   "name": "Tier 0 kit: light and paper",
+   "items": [
+    {
+     "name": "Solar lighting set (lamps)",
+     "qty": 6,
+     "isDevice": false
+    },
+    {
+     "name": "Printed Times Tables workbooks",
+     "qty": 40,
+     "isDevice": false
+    },
+    {
+     "name": "Teacher training day",
+     "qty": 2,
+     "isDevice": false
+    }
+   ],
+   "deviceCount": 0
+  },
+  {
+   "id": "kit-tier-1",
+   "tier": 1,
+   "name": "Tier 1 kit: solar learning corner",
+   "items": [
+    {
+     "name": "Solar panel and battery set",
+     "qty": 1,
+     "isDevice": false
+    },
+    {
+     "name": "Raspberry Pi learning server",
+     "qty": 1,
+     "isDevice": true
+    },
+    {
+     "name": "Small laptop",
+     "qty": 8,
+     "isDevice": true
+    },
+    {
+     "name": "Charging cabinet",
+     "qty": 1,
+     "isDevice": false
+    }
+   ],
+   "deviceCount": 9
+  },
+  {
+   "id": "kit-tier-2",
+   "tier": 2,
+   "name": "Tier 2 kit: protected laptop lab",
+   "items": [
+    {
+     "name": "Surge protection",
+     "qty": 2,
+     "isDevice": false
+    },
+    {
+     "name": "Battery backup (UPS)",
+     "qty": 1,
+     "isDevice": false
+    },
+    {
+     "name": "Raspberry Pi learning server",
+     "qty": 1,
+     "isDevice": true
+    },
+    {
+     "name": "Laptop",
+     "qty": 15,
+     "isDevice": true
+    }
+   ],
+   "deviceCount": 16
+  },
+  {
+   "id": "kit-tier-3",
+   "tier": 3,
+   "name": "Tier 3 kit: full lab",
+   "items": [
+    {
+     "name": "Surge protection",
+     "qty": 4,
+     "isDevice": false
+    },
+    {
+     "name": "Battery backup (UPS)",
+     "qty": 2,
+     "isDevice": false
+    },
+    {
+     "name": "Learning server",
+     "qty": 1,
+     "isDevice": true
+    },
+    {
+     "name": "Laptop",
+     "qty": 30,
+     "isDevice": true
+    },
+    {
+     "name": "Projector",
+     "qty": 1,
+     "isDevice": false
+    },
+    {
+     "name": "Wi-Fi access point",
+     "qty": 2,
+     "isDevice": false
+    }
+   ],
+   "deviceCount": 31
+  }
+ ]
+}
