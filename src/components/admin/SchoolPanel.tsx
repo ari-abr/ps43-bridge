@@ -60,7 +60,7 @@ export default function SchoolPanel({ school, score, kits, partners, onClose }: 
           <dt>Secure room</dt>
           <dd>{survey.secureRoom ? 'Yes' : 'No'}</dd>
           <dt>Survey date</dt>
-          <dd>{survey.surveyedAt}</dd>
+          <dd>{survey.surveyedAt.slice(0, 10)}</dd>
         </dl>
       ) : (
         <p className="muted">Not yet assessed</p>

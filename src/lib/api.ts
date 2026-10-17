@@ -18,23 +18,43 @@ import type { Kit, Partner, School, SchoolStatus, Shipment, ShipmentStatus, Surv
 export const KEY_PREFIX = 'ps43:'
 const SERVER_PREFIX = KEY_PREFIX + 'server:'
 const QUEUE_KEY = KEY_PREFIX + 'queue'
+const SENT_KEY = KEY_PREFIX + 'sent'
 const ONLINE_KEY = KEY_PREFIX + 'online'
+/** Set this key to "1" in devtools to make every upload fail (to test retries). */
+const FAIL_UPLOADS_KEY = KEY_PREFIX + 'debug:failUploads'
 const DELAY_MS = 300
+const SENT_LIMIT = 50
 
 export interface DataRecord {
   id: string
   [field: string]: unknown
 }
 
-interface QueueItem {
+export interface QueueItem {
+  /** "<collection>:<record id>", so the same record is never queued or uploaded twice. */
+  id: string
   collection: string
   record: DataRecord
   queuedAt: string
 }
 
+/** An item this device has uploaded (kept so screens can show "Uploaded 14:32"). */
+interface SentItem {
+  id: string
+  collection: string
+  record: DataRecord
+  savedAt: string
+  uploadedAt: string
+}
+
 // ---------- helpers ----------
 
 const wait = (ms = DELAY_MS) => new Promise<void>((resolve) => setTimeout(resolve, ms))
+
+/** A unique id like "sv-mgu1x2k3a9f0". Works without crypto.randomUUID (missing on plain-http LAN addresses). */
+export function newId(prefix: string): string {
+  return `${prefix}-${Date.now().toString(36)}${Math.random().toString(36).slice(2, 8)}`
+}
 
 function readJson<T>(key: string, fallback: T): T {
   try {
@@ -81,39 +101,101 @@ export function setOnline(online: boolean) {
   if (online) void flushQueue()
 }
 
+// The real network went away (e.g. devtools Offline): switch the demo toggle to Offline too.
+// Coming back online for real does not flip it; the presenter does that.
+if (!navigator.onLine && isOnline()) setOnline(false)
+window.addEventListener('offline', () => setOnline(false))
+
 // ---------- upload queue ----------
 
+const queueId = (collection: string, record: DataRecord) => `${collection}:${record.id}`
+
 export function getQueue(): QueueItem[] {
-  return readJson<QueueItem[]>(QUEUE_KEY, [])
+  // Items queued by older builds have no id: derive it.
+  return readJson<QueueItem[]>(QUEUE_KEY, []).map((item) => ({ ...item, id: item.id ?? queueId(item.collection, item.record) }))
 }
 
 export function getQueueCount(): number {
   return getQueue().length
 }
 
+/** Add a record to the queue, replacing a queued copy of the same record. */
+function enqueue(collection: string, record: DataRecord) {
+  const item: QueueItem = { id: queueId(collection, record), collection, record, queuedAt: new Date().toISOString() }
+  const queue = getQueue()
+  const i = queue.findIndex((q) => q.id === item.id)
+  if (i >= 0) queue[i] = { ...item, queuedAt: queue[i].queuedAt }
+  else queue.push(item)
+  writeJson(QUEUE_KEY, queue)
+}
+
+function getSent(): SentItem[] {
+  return readJson<SentItem[]>(SENT_KEY, [])
+}
+
+function logSent(collection: string, record: DataRecord, savedAt: string) {
+  const item: SentItem = { id: queueId(collection, record), collection, record, savedAt, uploadedAt: new Date().toISOString() }
+  const rest = getSent().filter((s) => s.id !== item.id)
+  writeJson(SENT_KEY, [item, ...rest].slice(0, SENT_LIMIT))
+}
+
 let flushing = false
 
-/** Upload queued items one by one. Stops early if we go Offline mid-way. */
+/**
+ * Upload queued items one by one.
+ * - Stops if we go Offline mid-way; the item being sent stays queued.
+ * - An item that fails stays queued and is retried on the next flush.
+ * - Items are removed by id and uploads replace by record id, so two flushes
+ *   (or two windows flushing at once) never create duplicates.
+ */
 export async function flushQueue(): Promise<void> {
   if (flushing) return
   flushing = true
+  const tried = new Set<string>()
   try {
     while (isOnline()) {
-      const [next] = getQueue()
+      // Re-read each time: items may have been added or removed (by another window) while we waited.
+      const next = getQueue().find((q) => !tried.has(q.id))
       if (!next) break
+      tried.add(next.id)
       await wait()
-      upsert(next.collection, next.record)
-      // Re-read the queue: new items may have been added while we waited.
-      writeJson(QUEUE_KEY, getQueue().slice(1))
+      if (!isOnline()) break // the "network" dropped during the upload
+      try {
+        upsert(next.collection, next.record)
+      } catch {
+        continue // keep it queued for the next flush
+      }
+      logSent(next.collection, next.record, next.queuedAt)
+      writeJson(QUEUE_KEY, getQueue().filter((q) => q.id !== next.id))
     }
   } finally {
     flushing = false
   }
 }
 
+/** This device's saved records in a collection, newest first: still waiting, or uploaded (and when). */
+export interface OutboxItem {
+  record: DataRecord
+  state: 'waiting' | 'uploaded'
+  savedAt: string
+  uploadedAt?: string
+}
+
+export function getOutbox(collection: string): OutboxItem[] {
+  const waiting: OutboxItem[] = getQueue()
+    .filter((q) => q.collection === collection)
+    .map((q) => ({ record: q.record, state: 'waiting', savedAt: q.queuedAt }))
+  const waitingIds = new Set(waiting.map((w) => w.record.id))
+  const uploaded: OutboxItem[] = getSent()
+    .filter((s) => s.collection === collection && !waitingIds.has(s.record.id))
+    .map((s) => ({ record: s.record, state: 'uploaded', savedAt: s.savedAt, uploadedAt: s.uploadedAt }))
+  return [...waiting, ...uploaded].sort((a, b) => b.savedAt.localeCompare(a.savedAt))
+}
+
 // ---------- records ----------
 
 function upsert(collection: string, record: DataRecord) {
+  if (localStorage.getItem(FAIL_UPLOADS_KEY) === '1') throw new Error('Simulated network error')
   const key = SERVER_PREFIX + collection
   const rows = readJson<DataRecord[]>(key, [])
   const i = rows.findIndex((r) => r.id === record.id)
@@ -131,15 +213,24 @@ export async function getRecords<T extends DataRecord = DataRecord>(collection: 
 /**
  * Save a record (insert or replace by id).
  * Online: uploads after a short delay. Offline: adds it to the upload queue.
+ * If the upload fails or we go Offline during it, the record is queued instead.
  * Returns whether it was uploaded now or queued.
  */
 export async function saveRecord(collection: string, record: DataRecord): Promise<'uploaded' | 'queued'> {
+  const savedAt = new Date().toISOString()
   if (!isOnline()) {
-    writeJson(QUEUE_KEY, [...getQueue(), { collection, record, queuedAt: new Date().toISOString() }])
+    enqueue(collection, record)
     return 'queued'
   }
   await wait()
-  upsert(collection, record)
+  try {
+    if (!isOnline()) throw new Error('Went offline during upload')
+    upsert(collection, record)
+  } catch {
+    enqueue(collection, record)
+    return 'queued'
+  }
+  logSent(collection, record, savedAt)
   return 'uploaded'
 }
 
@@ -232,6 +323,13 @@ export async function getSchools(): Promise<SchoolView[]> {
     }
     return { ...school, survey, tier, need, needScore: score, status, shipment }
   })
+}
+
+const schoolNames = new Map((schoolsSeed.schools as School[]).map((s) => [s.id, s.name]))
+
+/** A school's name from the seed list (no server call; for labelling device-local items). */
+export function schoolName(id: string): string {
+  return schoolNames.get(id) ?? id
 }
 
 // ---------- partners and kits (seed data) ----------

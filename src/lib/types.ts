@@ -18,7 +18,7 @@ export interface Survey {
   pupils: number
   teachers: number
   secureRoom: boolean
-  surveyedAt: string // YYYY-MM-DD
+  surveyedAt: string // YYYY-MM-DD (seed) or full ISO time (new surveys); compared as strings
 }
 
 export type ShipmentStatus = 'approved' | 'in transit' | 'delivered' | 'verified'
