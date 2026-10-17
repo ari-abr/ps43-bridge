@@ -59,7 +59,7 @@ export interface Kit {
   deviceCount: number
 }
 
-export type PartnerType = 'refurbisher' | 'solar installer' | 'transporter' | 'laptop donor'
+export type PartnerType = 'refurbisher' | 'solar installer' | 'transporter' | 'laptop donor' | 'education NGO'
 
 export interface Partner {
   id: string

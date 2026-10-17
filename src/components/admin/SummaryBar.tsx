@@ -2,13 +2,13 @@ import type { SchoolView } from '../../lib/api'
 
 export default function SummaryBar({ schools }: { schools: SchoolView[] }) {
   const assessed = schools.filter((s) => s.status !== 'unassessed').length
-  const approved = schools.filter((s) => s.shipment !== null).length
+  const allocated = schools.filter((s) => s.shipment !== null).length
   const done = schools.filter((s) => s.status === 'delivered' || s.status === 'verified').length
 
   const items: { label: string; value: string | number; hint?: string }[] = [
     { label: 'Schools shown', value: schools.length },
     { label: 'Assessed', value: assessed, hint: 'Has a survey' },
-    { label: 'Kits approved', value: approved, hint: 'Approved, or already further along' },
+    { label: 'Kits allocated', value: allocated, hint: 'Schools with a kit approved, in transit, delivered or verified.' },
     { label: 'Delivered / verified', value: done },
     { label: 'Active learners', value: '–', hint: 'Coming later' },
   ]

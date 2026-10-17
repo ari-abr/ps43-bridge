@@ -135,6 +135,20 @@
    ],
    "trust": 1,
    "trustLabel": "Referred"
+  },
+  {
+   "id": "partner-09",
+   "name": "Grassfields Learning Alliance",
+   "type": "education NGO",
+   "city": "Bafoussam",
+   "lat": 5.4769,
+   "lng": 10.4221,
+   "supplies": [
+    "printed materials",
+    "teacher training"
+   ],
+   "trust": 4,
+   "trustLabel": "Proven"
   }
  ]
 }

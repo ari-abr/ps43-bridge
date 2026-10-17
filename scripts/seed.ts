@@ -189,6 +189,7 @@ const partnerRows: [string, Partner['type'], string, number, number, string[], 1
   ['Highland Haulage', 'transporter', 'Bafoussam', 5.4737, 10.4179, ['road freight', 'kit delivery'], 5],
   ['Grassfields Laptop Donors', 'laptop donor', 'Bafoussam', 5.4812, 10.4263, ['donated laptops', 'chargers'], 3],
   ['Noun Valley Solar', 'solar installer', 'Foumban', 5.7266, 10.8986, ['solar panels', 'installation'], 1],
+  ['Grassfields Learning Alliance', 'education NGO', 'Bafoussam', 5.4769, 10.4221, ['printed materials', 'teacher training'], 4],
 ]
 const partners: Partner[] = partnerRows.map(([name, type, city, lat, lng, supplies, trust], i) => ({
   id: `partner-${pad(i + 1)}`,
