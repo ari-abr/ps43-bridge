@@ -3,6 +3,7 @@ import { createShipment, markInTransit, type SchoolView, type ShipmentView } fro
 import { matchPartners, matchTransporters, topPartner } from '../../lib/matching'
 import type { Kit, Partner } from '../../lib/types'
 import { useSyncStatus } from '../../lib/useSyncStatus'
+import { workingOfTotal } from '../../lib/report'
 import { capitalise } from './tierStyle'
 
 /** "2026-10-05" stays as it is; a full ISO time becomes local date and time. */
@@ -30,26 +31,46 @@ export default function ShipmentSection({ school, kit, partners }: Props) {
 
       {shipment && <Confirmations shipment={shipment} />}
 
-      <h3>Latest check-in</h3>
-      {school.checkin ? (
-        <dl className="facts">
-          <dt>Date</dt>
-          <dd>{when(school.checkin.checkedAt)}</dd>
-          <dt>Working</dt>
-          <dd>{school.checkin.working}</dd>
-          <dt>Broken</dt>
-          <dd>{school.checkin.broken}</dd>
-          <dt>Missing</dt>
-          <dd>{school.checkin.missing}</dd>
-          {school.checkin.note && (
-            <>
-              <dt>Note</dt>
-              <dd>{school.checkin.note}</dd>
-            </>
-          )}
-        </dl>
+      <DevicesSection school={school} />
+    </>
+  )
+}
+
+/** Devices from the latest check-in: "x of y devices working" first. */
+function DevicesSection({ school }: { school: SchoolView }) {
+  const { checkin } = school
+  const delivered = school.status === 'delivered' || school.status === 'verified'
+  return (
+    <>
+      <h3>Devices</h3>
+      {checkin ? (
+        <>
+          <p className="big-figure">
+            <strong>{workingOfTotal(school)}</strong> devices working
+          </p>
+          <dl className="facts">
+            <dt>Working</dt>
+            <dd>{checkin.working}</dd>
+            <dt>Broken</dt>
+            <dd>{checkin.broken}</dd>
+            <dt>Missing</dt>
+            <dd>{checkin.missing}</dd>
+            <dt>Check-in date</dt>
+            <dd>
+              {when(checkin.checkedAt)} {checkin.simulated && <span className="pill pill-demo">simulated demo data</span>}
+            </dd>
+            {checkin.note && !checkin.simulated && (
+              <>
+                <dt>Note</dt>
+                <dd>{checkin.note}</dd>
+              </>
+            )}
+          </dl>
+        </>
       ) : (
-        <p className="muted">No check-in yet</p>
+        <p className="muted">
+          {delivered ? 'No check-in yet. Coordinators submit one monthly in Field Tools.' : 'No devices delivered yet.'}
+        </p>
       )}
     </>
   )

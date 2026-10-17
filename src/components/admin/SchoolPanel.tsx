@@ -3,6 +3,7 @@ import type { SchoolView } from '../../lib/api'
 import { matchPartners } from '../../lib/matching'
 import { TIER_LABELS } from '../../lib/scoring'
 import type { Kit, Partner } from '../../lib/types'
+import LearningSection from './LearningSection'
 import ShipmentSection from './ShipmentSection'
 import { capitalise, tierColor } from './tierStyle'
 
@@ -113,8 +114,7 @@ export default function SchoolPanel({ school, score, kits, partners, onClose }: 
 
       <ShipmentSection school={school} kit={kit} partners={partners} />
 
-      <h3>Learning</h3>
-      <p className="muted">No learning data yet</p>
+      <LearningSection school={school} />
     </div>
   )
 }

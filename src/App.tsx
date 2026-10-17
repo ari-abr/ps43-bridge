@@ -3,6 +3,7 @@ import Header from './components/Header'
 import { getSavedRole, pathForRole } from './lib/roles'
 import AdminPage from './pages/AdminPage'
 import FieldPage from './pages/FieldPage'
+import ReportPage from './pages/ReportPage'
 import StudentPage from './pages/StudentPage'
 import TagsPrintPage from './pages/TagsPrintPage'
 import TeacherPage from './pages/TeacherPage'
@@ -30,6 +31,7 @@ export default function App() {
     <Routes>
       {/* Print pages have no header or footer. */}
       <Route path="/print/tags/:shipmentId" element={<TagsPrintPage />} />
+      <Route path="/admin/report" element={<ReportPage />} />
       <Route path="*" element={<AppLayout />} />
     </Routes>
   )

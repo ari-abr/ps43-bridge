@@ -4,7 +4,7 @@ import { CircleMarker, MapContainer, Marker, Popup, TileLayer, Tooltip, useMap }
 import 'leaflet/dist/leaflet.css'
 import type { SchoolView } from '../../lib/api'
 import type { Partner } from '../../lib/types'
-import { TIER_COLORS, UNASSESSED_COLOR, tierColor } from './tierStyle'
+import { MASTERY_BANDS, TIER_COLORS, UNASSESSED_COLOR, masteryColor, tierColor, type ColorBy } from './tierStyle'
 
 const CAMEROON_CENTRE: L.LatLngTuple = [5.7, 12.4]
 
@@ -29,7 +29,8 @@ function ViewController({ points, fitKey, focus }: { points: L.LatLngTuple[]; fi
   const map = useMap()
 
   useEffect(() => {
-    if (points.length > 0) map.fitBounds(L.latLngBounds(points), { padding: [24, 24] })
+    // No animation: leaving the page mid-animation (e.g. opening the report) made Leaflet touch a removed map.
+    if (points.length > 0) map.fitBounds(L.latLngBounds(points), { padding: [24, 24], animate: false })
     // Only refit when fitKey changes, not on every data refresh.
   }, [fitKey, map]) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -47,13 +48,14 @@ interface Props {
   /** Changes when the map should refit (region filter changed, or data first loaded). */
   fitKey: string
   partners: Partner[]
+  colorBy: ColorBy
   showPartners: boolean
   selectedId: string | null
   focus: MapFocus | null
   onSelect: (id: string) => void
 }
 
-export default function SchoolMap({ schools, fitSchools, fitKey, partners, showPartners, selectedId, focus, onSelect }: Props) {
+export default function SchoolMap({ schools, fitSchools, fitKey, partners, colorBy, showPartners, selectedId, focus, onSelect }: Props) {
   // Draw the selected school last so it sits on top.
   const ordered = [...schools].sort((a, b) => Number(a.id === selectedId) - Number(b.id === selectedId))
 
@@ -76,12 +78,15 @@ export default function SchoolMap({ schools, fitSchools, fitKey, partners, showP
             pathOptions={{
               color: selected ? '#111' : '#fff',
               weight: selected ? 3 : 1.5,
-              fillColor: tierColor(s.tier),
+              fillColor: colorBy === 'learning' ? masteryColor(s.progress?.masteryRate ?? null) : tierColor(s.tier),
               fillOpacity: 0.9,
             }}
             eventHandlers={{ click: () => onSelect(s.id) }}
           >
-            <Tooltip>{s.name}</Tooltip>
+            <Tooltip>
+              {s.name}
+              {colorBy === 'learning' && s.progress?.masteryRate != null && ` · mastery ${s.progress.masteryRate}%`}
+            </Tooltip>
           </CircleMarker>
         )
       })}
@@ -105,20 +110,31 @@ export default function SchoolMap({ schools, fitSchools, fitKey, partners, showP
 }
 
 interface LegendProps {
+  colorBy: ColorBy
+  onColorBy: (v: ColorBy) => void
   showPartners: boolean
   onTogglePartners: (v: boolean) => void
 }
 
-export function MapLegend({ showPartners, onTogglePartners }: LegendProps) {
-  const items = [
+export function MapLegend({ colorBy, onColorBy, showPartners, onTogglePartners }: LegendProps) {
+  const tierItems = [
     { label: 'Unassessed', color: UNASSESSED_COLOR },
     { label: 'Tier 0', color: TIER_COLORS[0] },
     { label: 'Tier 1', color: TIER_COLORS[1] },
     { label: 'Tier 2', color: TIER_COLORS[2] },
     { label: 'Tier 3', color: TIER_COLORS[3] },
   ]
+  const learningItems = [{ label: 'No learning data', color: UNASSESSED_COLOR }, ...MASTERY_BANDS]
+  const items = colorBy === 'learning' ? learningItems : tierItems
   return (
     <div className="legend">
+      <label className="field-inline legend-colorby">
+        <span>Colour by</span>
+        <select value={colorBy} onChange={(e) => onColorBy(e.target.value as ColorBy)}>
+          <option value="tier">Readiness tier</option>
+          <option value="learning">Learning (mastery rate)</option>
+        </select>
+      </label>
       <ul className="legend-items" aria-label="Map legend">
         {items.map((i) => (
           <li key={i.label}>

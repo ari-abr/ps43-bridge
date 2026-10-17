@@ -1,16 +1,32 @@
 import type { SchoolView } from '../../lib/api'
+import { summarise } from '../../lib/report'
 
 export default function SummaryBar({ schools }: { schools: SchoolView[] }) {
-  const assessed = schools.filter((s) => s.status !== 'unassessed').length
+  const sum = summarise(schools)
   const allocated = schools.filter((s) => s.shipment !== null).length
-  const done = schools.filter((s) => s.status === 'delivered' || s.status === 'verified').length
+  const noLearning = sum.schoolsWithProgress === 0
+  const plural = sum.schoolsWithProgress === 1 ? '' : 's'
 
   const items: { label: string; value: string | number; hint?: string }[] = [
     { label: 'Schools shown', value: schools.length },
-    { label: 'Assessed', value: assessed, hint: 'Has a survey' },
+    { label: 'Assessed', value: sum.assessed, hint: 'Has a survey' },
     { label: 'Kits allocated', value: allocated, hint: 'Schools with a kit approved, in transit, delivered or verified.' },
-    { label: 'Delivered / verified', value: done },
-    { label: 'Active learners', value: '–', hint: 'Coming later' },
+    { label: 'Delivered / verified', value: sum.kitsDelivered },
+    {
+      label: 'Active learners',
+      value: noLearning ? '–' : sum.activeLearners,
+      hint: noLearning
+        ? 'No school has sent learning totals yet.'
+        : `Students with a lesson or quiz attempt, from ${sum.schoolsWithProgress} school${plural}.`,
+    },
+    {
+      label: 'Devices working',
+      value: sum.devicesWorkingPct === null ? '–' : `${sum.devicesWorkingPct}%`,
+      hint:
+        sum.devicesWorkingPct === null
+          ? 'No check-ins yet.'
+          : `${sum.devicesWorking} of ${sum.devicesChecked} devices, from the latest check-in of each school that has one.`,
+    },
   ]
 
   return (

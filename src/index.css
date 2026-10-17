@@ -330,3 +330,49 @@ textarea { font: inherit; padding: 0.4rem 0.7rem; border: 1px solid var(--border
   .print-page { padding: 0; max-width: none; }
   .tag-sheet { grid-template-columns: repeat(3, 1fr); }
 }
+
+/* ---------- learning and devices on the Admin Map ---------- */
+
+.admin-title { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; margin-bottom: 0.5rem; }
+.admin-title h1 { margin: 0; }
+.admin-title .btn-as-link { flex: none; }
+.big-figure { font-size: 1.1rem; margin: 0.25rem 0 0.5rem; }
+.big-figure strong { font-size: 1.6rem; color: var(--green); }
+.legend-colorby { flex: 1 1 100%; }
+.learning-content h3 { margin-top: 1rem; }
+.learning-content .btn-secondary { margin-top: 0.25rem; }
+
+/* ---------- donor report (A4) ---------- */
+
+.toolbar-actions { display: flex; gap: 0.5rem; }
+.toolbar-actions button { width: auto; padding: 0 1rem; min-height: 2.5rem; }
+.report-head h1 { font-size: 1.5rem; margin: 0; }
+.report-head p { margin: 0.25rem 0; }
+.report-section { margin-top: 1rem; break-inside: avoid; }
+.report-section h2 { font-size: 1.05rem; margin: 0 0 0.4rem; color: var(--green); border-bottom: 1px solid var(--border); padding-bottom: 0.2rem; }
+.report-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; }
+.report-stat { border: 1px solid var(--border); border-radius: 6px; padding: 0.4rem 0.6rem; }
+.report-value { font-size: 1.5rem; font-weight: 700; line-height: 1.2; }
+.report-label { font-size: 0.85rem; font-weight: 600; }
+.report-note { font-size: 0.72rem; color: var(--muted); }
+.report-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+.report-table th, .report-table td { padding: 0.3rem 0.4rem; border-bottom: 1px solid var(--border); text-align: left; }
+.report-table th { color: var(--muted); font-weight: 600; }
+.report-table .num { text-align: right; white-space: nowrap; }
+.report-table tr { break-inside: avoid; }
+.report-table thead { display: table-header-group; }
+.small-table { max-width: 22rem; }
+.report-table .subtotal td { font-weight: 700; border-top: 2px solid var(--border); }
+.report-method ul { margin: 0; padding-left: 1.1rem; font-size: 0.85rem; }
+.report-method li { margin-bottom: 0.25rem; }
+@media (max-width: 700px) {
+  .report-grid { grid-template-columns: repeat(2, 1fr); }
+  .report-table { display: block; overflow-x: auto; }
+}
+@media print {
+  .report { font-size: 10pt; }
+  .report-grid { grid-template-columns: repeat(4, 1fr); }
+  .report-table { font-size: 8.5pt; display: table; }
+  .report-value { font-size: 15pt; }
+  .report-method { break-inside: avoid; }
+}

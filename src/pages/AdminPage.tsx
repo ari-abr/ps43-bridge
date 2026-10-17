@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
 import LearningContent from '../components/admin/LearningContent'
 import Filters, { NO_FILTERS, type FilterState } from '../components/admin/Filters'
 import PriorityList, { type RankedSchool } from '../components/admin/PriorityList'
 import PrioritySettings from '../components/admin/PrioritySettings'
 import SchoolMap, { MapLegend, type MapFocus } from '../components/admin/SchoolMap'
 import SchoolPanel from '../components/admin/SchoolPanel'
+import type { ColorBy } from '../components/admin/tierStyle'
 import SummaryBar from '../components/admin/SummaryBar'
 import { KEY_PREFIX, getKits, getPartners, getSchools, subscribe, type SchoolView } from '../lib/api'
 import { DEFAULT_WEIGHTS, needScore, type NeedWeights } from '../lib/scoring'
@@ -37,6 +39,7 @@ export default function AdminPage() {
   const [kits, setKits] = useState<Kit[]>([])
   const [filters, setFilters] = useState<FilterState>(NO_FILTERS)
   const [showPartners, setShowPartners] = useState(false)
+  const [colorBy, setColorBy] = useState<ColorBy>('tier')
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [focus, setFocus] = useState<MapFocus | null>(null)
   const [weights, setWeights] = useState<NeedWeights>(loadWeights)
@@ -110,7 +113,12 @@ export default function AdminPage() {
 
   return (
     <div className="admin">
-      <h1>Admin Map</h1>
+      <div className="admin-title">
+        <h1>Admin Map</h1>
+        <Link className="btn-secondary btn-as-link" to={`/admin/report${filters.region === 'all' ? '' : `?region=${filters.region}`}`}>
+          Donor report{filters.region === 'all' ? '' : ` (${filters.region})`}
+        </Link>
+      </div>
 
       <SummaryBar schools={shown} />
       <Filters value={filters} onChange={setFilters} />
@@ -123,12 +131,18 @@ export default function AdminPage() {
             fitSchools={fitSchools}
             fitKey={`${filters.region}|${schools === null ? 'loading' : 'ready'}`}
             partners={partners}
+            colorBy={colorBy}
             showPartners={showPartners}
             selectedId={selected?.id ?? null}
             focus={focus}
             onSelect={selectFromMap}
           />
-          <MapLegend showPartners={showPartners} onTogglePartners={setShowPartners} />
+          <MapLegend
+            colorBy={colorBy}
+            onColorBy={setColorBy}
+            showPartners={showPartners}
+            onTogglePartners={setShowPartners}
+          />
         </div>
 
         <div className="admin-panel" ref={panelRef}>

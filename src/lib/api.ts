@@ -20,6 +20,7 @@ import type {
   Kit,
   Partner,
   Party,
+  Progress,
   School,
   SchoolStatus,
   Shipment,
@@ -258,6 +259,7 @@ export type SurveyRecord = DataRecord & Survey & { schoolId: string }
 export type ShipmentRecord = DataRecord & Shipment
 export type ConfirmationRecord = DataRecord & Confirmation
 export type CheckinRecord = DataRecord & Checkin
+export type ProgressRow = DataRecord & Progress
 
 /** A shipment with its confirmations and the status they give it. */
 export interface ShipmentView extends Shipment {
@@ -278,6 +280,8 @@ export interface SchoolView extends School {
   shipment: ShipmentView | null
   /** The newest check-in, or null. */
   checkin: Checkin | null
+  /** The school's learning totals, or null if no student has used a device there yet. */
+  progress: Progress | null
 }
 
 const seedSurveys = demoState.surveys as Record<string, Survey>
@@ -331,6 +335,15 @@ export async function getLatestSurveys(): Promise<Map<string, Survey>> {
   return latest
 }
 
+/** Learning totals per school. A record with nothing counted yet (e.g. a device just set up) is no progress. */
+async function getProgressBySchool(): Promise<Map<string, Progress>> {
+  const bySchool = new Map<string, Progress>()
+  for (const p of await getRecords<ProgressRow>('progress')) {
+    if (p.activeStudents > 0 || p.lessonsCompleted > 0 || p.quizAttempts > 0) bySchool.set(p.schoolId, p)
+  }
+  return bySchool
+}
+
 const SHIPMENT_STATUS: Record<ShipmentStatus, SchoolStatus> = {
   approved: 'kit approved',
   'in transit': 'in transit',
@@ -340,7 +353,12 @@ const SHIPMENT_STATUS: Record<ShipmentStatus, SchoolStatus> = {
 
 /** Every school with its latest survey, tier, need score, status, shipment and latest check-in. */
 export async function getSchools(): Promise<SchoolView[]> {
-  const [surveys, shipments, checkins] = await Promise.all([getLatestSurveys(), getShipments(), getLatestCheckins()])
+  const [surveys, shipments, checkins, progress] = await Promise.all([
+    getLatestSurveys(),
+    getShipments(),
+    getLatestCheckins(),
+    getProgressBySchool(),
+  ])
 
   // One shipment per school: the most recently created.
   const shipmentOf = latestBySchool(shipments)
@@ -371,7 +389,17 @@ export async function getSchools(): Promise<SchoolView[]> {
       }
       score = needScore(need)
     }
-    return { ...school, survey, tier, need, needScore: score, status, shipment, checkin: checkins.get(school.id) ?? null }
+    return {
+      ...school,
+      survey,
+      tier,
+      need,
+      needScore: score,
+      status,
+      shipment,
+      checkin: checkins.get(school.id) ?? null,
+      progress: progress.get(school.id) ?? null,
+    }
   })
 }
 

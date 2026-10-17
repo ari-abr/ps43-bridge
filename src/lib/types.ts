@@ -73,6 +73,21 @@ export interface Checkin {
   missing: number
   note: string
   checkedAt: string
+  simulated?: boolean // written by the Admin "Simulate 30 days" demo button
+}
+
+/** A school's learning totals from its devices: one record per school ("progress-<schoolId>"). No names. */
+export interface Progress {
+  id: string
+  schoolId: string
+  activeStudents: number
+  lessonsCompleted: number
+  quizAttempts: number
+  masteryRate: number | null // percent
+  averageScore: number | null // percent
+  courseVersion: number
+  updatedAt: string
+  simulated?: boolean
 }
 
 export interface KitItem {
