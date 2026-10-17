@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import LearningContent from '../components/admin/LearningContent'
 import Filters, { NO_FILTERS, type FilterState } from '../components/admin/Filters'
 import PriorityList, { type RankedSchool } from '../components/admin/PriorityList'
 import PrioritySettings from '../components/admin/PrioritySettings'
@@ -147,6 +148,8 @@ export default function AdminPage() {
           <PriorityList ranked={ranked} selectedId={selected?.id ?? null} onSelect={selectFromList} />
         </div>
       </div>
+
+      <LearningContent />
     </div>
   )
 }

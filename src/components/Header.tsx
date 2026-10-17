@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from 'react-router-dom'
-import { resetDemoData, setOnline } from '../lib/api'
+import { getQueue, resetDemoData, setOnline } from '../lib/api'
 import { ROLES, getSavedRole, pathForRole, roleForPath, saveRole, type Role } from '../lib/roles'
 import { useSyncStatus } from '../lib/useSyncStatus'
 
@@ -24,6 +24,13 @@ export default function Header() {
     queueCount === 0
       ? 'All synced'
       : `${queueCount} item${queueCount === 1 ? '' : 's'} waiting to upload`
+
+  // e.g. "1 surveys, 1 progress": what is waiting, by collection.
+  const waitingByCollection = Object.entries(
+    getQueue().reduce<Record<string, number>>((acc, q) => ({ ...acc, [q.collection]: (acc[q.collection] ?? 0) + 1 }), {}),
+  )
+    .map(([collection, n]) => `${n} ${collection}`)
+    .join(', ')
 
   return (
     <header className="header">
@@ -51,7 +58,7 @@ export default function Header() {
           <span className="dot" /> {online ? 'Online' : 'Offline'}
         </button>
 
-        <span className={`badge ${queueCount === 0 ? 'badge-ok' : 'badge-wait'}`} role="status">
+        <span className={`badge ${queueCount === 0 ? 'badge-ok' : 'badge-wait'}`} role="status" title={waitingByCollection || undefined}>
           {syncText}
         </span>
 

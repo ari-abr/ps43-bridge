@@ -344,6 +344,48 @@ export async function getKits(): Promise<Kit[]> {
   return kitsSeed.kits as Kit[]
 }
 
+// ---------- course packs ----------
+//
+// 'courseReleases' { id: packId, version, publishedAt }  the version devices should install.
+// A pack with no record is published at version 1.
+
+interface CourseRelease extends DataRecord {
+  version: number
+  publishedAt: string
+}
+
+const FIRST_VERSION = 1
+
+/** The published version of a course pack. Throws while Offline (the server can't be reached). */
+export async function getPublishedVersion(packId: string): Promise<number> {
+  if (!isOnline()) throw new Error('Offline')
+  const releases = await getRecords<CourseRelease>('courseReleases')
+  if (!isOnline()) throw new Error('Offline')
+  return releases.find((r) => r.id === packId)?.version ?? FIRST_VERSION
+}
+
+/** Admin: publish a version of a course pack. Online only; not queued. */
+export async function publishCourseVersion(packId: string, version: number): Promise<void> {
+  if (!isOnline()) throw new Error('Offline')
+  await wait()
+  if (!isOnline()) throw new Error('Offline')
+  upsert('courseReleases', { id: packId, version, publishedAt: new Date().toISOString() })
+}
+
+// ---------- device-only storage ----------
+//
+// For data that never leaves the device (e.g. student names and their progress).
+// Same "ps43:" prefix, so other windows refresh and "Reset demo data" clears it.
+
+export function getLocal<T>(key: string, fallback: T): T {
+  return readJson<T>(KEY_PREFIX + key, fallback)
+}
+
+/** Save device-only data and notify listeners. Throws if storage is full. */
+export function setLocal(key: string, value: unknown) {
+  writeJson(KEY_PREFIX + key, value)
+}
+
 // ---------- demo reset ----------
 
 /** Remove every app key from localStorage. */
