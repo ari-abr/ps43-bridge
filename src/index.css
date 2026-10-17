@@ -1,0 +1,81 @@
+:root {
+  --green: #0f6e5c;
+  --green-light: #e3f2ee;
+  --amber: #a15c00;
+  --amber-light: #fff3e0;
+  --red: #b3261e;
+  --text: #1d1d1d;
+  --muted: #5f6368;
+  --border: #d9d9d9;
+  --bg: #f6f7f8;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color: var(--text);
+  line-height: 1.5;
+}
+
+* { box-sizing: border-box; }
+
+body { margin: 0; background: var(--bg); }
+
+#root { min-height: 100vh; display: flex; flex-direction: column; }
+
+h1 { font-size: 1.4rem; margin: 0 0 0.5rem; }
+
+button, select { font: inherit; }
+
+/* ---------- header ---------- */
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: #fff;
+  border-bottom: 1px solid var(--border);
+}
+
+.header-title { font-weight: 700; font-size: 1.15rem; color: var(--green); }
+
+.header-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
+
+.field-inline { display: flex; align-items: center; gap: 0.4rem; font-size: 0.9rem; color: var(--muted); }
+
+select, button {
+  min-height: 2.25rem;
+  padding: 0.3rem 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.toggle { display: inline-flex; align-items: center; gap: 0.4rem; font-weight: 600; }
+.toggle .dot { width: 0.6rem; height: 0.6rem; border-radius: 50%; background: currentColor; }
+.toggle.is-online { color: var(--green); border-color: var(--green); }
+.toggle.is-offline { color: var(--red); border-color: var(--red); }
+
+.badge { padding: 0.25rem 0.6rem; border-radius: 999px; font-size: 0.85rem; white-space: nowrap; }
+.badge-ok { background: var(--green-light); color: var(--green); }
+.badge-wait { background: var(--amber-light); color: var(--amber); }
+
+.btn-secondary { color: var(--muted); }
+
+/* ---------- page ---------- */
+
+.main { flex: 1; width: 100%; max-width: 960px; margin: 0 auto; padding: 1rem; }
+
+.main section { background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 1rem; }
+
+.footer { padding: 0.75rem 1rem; text-align: center; font-size: 0.8rem; color: var(--muted); }
+
+/* ---------- phone ---------- */
+
+@media (max-width: 600px) {
+  .header { flex-direction: column; align-items: stretch; }
+  .header-controls { justify-content: space-between; }
+  .header-controls .field-inline { flex: 1 1 100%; }
+  .header-controls select { flex: 1; }
+}
