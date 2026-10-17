@@ -66,7 +66,7 @@ export default function TeacherPage() {
           <p className="muted empty">Students appear here once they enter their name on this device.</p>
         ) : (
           <div className="table-wrap">
-            <table className="class-table">
+            <table className="class-table stack-table">
               <thead>
                 <tr>
                   <th>Student</th>
@@ -79,16 +79,16 @@ export default function TeacherPage() {
               <tbody>
                 {summaries.map((s) => (
                   <tr key={s.student.id}>
-                    <td>
+                    <td data-label="Student">
                       {s.student.name}
                       {s.student.demo && <span className="pill pill-demo">demo</span>}
                     </td>
-                    <td>
+                    <td data-label="Lessons">
                       {s.lessonsDone} / {pack.lessons.length}
                     </td>
-                    <td>{pct(s.latest)}</td>
-                    <td>{pct(s.best)}</td>
-                    <td>
+                    <td data-label="Latest">{pct(s.latest)}</td>
+                    <td data-label="Best">{pct(s.best)}</td>
+                    <td data-label="Status">
                       {s.mastered ? (
                         <span className="badge badge-ok">Mastered</span>
                       ) : (

@@ -93,7 +93,7 @@ export default function ReportPage() {
   ]
 
   return (
-    <div className="print-page report">
+    <main className="print-page report">
       <div className="print-toolbar">
         <Link to="/admin">← Admin Map</Link>
         <span className="toolbar-actions">
@@ -165,7 +165,7 @@ export default function ReportPage() {
         {rows.length === 0 ? (
           <p className="muted">No school has a kit yet.</p>
         ) : (
-          <table className="report-table">
+          <table className="report-table stack-table">
             <thead>
               <tr>
                 <th>School</th>
@@ -180,13 +180,13 @@ export default function ReportPage() {
             <tbody>
               {rows.map((r) => (
                 <tr key={r.name}>
-                  <td>{r.name}</td>
-                  <td>{r.region}</td>
-                  <td>{r.tier}</td>
-                  <td>{r.status}</td>
-                  <td className="num">{r.devicesWorking}</td>
-                  <td className="num">{r.activeLearners}</td>
-                  <td className="num">{r.mastery}</td>
+                  <td data-label="School">{r.name}</td>
+                  <td data-label="Region">{r.region}</td>
+                  <td data-label="Tier">{r.tier}</td>
+                  <td data-label="Shipment">{r.status}</td>
+                  <td className="num" data-label="Devices working">{r.devicesWorking}</td>
+                  <td className="num" data-label="Active learners">{r.activeLearners}</td>
+                  <td className="num" data-label="Mastery">{r.mastery}</td>
                 </tr>
               ))}
             </tbody>
@@ -218,6 +218,6 @@ export default function ReportPage() {
           </li>
         </ul>
       </section>
-    </div>
+    </main>
   )
 }

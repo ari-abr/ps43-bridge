@@ -190,10 +190,10 @@ function CheckinForm({ school, onDone }: { school: SchoolView; onDone: () => voi
 function RecentCheckins() {
   const [items, setItems] = useState(() => getOutbox('checkins'))
   useEffect(() => subscribe(() => setItems(getOutbox('checkins'))), [])
-  if (items.length === 0) return null
   return (
     <div className="card">
       <h2>My recent check-ins</h2>
+      {items.length === 0 && <p className="muted">No check-ins saved on this device yet.</p>}
       <ul className="recent-list">
         {items.map((item) => {
           const c = item.record as CheckinRecord

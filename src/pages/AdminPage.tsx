@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import LearningContent from '../components/admin/LearningContent'
+import DemoControls from '../components/admin/DemoControls'
 import Filters, { NO_FILTERS, type FilterState } from '../components/admin/Filters'
 import PriorityList, { type RankedSchool } from '../components/admin/PriorityList'
 import PrioritySettings from '../components/admin/PrioritySettings'
@@ -120,11 +120,21 @@ export default function AdminPage() {
         </Link>
       </div>
 
+      <DemoControls />
+
       <SummaryBar schools={shown} />
       <Filters value={filters} onChange={setFilters} />
+      {schools !== null && shown.length === 0 && (
+        <p className="muted" role="status">
+          No schools match these filters.{' '}
+          <button type="button" className="btn-link" onClick={() => setFilters(NO_FILTERS)}>
+            Clear filters
+          </button>
+        </p>
+      )}
 
       <div className="admin-grid">
-        <div className="admin-map card">
+        <div className="admin-map card" role="region" aria-label="Map of schools">
           {schools === null && <p className="muted loading">Loading schools…</p>}
           <SchoolMap
             schools={shown}
@@ -159,11 +169,9 @@ export default function AdminPage() {
           <h2>Priority list</h2>
           <p className="muted small">Assessed schools, highest need first.</p>
           <PrioritySettings weights={weights} onChange={changeWeights} />
-          <PriorityList ranked={ranked} selectedId={selected?.id ?? null} onSelect={selectFromList} />
+          <PriorityList loading={schools === null} ranked={ranked} selectedId={selected?.id ?? null} onSelect={selectFromList} />
         </div>
       </div>
-
-      <LearningContent />
     </div>
   )
 }

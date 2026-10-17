@@ -8,12 +8,14 @@ export interface RankedSchool {
 }
 
 interface Props {
+  loading: boolean
   ranked: RankedSchool[]
   selectedId: string | null
   onSelect: (id: string) => void
 }
 
-export default function PriorityList({ ranked, selectedId, onSelect }: Props) {
+export default function PriorityList({ loading, ranked, selectedId, onSelect }: Props) {
+  if (loading) return <p className="muted small">Loading schools…</p>
   if (ranked.length === 0) return <p className="muted small">No assessed schools match the filters.</p>
 
   return (
@@ -35,11 +37,8 @@ export default function PriorityList({ ranked, selectedId, onSelect }: Props) {
             </span>
             <span className="priority-score">
               <strong>{score.toFixed(1)}</strong>
-              <span
-                className="tier-dot"
-                style={{ background: tierColor(school.tier) }}
-                title={school.tier === null ? undefined : TIER_LABELS[school.tier]}
-              />
+              <span className="tier-dot" style={{ background: tierColor(school.tier) }} aria-hidden="true" />
+              <span className="sr-only">{school.tier === null ? 'Unassessed' : TIER_LABELS[school.tier]}</span>
             </span>
           </button>
         </li>

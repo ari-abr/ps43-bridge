@@ -23,6 +23,12 @@ h1 { font-size: 1.4rem; margin: 0 0 0.5rem; }
 
 button, select { font: inherit; }
 
+/* Visible keyboard focus everywhere. */
+:focus-visible { outline: 3px solid #1a5fb4; outline-offset: 2px; }
+.choice-option:focus-within { outline: 3px solid #1a5fb4; outline-offset: 2px; }
+
+.sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+
 /* ---------- header ---------- */
 
 .header {
@@ -38,12 +44,15 @@ button, select { font: inherit; }
 
 .header-title { font-weight: 700; font-size: 1.15rem; color: var(--green); }
 
+.header-top { display: contents; }
+.menu-btn { display: none; }
 .header-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
 
 .field-inline { display: flex; align-items: center; gap: 0.4rem; font-size: 0.9rem; color: var(--muted); }
 
 select, button {
-  min-height: 2.25rem;
+  min-height: 2.75rem; /* 44px tap target */
+  min-width: 2.75rem;
   padding: 0.3rem 0.7rem;
   border: 1px solid var(--border);
   border-radius: 6px;
@@ -74,11 +83,20 @@ select, button {
 /* ---------- phone ---------- */
 
 @media (max-width: 600px) {
-  .header { flex-direction: column; align-items: stretch; }
+  .header { flex-direction: column; align-items: stretch; gap: 0.5rem; }
+  .header-top { display: flex; align-items: center; justify-content: space-between; }
+  .menu-btn { display: inline-flex; align-items: center; }
   .header-controls { justify-content: space-between; }
-  .header-controls .field-inline { flex: 1 1 100%; }
-  .header-controls select { flex: 1; }
+  /* Role and Reset live in the menu; Online/Offline and sync status always show. */
+  .menu-item { display: none; }
+  .menu-open .menu-item { display: flex; flex: 1 1 100%; }
+  .menu-open .field-inline.menu-item select { flex: 1; }
+  .menu-open button.menu-item { justify-content: center; }
+  .header-controls .badge { white-space: normal; text-align: center; flex: 1; }
 }
+
+/* Leaflet zoom buttons: 44px on touch screens. */
+.leaflet-touch .leaflet-bar a { width: 44px; height: 44px; line-height: 44px; }
 
 /* ---------- admin map ---------- */
 
@@ -136,7 +154,9 @@ select, button {
 .legend { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.5rem 1rem; padding: 0.5rem 0.25rem 0.1rem; font-size: 0.85rem; }
 .legend-items { display: flex; flex-wrap: wrap; gap: 0.25rem 0.9rem; list-style: none; margin: 0; padding: 0; }
 .legend-items li { display: flex; align-items: center; gap: 0.35rem; }
-.legend-toggle { display: flex; align-items: center; gap: 0.35rem; cursor: pointer; }
+.legend-toggle { display: flex; align-items: center; gap: 0.35rem; cursor: pointer; min-height: 2.75rem; }
+.legend-toggle input { width: 1.25rem; height: 1.25rem; accent-color: var(--green); }
+.map-note { position: absolute; top: 0.75rem; left: 0.75rem; right: 0.75rem; z-index: 500; margin: 0; padding: 0.3rem 0.75rem; border-radius: 6px; background: var(--amber-light); color: var(--amber); border: 1px solid var(--amber); }
 
 .tier-dot { display: inline-block; width: 0.8rem; height: 0.8rem; border-radius: 50%; border: 1px solid rgba(0, 0, 0, 0.25); vertical-align: -0.1rem; flex: none; }
 
@@ -144,7 +164,8 @@ select, button {
 .partner-swatch { display: inline-block; width: 0.65rem; height: 0.65rem; background: #6a1b9a; transform: rotate(45deg); margin: 0 0.1rem; }
 
 .priority-settings { border: 1px solid var(--border); border-radius: 6px; padding: 0.4rem 0.75rem; margin: 0.5rem 0 0.75rem; background: var(--bg); }
-.priority-settings summary { cursor: pointer; font-weight: 600; }
+.priority-settings summary, .demo-controls summary { cursor: pointer; font-weight: 600; min-height: 2.75rem; display: flex; align-items: center; }
+.slider input { min-height: 2.75rem; }
 .slider { display: block; margin: 0.6rem 0; }
 .slider-head { display: flex; justify-content: space-between; font-size: 0.9rem; }
 .slider input { width: 100%; }
@@ -164,7 +185,7 @@ select, button {
 .pill-demo { background: var(--amber-light); color: var(--amber); }
 .facts { display: grid; grid-template-columns: max-content 1fr; gap: 0.15rem 0.75rem; margin: 0; }
 .facts dt { color: var(--muted); }
-.facts dd { margin: 0; }
+.facts dd { margin: 0; overflow-wrap: anywhere; }
 .plain-list { margin: 0.25rem 0 0; padding-left: 1.1rem; }
 .plain-list li { margin-bottom: 0.35rem; }
 .kit-name { margin: 0; font-weight: 600; }
@@ -174,13 +195,14 @@ select, button {
 .field { max-width: 640px; margin: 0 auto; display: flex; flex-direction: column; gap: 0.75rem; }
 .field h1 { margin: 0; }
 
+.tabpanel { display: flex; flex-direction: column; gap: 0.75rem; }
 .tabs { display: flex; gap: 0.25rem; border-bottom: 1px solid var(--border); }
 .tab { flex: 1; min-height: 2.75rem; border: 0; border-bottom: 3px solid transparent; border-radius: 0; background: transparent; font-weight: 600; color: var(--muted); }
 .tab.is-active { color: var(--green); border-bottom-color: var(--green); }
 
 .btn-primary { min-height: 2.75rem; width: 100%; background: var(--green); border-color: var(--green); color: #fff; font-weight: 600; }
 .btn-primary:disabled { opacity: 0.6; cursor: wait; }
-.btn-link { border: 0; background: transparent; color: var(--green); text-decoration: underline; padding: 0; min-height: 2rem; align-self: flex-start; }
+.btn-link { border: 0; background: transparent; color: var(--green); text-decoration: underline; padding: 0 0.25rem; min-height: 2.75rem; align-self: flex-start; }
 
 input[type="text"], input[type="search"] {
   font: inherit; min-height: 2.75rem; padding: 0.3rem 0.7rem; width: 100%;
@@ -250,7 +272,7 @@ input[type="text"], input[type="search"] {
 .fact-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(7.5rem, 1fr)); gap: 0.25rem 0.75rem; font-variant-numeric: tabular-nums; }
 .try-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr)); gap: 0.5rem; }
 .try-list details { border: 1px solid var(--border); border-radius: 6px; padding: 0.5rem 0.75rem; font-size: 1.1rem; }
-.try-list summary { cursor: pointer; }
+.try-list summary { cursor: pointer; min-height: 2.75rem; display: flex; align-items: center; }
 
 .quiz-question { font-size: 1.4rem; }
 .quiz-options { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
@@ -312,7 +334,8 @@ textarea { font: inherit; padding: 0.4rem 0.7rem; border: 1px solid var(--border
 
 .print-note { padding: 1rem; }
 .print-page { max-width: 210mm; margin: 0 auto; padding: 1rem; background: #fff; min-height: 100vh; }
-.print-toolbar { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+.print-toolbar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.5rem 1rem; margin-bottom: 1rem; }
+.print-toolbar a { display: inline-flex; align-items: center; min-height: 2.75rem; }
 .print-toolbar .btn-primary { width: auto; padding: 0 1.5rem; }
 .tag-sheet { display: grid; grid-template-columns: repeat(auto-fill, minmax(60mm, 1fr)); gap: 4mm; }
 .tag { display: flex; align-items: center; gap: 3mm; padding: 3mm; border: 1px dashed #888; border-radius: 2mm; break-inside: avoid; page-break-inside: avoid; }
@@ -333,7 +356,7 @@ textarea { font: inherit; padding: 0.4rem 0.7rem; border: 1px solid var(--border
 
 /* ---------- learning and devices on the Admin Map ---------- */
 
-.admin-title { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; margin-bottom: 0.5rem; }
+.admin-title { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.75rem; margin-bottom: 0.5rem; }
 .admin-title h1 { margin: 0; }
 .admin-title .btn-as-link { flex: none; }
 .big-figure { font-size: 1.1rem; margin: 0.25rem 0 0.5rem; }
@@ -344,8 +367,8 @@ textarea { font: inherit; padding: 0.4rem 0.7rem; border: 1px solid var(--border
 
 /* ---------- donor report (A4) ---------- */
 
-.toolbar-actions { display: flex; gap: 0.5rem; }
-.toolbar-actions button { width: auto; padding: 0 1rem; min-height: 2.5rem; }
+.toolbar-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.toolbar-actions button { width: auto; padding: 0 1rem; }
 .report-head h1 { font-size: 1.5rem; margin: 0; }
 .report-head p { margin: 0.25rem 0; }
 .report-section { margin-top: 1rem; break-inside: avoid; }
@@ -367,7 +390,16 @@ textarea { font: inherit; padding: 0.4rem 0.7rem; border: 1px solid var(--border
 .report-method li { margin-bottom: 0.25rem; }
 @media (max-width: 700px) {
   .report-grid { grid-template-columns: repeat(2, 1fr); }
-  .report-table { display: block; overflow-x: auto; }
+}
+
+/* Wide tables become one card per row on a phone (no sideways scrolling). */
+@media screen and (max-width: 700px) {
+  .stack-table, .stack-table tbody, .stack-table tr, .stack-table td { display: block; }
+  .stack-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); }
+  .stack-table tr { border: 1px solid var(--border); border-radius: 6px; margin-bottom: 0.5rem; padding: 0.25rem 0.6rem; background: #fff; }
+  .stack-table td { display: flex; justify-content: space-between; gap: 1rem; padding: 0.2rem 0; border: 0; white-space: normal; text-align: right !important; }
+  .stack-table td::before { content: attr(data-label); color: var(--muted); font-weight: 600; text-align: left; flex: none; }
+  .table-wrap { overflow-x: visible; }
 }
 @media print {
   .report { font-size: 10pt; }
@@ -376,3 +408,14 @@ textarea { font: inherit; padding: 0.4rem 0.7rem; border: 1px solid var(--border
   .report-value { font-size: 15pt; }
   .report-method { break-inside: avoid; }
 }
+
+/* ---------- demo controls (Admin) ---------- */
+
+.demo-controls { margin-bottom: 0.75rem; }
+.demo-controls[open] summary { margin-bottom: 0.25rem; }
+.demo-controls > .btn-primary, .demo-controls > .btn-secondary { width: auto; max-width: 100%; padding: 0.3rem 1rem; }
+.demo-controls .btn-primary { width: auto; }
+.demo-controls h2 { font-size: 0.95rem; margin: 1rem 0 0.25rem; color: var(--green); }
+.scene { margin-top: 0.5rem; padding: 0.5rem 0.75rem; border-radius: 6px; background: var(--green-light); }
+.scene-title { margin: 0.25rem 0 0; font-weight: 600; }
+.scene .plain-list { margin-bottom: 0.5rem; }

@@ -22,13 +22,15 @@ export default function FieldPage() {
     <div className="field">
       <h1>Field Tools</h1>
 
-      <div className="tabs" role="tablist">
+      <div className="tabs" role="tablist" aria-label="Field Tools">
         {TABS.map((t) => (
           <button
             key={t.id}
             type="button"
             role="tab"
+            id={`tab-${t.id}`}
             aria-selected={tab === t.id}
+            aria-controls="tabpanel"
             className={`tab ${tab === t.id ? 'is-active' : ''}`}
             onClick={() => setTab(t.id)}
           >
@@ -37,18 +39,20 @@ export default function FieldPage() {
         ))}
       </div>
 
-      {tab === 'survey' &&
-        (school ? (
-          <SurveyForm key={school.id} school={school} onDone={() => setSchool(null)} />
-        ) : (
-          <>
-            <SchoolPicker onSelect={setSchool} />
-            <RecentSurveys />
-          </>
-        ))}
+      <div className="tabpanel" role="tabpanel" id="tabpanel" aria-labelledby={`tab-${tab}`}>
+        {tab === 'survey' &&
+          (school ? (
+            <SurveyForm key={school.id} school={school} onDone={() => setSchool(null)} />
+          ) : (
+            <>
+              <SchoolPicker onSelect={setSchool} />
+              <RecentSurveys />
+            </>
+          ))}
 
-      {tab === 'deliveries' && <Deliveries />}
-      {tab === 'checkins' && <Checkins />}
+        {tab === 'deliveries' && <Deliveries />}
+        {tab === 'checkins' && <Checkins />}
+      </div>
     </div>
   )
 }

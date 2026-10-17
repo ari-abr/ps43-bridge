@@ -9,6 +9,7 @@ interface Props {
 function cameraError(err: unknown): string {
   const name = err instanceof DOMException ? err.name : ''
   if (name === 'NotAllowedError') return 'Camera permission was refused. Allow the camera in the browser, or type the tag below.'
+  if (name === 'NotFoundError') return 'This device has no camera. Type the tag below instead.'
   if (name === 'NotReadableError') return 'The camera is in use by another app. Close it, or type the tag below.'
   return 'No camera could be started on this device. Type the tag below instead.'
 }
@@ -19,6 +20,7 @@ export default function QrScannerBox({ onCode }: Props) {
   const onCodeRef = useRef(onCode)
   onCodeRef.current = onCode
   const [on, setOn] = useState(false)
+  const [starting, setStarting] = useState(false)
   const [error, setError] = useState<string | null>(
     window.isSecureContext ? null : 'The camera only works on localhost or HTTPS. Type the tag below instead.',
   )
@@ -33,13 +35,19 @@ export default function QrScannerBox({ onCode }: Props) {
       maxScansPerSecond: 5,
     })
     let live = true
-    scanner.start().catch((err) => {
-      if (!live) return
-      setError(cameraError(err))
-      setOn(false)
-    })
+    setStarting(true)
+    scanner
+      .start()
+      .then(() => live && setStarting(false))
+      .catch((err) => {
+        if (!live) return
+        setError(cameraError(err))
+        setStarting(false)
+        setOn(false)
+      })
     return () => {
       live = false
+      setStarting(false)
       scanner.stop()
       scanner.destroy()
     }
@@ -61,8 +69,20 @@ export default function QrScannerBox({ onCode }: Props) {
           <video ref={videoRef} muted playsInline />
         </div>
       )}
+      {on && starting && (
+        <p className="muted small" role="status">
+          Starting the camera… allow it if the browser asks.
+        </p>
+      )}
       {!cameraBlocked && (
-        <button type="button" className={on ? 'btn-secondary' : 'btn-primary'} onClick={() => { setError(null); setOn(!on) }}>
+        <button
+          type="button"
+          className={on ? 'btn-secondary' : 'btn-primary'}
+          onClick={() => {
+            setError(null)
+            setOn(!on)
+          }}
+        >
           {on ? 'Stop camera' : 'Scan with camera'}
         </button>
       )}

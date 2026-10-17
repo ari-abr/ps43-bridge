@@ -46,6 +46,16 @@ export default function DeliveryCard({ schoolId }: { schoolId: string }) {
     )
   }
 
+  if (shipment.status === 'approved') {
+    return (
+      <div className="card" role="status">
+        <h2>Kit approved</h2>
+        <p className="muted">
+          A PS43 kit is approved for this school. You can confirm what arrived once the coordinator has delivered it.
+        </p>
+      </div>
+    )
+  }
   if (shipment.status !== 'in transit' && shipment.status !== 'delivered') return null
   return <ConfirmForm key={shipment.id} shipment={shipment} />
 }

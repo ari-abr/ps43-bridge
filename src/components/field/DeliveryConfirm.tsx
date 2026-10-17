@@ -129,13 +129,16 @@ export default function DeliveryConfirm({ shipment, onBack }: Props) {
     <div className="card delivery">
       {header}
 
+      {shipment.devices.length === 0 && (
+        <p className="muted">This kit has no tagged devices, so there is nothing to scan. Confirm when it arrives.</p>
+      )}
       {shipment.devices.length > 0 && (
         <>
           <div className="scan-progress" role="status">
             <strong>
               {scanned.size} of {shipment.devices.length} scanned
             </strong>
-            <progress max={shipment.devices.length} value={scanned.size} />
+            <progress max={shipment.devices.length} value={scanned.size} aria-label="Devices scanned" />
           </div>
 
           <QrScannerBox onCode={onCode} />
@@ -147,7 +150,7 @@ export default function DeliveryConfirm({ shipment, onBack }: Props) {
             </p>
           )}
 
-          <ul className="device-list">
+          <ul className="device-list" tabIndex={0} aria-label="Devices in this shipment">
             {shipment.devices.map((d) => (
               <li key={d.assetId} className={scanned.has(d.assetId) ? 'is-done' : ''}>
                 <span className={`tick ${scanned.has(d.assetId) ? 'is-done' : ''}`} aria-hidden="true">

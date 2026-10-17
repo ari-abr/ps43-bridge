@@ -34,7 +34,7 @@ export default function TagsPrintPage() {
   const school = schoolName(shipment.schoolId)
 
   return (
-    <div className="print-page">
+    <main className="print-page">
       <div className="print-toolbar">
         <div>
           <strong>QR tags: {school}</strong>
@@ -59,6 +59,6 @@ export default function TagsPrintPage() {
           </div>
         ))}
       </div>
-    </div>
+    </main>
   )
 }
