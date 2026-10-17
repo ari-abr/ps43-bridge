@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import DeliveryCard from '../components/learn/DeliveryCard'
 import LearnShell from '../components/learn/LearnShell'
 import ProgressSyncNote from '../components/learn/ProgressSyncNote'
 import { MASTERY_PERCENT, addDemoClass, classTotals, summariseStudent } from '../lib/learning'
@@ -7,7 +8,7 @@ import { useLearning } from '../lib/useLearning'
 const pct = (n: number | null) => (n === null ? '–' : `${n}%`)
 
 export default function TeacherPage() {
-  const { students, pack } = useLearning()
+  const { students, pack, schoolId } = useLearning()
   const [error, setError] = useState<string | null>(null)
 
   const summaries = useMemo(
@@ -28,6 +29,7 @@ export default function TeacherPage() {
 
   return (
     <LearnShell title="Learning: Teacher">
+      {schoolId && <DeliveryCard schoolId={schoolId} />}
       <div className="summary" role="group" aria-label="Class summary">
         <div className="summary-item" title="At least one lesson done or one quiz attempt">
           <div className="summary-value">{totals.activeStudents}</div>

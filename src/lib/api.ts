@@ -13,7 +13,19 @@ import kitsSeed from '../data/kits.json'
 import partnersSeed from '../data/partners.json'
 import schoolsSeed from '../data/schools.json'
 import { needScore, nearestKm, tierFromSurvey, type NeedInput, type Tier } from './scoring.ts'
-import type { Kit, Partner, School, SchoolStatus, Shipment, ShipmentStatus, Survey } from './types.ts'
+import { assetNumber, confirmationId, devicesForKit, latestBySchool, shipmentStatus } from './shipments.ts'
+import type {
+  Checkin,
+  Confirmation,
+  Kit,
+  Partner,
+  Party,
+  School,
+  SchoolStatus,
+  Shipment,
+  ShipmentStatus,
+  Survey,
+} from './types.ts'
 
 export const KEY_PREFIX = 'ps43:'
 const SERVER_PREFIX = KEY_PREFIX + 'server:'
@@ -237,11 +249,22 @@ export async function saveRecord(collection: string, record: DataRecord): Promis
 // ---------- schools, surveys, shipments ----------
 //
 // Uploaded collections (saved with saveRecord):
-//   'surveys'   { id, schoolId, ...Survey }  one record per survey; the latest surveyedAt wins
-//   'shipments' Shipment                     replaces the seed shipment with the same id
+//   'surveys'       { id, schoolId, ...Survey }  one record per survey; the latest surveyedAt wins
+//   'shipments'     Shipment                     replaces the seed shipment with the same id (Admin only)
+//   'confirmations' Confirmation                 one per party per shipment: "conf-<shipmentId>-<party>"
+//   'checkins'      Checkin                      one per check-in (unique ids)
 
 export type SurveyRecord = DataRecord & Survey & { schoolId: string }
 export type ShipmentRecord = DataRecord & Shipment
+export type ConfirmationRecord = DataRecord & Confirmation
+export type CheckinRecord = DataRecord & Checkin
+
+/** A shipment with its confirmations and the status they give it. */
+export interface ShipmentView extends Shipment {
+  status: ShipmentStatus
+  coordinator: Confirmation | null
+  teacher: Confirmation | null
+}
 
 export interface SchoolView extends School {
   survey: Survey | null
@@ -252,18 +275,49 @@ export interface SchoolView extends School {
   /** Need score (0-100) with the default weights. Null if not assessed. */
   needScore: number | null
   status: SchoolStatus
-  shipment: Shipment | null
+  shipment: ShipmentView | null
+  /** The newest check-in, or null. */
+  checkin: Checkin | null
 }
 
 const seedSurveys = demoState.surveys as Record<string, Survey>
 const seedShipments = demoState.shipments as Shipment[]
+const seedConfirmations = demoState.confirmations as Confirmation[]
 
-/** Seed shipments plus uploaded ones (an uploaded shipment replaces a seed one with the same id). */
-export async function getShipments(): Promise<Shipment[]> {
-  const uploaded = await getRecords<ShipmentRecord>('shipments')
-  const byId = new Map<string, Shipment>(seedShipments.map((s) => [s.id, s]))
-  uploaded.forEach((s) => byId.set(s.id, s))
+/** Seed records plus uploaded ones (an uploaded record replaces a seed one with the same id). */
+async function seedPlusUploaded<T extends { id: string }>(collection: string, seed: T[]): Promise<T[]> {
+  const uploaded = await getRecords<DataRecord & T>(collection)
+  const byId = new Map<string, T>(seed.map((r) => [r.id, r]))
+  uploaded.forEach((r) => byId.set(r.id, r))
   return [...byId.values()]
+}
+
+/** Every shipment with its confirmations and derived status. */
+export async function getShipments(): Promise<ShipmentView[]> {
+  const [shipments, confirmations] = await Promise.all([
+    seedPlusUploaded('shipments', seedShipments),
+    seedPlusUploaded('confirmations', seedConfirmations),
+  ])
+  const byId = new Map(confirmations.map((c) => [c.id, c]))
+  return shipments.map((sh) => {
+    const coordinator = byId.get(confirmationId(sh.id, 'coordinator')) ?? null
+    const teacher = byId.get(confirmationId(sh.id, 'teacher')) ?? null
+    return { ...sh, status: shipmentStatus(sh, coordinator, teacher), coordinator, teacher }
+  })
+}
+
+export async function getShipment(id: string): Promise<ShipmentView | null> {
+  return (await getShipments()).find((s) => s.id === id) ?? null
+}
+
+/** The newest check-in of each school. */
+async function getLatestCheckins(): Promise<Map<string, Checkin>> {
+  const latest = new Map<string, Checkin>()
+  for (const c of await getRecords<CheckinRecord>('checkins')) {
+    const current = latest.get(c.schoolId)
+    if (!current || c.checkedAt >= current.checkedAt) latest.set(c.schoolId, c)
+  }
+  return latest
 }
 
 /** The latest survey of each school: seed surveys plus uploaded ones. */
@@ -284,16 +338,12 @@ const SHIPMENT_STATUS: Record<ShipmentStatus, SchoolStatus> = {
   verified: 'verified',
 }
 
-/** Every school with its latest survey, tier, need score, status and shipment. */
+/** Every school with its latest survey, tier, need score, status, shipment and latest check-in. */
 export async function getSchools(): Promise<SchoolView[]> {
-  const [surveys, shipments] = await Promise.all([getLatestSurveys(), getShipments()])
+  const [surveys, shipments, checkins] = await Promise.all([getLatestSurveys(), getShipments(), getLatestCheckins()])
 
-  // One shipment per school: the most recently approved.
-  const shipmentOf = new Map<string, Shipment>()
-  for (const sh of shipments) {
-    const current = shipmentOf.get(sh.schoolId)
-    if (!current || sh.approvedAt >= current.approvedAt) shipmentOf.set(sh.schoolId, sh)
-  }
+  // One shipment per school: the most recently created.
+  const shipmentOf = latestBySchool(shipments)
 
   const schools = schoolsSeed.schools as School[]
   const isEquipped = (s: School) => {
@@ -321,11 +371,75 @@ export async function getSchools(): Promise<SchoolView[]> {
       }
       score = needScore(need)
     }
-    return { ...school, survey, tier, need, needScore: score, status, shipment }
+    return { ...school, survey, tier, need, needScore: score, status, shipment, checkin: checkins.get(school.id) ?? null }
   })
 }
 
+// ---------- shipment actions (Admin) ----------
+
+export interface NewShipment {
+  schoolId: string
+  tier: Tier
+  kit: Kit
+  partnerId: string
+  transporterId: string
+}
+
+/**
+ * Approve a kit: create the shipment with one device per kit device, numbered after the highest
+ * asset id in use (uploaded, or still queued on this device), so asset ids never repeat.
+ */
+export async function createShipment(input: NewShipment): Promise<'uploaded' | 'queued'> {
+  const queued = getQueue()
+    .filter((q) => q.collection === 'shipments')
+    .map((q) => q.record as ShipmentRecord)
+  const used = [...(await getShipments()), ...queued].flatMap((s) => s.devices.map((d) => assetNumber(d.assetId)))
+  const shipment: ShipmentRecord = {
+    id: newId('ship'),
+    schoolId: input.schoolId,
+    tier: input.tier,
+    kitId: input.kit.id,
+    kitItems: input.kit.items,
+    partnerId: input.partnerId,
+    transporterId: input.transporterId,
+    devices: devicesForKit(input.kit.items, Math.max(0, ...used) + 1),
+    createdAt: new Date().toISOString(),
+    inTransitAt: null,
+  }
+  return saveRecord('shipments', shipment)
+}
+
+export async function markInTransit(s: Shipment): Promise<'uploaded' | 'queued'> {
+  // Only the stored fields: status and confirmations are never saved on the shipment.
+  const { id, schoolId, tier, kitId, kitItems, partnerId, transporterId, devices, createdAt } = s
+  const record: ShipmentRecord = {
+    id,
+    schoolId,
+    tier,
+    kitId,
+    kitItems,
+    partnerId,
+    transporterId,
+    devices,
+    createdAt,
+    inTransitAt: new Date().toISOString(),
+  }
+  return saveRecord('shipments', record)
+}
+
+/** This device's own confirmation for a shipment (waiting to upload, or uploaded), if any. */
+export function getMyConfirmation(shipmentId: string, party: Party): OutboxItem | undefined {
+  const id = confirmationId(shipmentId, party)
+  return getOutbox('confirmations').find((o) => o.record.id === id)
+}
+
 const schoolNames = new Map((schoolsSeed.schools as School[]).map((s) => [s.id, s.name]))
+const schoolRegions = new Map((schoolsSeed.schools as School[]).map((s) => [s.id, s.region]))
+
+/** A school's region from the seed list (no server call). */
+export function schoolRegion(id: string): string {
+  return schoolRegions.get(id) ?? ''
+}
 
 /** A school's name from the seed list (no server call; for labelling device-local items). */
 export function schoolName(id: string): string {

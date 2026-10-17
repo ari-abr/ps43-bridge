@@ -366,363 +366,618 @@
   {
    "id": "ship-01",
    "schoolId": "sch-031",
-   "kitId": "kit-tier-0",
    "tier": 0,
+   "kitId": "kit-tier-0",
+   "kitItems": [
+    {
+     "name": "Solar lighting set (lamps)",
+     "qty": 6,
+     "isDevice": false
+    },
+    {
+     "name": "Printed Times Tables workbooks",
+     "qty": 40,
+     "isDevice": false
+    },
+    {
+     "name": "Teacher training day",
+     "qty": 2,
+     "isDevice": false
+    }
+   ],
+   "partnerId": "partner-09",
    "transporterId": "partner-02",
-   "status": "approved",
-   "approvedAt": "2026-09-19",
-   "devices": []
+   "devices": [],
+   "createdAt": "2026-09-19",
+   "inTransitAt": null
   },
   {
    "id": "ship-02",
    "schoolId": "sch-140",
-   "kitId": "kit-tier-1",
    "tier": 1,
+   "kitId": "kit-tier-1",
+   "kitItems": [
+    {
+     "name": "Solar panel and battery set",
+     "qty": 1,
+     "isDevice": false
+    },
+    {
+     "name": "Raspberry Pi learning server",
+     "qty": 1,
+     "isDevice": true
+    },
+    {
+     "name": "Small laptop",
+     "qty": 8,
+     "isDevice": true
+    },
+    {
+     "name": "Charging cabinet",
+     "qty": 1,
+     "isDevice": false
+    }
+   ],
+   "partnerId": "partner-05",
    "transporterId": "partner-06",
-   "status": "in transit",
-   "approvedAt": "2026-09-18",
    "devices": [
     {
-     "id": "DEV-02-01",
+     "assetId": "PS43-0001",
      "type": "server"
     },
     {
-     "id": "DEV-02-02",
+     "assetId": "PS43-0002",
      "type": "laptop"
     },
     {
-     "id": "DEV-02-03",
+     "assetId": "PS43-0003",
      "type": "laptop"
     },
     {
-     "id": "DEV-02-04",
+     "assetId": "PS43-0004",
      "type": "laptop"
     },
     {
-     "id": "DEV-02-05",
+     "assetId": "PS43-0005",
      "type": "laptop"
     },
     {
-     "id": "DEV-02-06",
+     "assetId": "PS43-0006",
      "type": "laptop"
     },
     {
-     "id": "DEV-02-07",
+     "assetId": "PS43-0007",
      "type": "laptop"
     },
     {
-     "id": "DEV-02-08",
+     "assetId": "PS43-0008",
      "type": "laptop"
     },
     {
-     "id": "DEV-02-09",
+     "assetId": "PS43-0009",
      "type": "laptop"
     }
    ],
-   "shippedAt": "2026-09-22"
+   "createdAt": "2026-09-18",
+   "inTransitAt": "2026-09-22"
   },
   {
    "id": "ship-03",
    "schoolId": "sch-210",
-   "kitId": "kit-tier-2",
    "tier": 2,
+   "kitId": "kit-tier-2",
+   "kitItems": [
+    {
+     "name": "Surge protection",
+     "qty": 2,
+     "isDevice": false
+    },
+    {
+     "name": "Battery backup (UPS)",
+     "qty": 1,
+     "isDevice": false
+    },
+    {
+     "name": "Raspberry Pi learning server",
+     "qty": 1,
+     "isDevice": true
+    },
+    {
+     "name": "Laptop",
+     "qty": 15,
+     "isDevice": true
+    }
+   ],
+   "partnerId": "partner-05",
    "transporterId": "partner-04",
-   "status": "delivered",
-   "approvedAt": "2026-09-22",
    "devices": [
     {
-     "id": "DEV-03-01",
+     "assetId": "PS43-0010",
      "type": "server"
     },
     {
-     "id": "DEV-03-02",
+     "assetId": "PS43-0011",
      "type": "laptop"
     },
     {
-     "id": "DEV-03-03",
+     "assetId": "PS43-0012",
      "type": "laptop"
     },
     {
-     "id": "DEV-03-04",
+     "assetId": "PS43-0013",
      "type": "laptop"
     },
     {
-     "id": "DEV-03-05",
+     "assetId": "PS43-0014",
      "type": "laptop"
     },
     {
-     "id": "DEV-03-06",
+     "assetId": "PS43-0015",
      "type": "laptop"
     },
     {
-     "id": "DEV-03-07",
+     "assetId": "PS43-0016",
      "type": "laptop"
     },
     {
-     "id": "DEV-03-08",
+     "assetId": "PS43-0017",
      "type": "laptop"
     },
     {
-     "id": "DEV-03-09",
+     "assetId": "PS43-0018",
      "type": "laptop"
     },
     {
-     "id": "DEV-03-10",
+     "assetId": "PS43-0019",
      "type": "laptop"
     },
     {
-     "id": "DEV-03-11",
+     "assetId": "PS43-0020",
      "type": "laptop"
     },
     {
-     "id": "DEV-03-12",
+     "assetId": "PS43-0021",
      "type": "laptop"
     },
     {
-     "id": "DEV-03-13",
+     "assetId": "PS43-0022",
      "type": "laptop"
     },
     {
-     "id": "DEV-03-14",
+     "assetId": "PS43-0023",
      "type": "laptop"
     },
     {
-     "id": "DEV-03-15",
+     "assetId": "PS43-0024",
      "type": "laptop"
     },
     {
-     "id": "DEV-03-16",
+     "assetId": "PS43-0025",
      "type": "laptop"
     }
    ],
-   "shippedAt": "2026-09-27",
-   "deliveredAt": "2026-10-05"
+   "createdAt": "2026-09-22",
+   "inTransitAt": "2026-09-27"
   },
   {
    "id": "ship-04",
    "schoolId": "sch-012",
-   "kitId": "kit-tier-0",
    "tier": 0,
+   "kitId": "kit-tier-0",
+   "kitItems": [
+    {
+     "name": "Solar lighting set (lamps)",
+     "qty": 6,
+     "isDevice": false
+    },
+    {
+     "name": "Printed Times Tables workbooks",
+     "qty": 40,
+     "isDevice": false
+    },
+    {
+     "name": "Teacher training day",
+     "qty": 2,
+     "isDevice": false
+    }
+   ],
+   "partnerId": "partner-09",
    "transporterId": "partner-02",
-   "status": "verified",
-   "approvedAt": "2026-09-22",
    "devices": [],
-   "shippedAt": "2026-09-27",
-   "deliveredAt": "2026-10-01",
-   "verifiedAt": "2026-10-06"
+   "createdAt": "2026-09-22",
+   "inTransitAt": "2026-09-27"
   },
   {
    "id": "ship-05",
    "schoolId": "sch-136",
-   "kitId": "kit-tier-0",
    "tier": 0,
+   "kitId": "kit-tier-0",
+   "kitItems": [
+    {
+     "name": "Solar lighting set (lamps)",
+     "qty": 6,
+     "isDevice": false
+    },
+    {
+     "name": "Printed Times Tables workbooks",
+     "qty": 40,
+     "isDevice": false
+    },
+    {
+     "name": "Teacher training day",
+     "qty": 2,
+     "isDevice": false
+    }
+   ],
+   "partnerId": "partner-09",
    "transporterId": "partner-06",
-   "status": "approved",
-   "approvedAt": "2026-09-20",
-   "devices": []
+   "devices": [],
+   "createdAt": "2026-09-20",
+   "inTransitAt": null
   },
   {
    "id": "ship-06",
    "schoolId": "sch-205",
-   "kitId": "kit-tier-2",
    "tier": 2,
+   "kitId": "kit-tier-2",
+   "kitItems": [
+    {
+     "name": "Surge protection",
+     "qty": 2,
+     "isDevice": false
+    },
+    {
+     "name": "Battery backup (UPS)",
+     "qty": 1,
+     "isDevice": false
+    },
+    {
+     "name": "Raspberry Pi learning server",
+     "qty": 1,
+     "isDevice": true
+    },
+    {
+     "name": "Laptop",
+     "qty": 15,
+     "isDevice": true
+    }
+   ],
+   "partnerId": "partner-05",
    "transporterId": "partner-04",
-   "status": "in transit",
-   "approvedAt": "2026-09-21",
    "devices": [
     {
-     "id": "DEV-06-01",
+     "assetId": "PS43-0026",
      "type": "server"
     },
     {
-     "id": "DEV-06-02",
+     "assetId": "PS43-0027",
      "type": "laptop"
     },
     {
-     "id": "DEV-06-03",
+     "assetId": "PS43-0028",
      "type": "laptop"
     },
     {
-     "id": "DEV-06-04",
+     "assetId": "PS43-0029",
      "type": "laptop"
     },
     {
-     "id": "DEV-06-05",
+     "assetId": "PS43-0030",
      "type": "laptop"
     },
     {
-     "id": "DEV-06-06",
+     "assetId": "PS43-0031",
      "type": "laptop"
     },
     {
-     "id": "DEV-06-07",
+     "assetId": "PS43-0032",
      "type": "laptop"
     },
     {
-     "id": "DEV-06-08",
+     "assetId": "PS43-0033",
      "type": "laptop"
     },
     {
-     "id": "DEV-06-09",
+     "assetId": "PS43-0034",
      "type": "laptop"
     },
     {
-     "id": "DEV-06-10",
+     "assetId": "PS43-0035",
      "type": "laptop"
     },
     {
-     "id": "DEV-06-11",
+     "assetId": "PS43-0036",
      "type": "laptop"
     },
     {
-     "id": "DEV-06-12",
+     "assetId": "PS43-0037",
      "type": "laptop"
     },
     {
-     "id": "DEV-06-13",
+     "assetId": "PS43-0038",
      "type": "laptop"
     },
     {
-     "id": "DEV-06-14",
+     "assetId": "PS43-0039",
      "type": "laptop"
     },
     {
-     "id": "DEV-06-15",
+     "assetId": "PS43-0040",
      "type": "laptop"
     },
     {
-     "id": "DEV-06-16",
+     "assetId": "PS43-0041",
      "type": "laptop"
     }
    ],
-   "shippedAt": "2026-09-25"
+   "createdAt": "2026-09-21",
+   "inTransitAt": "2026-09-25"
   },
   {
    "id": "ship-07",
    "schoolId": "sch-087",
-   "kitId": "kit-tier-1",
    "tier": 1,
+   "kitId": "kit-tier-1",
+   "kitItems": [
+    {
+     "name": "Solar panel and battery set",
+     "qty": 1,
+     "isDevice": false
+    },
+    {
+     "name": "Raspberry Pi learning server",
+     "qty": 1,
+     "isDevice": true
+    },
+    {
+     "name": "Small laptop",
+     "qty": 8,
+     "isDevice": true
+    },
+    {
+     "name": "Charging cabinet",
+     "qty": 1,
+     "isDevice": false
+    }
+   ],
+   "partnerId": "partner-05",
    "transporterId": "partner-02",
-   "status": "delivered",
-   "approvedAt": "2026-09-17",
    "devices": [
     {
-     "id": "DEV-07-01",
+     "assetId": "PS43-0042",
      "type": "server"
     },
     {
-     "id": "DEV-07-02",
+     "assetId": "PS43-0043",
      "type": "laptop"
     },
     {
-     "id": "DEV-07-03",
+     "assetId": "PS43-0044",
      "type": "laptop"
     },
     {
-     "id": "DEV-07-04",
+     "assetId": "PS43-0045",
      "type": "laptop"
     },
     {
-     "id": "DEV-07-05",
+     "assetId": "PS43-0046",
      "type": "laptop"
     },
     {
-     "id": "DEV-07-06",
+     "assetId": "PS43-0047",
      "type": "laptop"
     },
     {
-     "id": "DEV-07-07",
+     "assetId": "PS43-0048",
      "type": "laptop"
     },
     {
-     "id": "DEV-07-08",
+     "assetId": "PS43-0049",
      "type": "laptop"
     },
     {
-     "id": "DEV-07-09",
+     "assetId": "PS43-0050",
      "type": "laptop"
     }
    ],
-   "shippedAt": "2026-09-24",
-   "deliveredAt": "2026-09-29"
+   "createdAt": "2026-09-17",
+   "inTransitAt": "2026-09-24"
   },
   {
    "id": "ship-08",
    "schoolId": "sch-120",
-   "kitId": "kit-tier-2",
    "tier": 2,
+   "kitId": "kit-tier-2",
+   "kitItems": [
+    {
+     "name": "Surge protection",
+     "qty": 2,
+     "isDevice": false
+    },
+    {
+     "name": "Battery backup (UPS)",
+     "qty": 1,
+     "isDevice": false
+    },
+    {
+     "name": "Raspberry Pi learning server",
+     "qty": 1,
+     "isDevice": true
+    },
+    {
+     "name": "Laptop",
+     "qty": 15,
+     "isDevice": true
+    }
+   ],
+   "partnerId": "partner-05",
    "transporterId": "partner-06",
-   "status": "verified",
-   "approvedAt": "2026-09-20",
    "devices": [
     {
-     "id": "DEV-08-01",
+     "assetId": "PS43-0051",
      "type": "server"
     },
     {
-     "id": "DEV-08-02",
+     "assetId": "PS43-0052",
      "type": "laptop"
     },
     {
-     "id": "DEV-08-03",
+     "assetId": "PS43-0053",
      "type": "laptop"
     },
     {
-     "id": "DEV-08-04",
+     "assetId": "PS43-0054",
      "type": "laptop"
     },
     {
-     "id": "DEV-08-05",
+     "assetId": "PS43-0055",
      "type": "laptop"
     },
     {
-     "id": "DEV-08-06",
+     "assetId": "PS43-0056",
      "type": "laptop"
     },
     {
-     "id": "DEV-08-07",
+     "assetId": "PS43-0057",
      "type": "laptop"
     },
     {
-     "id": "DEV-08-08",
+     "assetId": "PS43-0058",
      "type": "laptop"
     },
     {
-     "id": "DEV-08-09",
+     "assetId": "PS43-0059",
      "type": "laptop"
     },
     {
-     "id": "DEV-08-10",
+     "assetId": "PS43-0060",
      "type": "laptop"
     },
     {
-     "id": "DEV-08-11",
+     "assetId": "PS43-0061",
      "type": "laptop"
     },
     {
-     "id": "DEV-08-12",
+     "assetId": "PS43-0062",
      "type": "laptop"
     },
     {
-     "id": "DEV-08-13",
+     "assetId": "PS43-0063",
      "type": "laptop"
     },
     {
-     "id": "DEV-08-14",
+     "assetId": "PS43-0064",
      "type": "laptop"
     },
     {
-     "id": "DEV-08-15",
+     "assetId": "PS43-0065",
      "type": "laptop"
     },
     {
-     "id": "DEV-08-16",
+     "assetId": "PS43-0066",
      "type": "laptop"
     }
    ],
-   "shippedAt": "2026-09-26",
-   "deliveredAt": "2026-10-04",
-   "verifiedAt": "2026-10-06"
+   "createdAt": "2026-09-20",
+   "inTransitAt": "2026-09-26"
+  }
+ ],
+ "confirmations": [
+  {
+   "id": "conf-ship-03-coordinator",
+   "shipmentId": "ship-03",
+   "party": "coordinator",
+   "confirmedAt": "2026-10-05",
+   "scannedAssetIds": [
+    "PS43-0010",
+    "PS43-0011",
+    "PS43-0012",
+    "PS43-0013",
+    "PS43-0014",
+    "PS43-0015",
+    "PS43-0016",
+    "PS43-0017",
+    "PS43-0018",
+    "PS43-0019",
+    "PS43-0020",
+    "PS43-0021",
+    "PS43-0022",
+    "PS43-0023",
+    "PS43-0024",
+    "PS43-0025"
+   ],
+   "photoTaken": true,
+   "note": ""
+  },
+  {
+   "id": "conf-ship-04-coordinator",
+   "shipmentId": "ship-04",
+   "party": "coordinator",
+   "confirmedAt": "2026-10-01",
+   "scannedAssetIds": [],
+   "photoTaken": true,
+   "note": ""
+  },
+  {
+   "id": "conf-ship-04-teacher",
+   "shipmentId": "ship-04",
+   "party": "teacher",
+   "confirmedAt": "2026-10-06",
+   "devicesReceived": 0,
+   "note": ""
+  },
+  {
+   "id": "conf-ship-07-coordinator",
+   "shipmentId": "ship-07",
+   "party": "coordinator",
+   "confirmedAt": "2026-09-29",
+   "scannedAssetIds": [
+    "PS43-0042",
+    "PS43-0043",
+    "PS43-0044",
+    "PS43-0045",
+    "PS43-0046",
+    "PS43-0047",
+    "PS43-0048",
+    "PS43-0049",
+    "PS43-0050"
+   ],
+   "photoTaken": true,
+   "note": ""
+  },
+  {
+   "id": "conf-ship-08-coordinator",
+   "shipmentId": "ship-08",
+   "party": "coordinator",
+   "confirmedAt": "2026-10-04",
+   "scannedAssetIds": [
+    "PS43-0051",
+    "PS43-0052",
+    "PS43-0053",
+    "PS43-0054",
+    "PS43-0055",
+    "PS43-0056",
+    "PS43-0057",
+    "PS43-0058",
+    "PS43-0059",
+    "PS43-0060",
+    "PS43-0061",
+    "PS43-0062",
+    "PS43-0063",
+    "PS43-0064",
+    "PS43-0065",
+    "PS43-0066"
+   ],
+   "photoTaken": true,
+   "note": ""
+  },
+  {
+   "id": "conf-ship-08-teacher",
+   "shipmentId": "ship-08",
+   "party": "teacher",
+   "confirmedAt": "2026-10-06",
+   "devicesReceived": 16,
+   "note": ""
   }
  ]
 }

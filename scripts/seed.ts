@@ -4,12 +4,14 @@
 // Real OpenStreetMap coordinates are kept, but school and partner names are fictional (see CLAUDE.md).
 
 import { mkdirSync, readFileSync, statSync, writeFileSync } from 'node:fs'
+import { topPartner } from '../src/lib/matching.ts'
 import { distanceKm, nearestKm, tierFromSurvey } from '../src/lib/scoring.ts'
+import { confirmationId, devicesForKit, shipmentStatus } from '../src/lib/shipments.ts'
 import type { Power, Signal, Tier } from '../src/lib/scoring.ts'
 import type {
+  Confirmation,
   CourseManifest,
   CoursePack,
-  Device,
   Kit,
   Lesson,
   Partner,
@@ -254,45 +256,70 @@ const shipmentSchools = REGIONS.flatMap((region) =>
 const chosen: School[] = []
 for (let i = 0; chosen.length < 8; i++) chosen.push(shipmentSchools[(i % 3) * SURVEYED_PER_REGION + Math.floor(i / 3)])
 
-const shipments: Shipment[] = chosen.map((school, i) => {
+// Status is never stored: it follows from inTransitAt and the confirmations, so each seed
+// shipment gets the confirmations that give it its planned status.
+const shipments: Shipment[] = []
+const confirmations: Confirmation[] = []
+let nextAsset = 1
+chosen.forEach((school, i) => {
   const status = STATUSES[i % 4]
   const tier = tierFromSurvey(surveys[school.id].power, surveys[school.id].signal)
   const kit = kits.find((k) => k.tier === tier)!
   const id = `ship-${pad(i + 1)}`
+  const devices = devicesForKit(kit.items, nextAsset)
+  nextAsset += devices.length
 
-  const devices: Device[] = []
-  if (status !== 'approved') {
-    let n = 0
-    for (const item of kit.items.filter((it) => it.isDevice)) {
-      for (let q = 0; q < item.qty; q++) {
-        devices.push({
-          id: `DEV-${pad(i + 1)}-${pad(++n)}`,
-          type: item.name.toLowerCase().includes('server') ? 'server' : 'laptop',
-        })
-      }
-    }
-  }
+  // Same random calls in the same order as before, so the rest of the seed data does not change.
+  const approvedAt = randomDate('2026-09-16', '2026-09-22')
+  const shippedAt = status !== 'approved' ? addDays(approvedAt, int(3, 7)) : null
+  const deliveredAt = status === 'delivered' || status === 'verified' ? addDays(shippedAt!, int(4, 10)) : null
+  const verifiedAt = status === 'verified' ? addDays(deliveredAt!, int(2, 6)) : null
 
   const shipment: Shipment = {
     id,
     schoolId: school.id,
-    kitId: kit.id,
     tier,
+    kitId: kit.id,
+    kitItems: kit.items,
+    partnerId: topPartner(tier, school, partners)!.partner.id,
     transporterId: transporterByRegion[school.region],
-    status,
-    approvedAt: randomDate('2026-09-16', '2026-09-22'),
     devices,
+    createdAt: approvedAt,
+    inTransitAt: shippedAt,
   }
-  if (status !== 'approved') shipment.shippedAt = addDays(shipment.approvedAt, int(3, 7))
-  if (status === 'delivered' || status === 'verified') shipment.deliveredAt = addDays(shipment.shippedAt!, int(4, 10))
-  if (status === 'verified') shipment.verifiedAt = addDays(shipment.deliveredAt!, int(2, 6))
-  return shipment
+  shipments.push(shipment)
+
+  const coordinator: Confirmation | null = deliveredAt
+    ? {
+        id: confirmationId(id, 'coordinator'),
+        shipmentId: id,
+        party: 'coordinator',
+        confirmedAt: deliveredAt,
+        scannedAssetIds: devices.map((d) => d.assetId),
+        photoTaken: true,
+        note: '',
+      }
+    : null
+  const teacher: Confirmation | null = verifiedAt
+    ? {
+        id: confirmationId(id, 'teacher'),
+        shipmentId: id,
+        party: 'teacher',
+        confirmedAt: verifiedAt,
+        devicesReceived: devices.length,
+        note: '',
+      }
+    : null
+  if (coordinator) confirmations.push(coordinator)
+  if (teacher) confirmations.push(teacher)
+  if (shipmentStatus(shipment, coordinator, teacher) !== status) throw new Error(`${id} should be ${status}`)
 })
 
 writeJson(`${OUT}/demo-state.json`, {
   note: 'DEMO DATA: made-up survey answers and shipments for the demo. Schools not listed in "surveys" are unsurveyed (grey).',
   surveys,
   shipments,
+  confirmations,
 })
 
 // ---------- 5. course packs ----------
@@ -424,10 +451,17 @@ for (const s of Object.values(surveys)) tierCounts[tierFromSurvey(s.power, s.sig
 for (const t of [0, 1, 2, 3]) console.log(`  Tier ${t}: ${tierCounts[t]}`)
 
 console.log('\nShipments per status:')
-for (const status of STATUSES) console.log(`  ${status}: ${shipments.filter((s) => s.status === status).length}`)
+const statusOf = (s: Shipment) =>
+  shipmentStatus(
+    s,
+    confirmations.find((c) => c.id === confirmationId(s.id, 'coordinator')) ?? null,
+    confirmations.find((c) => c.id === confirmationId(s.id, 'teacher')) ?? null,
+  )
+for (const status of STATUSES) console.log(`  ${status}: ${shipments.filter((s) => statusOf(s) === status).length}`)
+console.log(`  Devices tagged: ${nextAsset - 1} (PS43-0001 to PS43-${String(nextAsset - 1).padStart(4, '0')})`)
 
 const equipped = shipments
-  .filter((s) => s.status === 'delivered' || s.status === 'verified')
+  .filter((s) => statusOf(s) === 'delivered' || statusOf(s) === 'verified')
   .map((s) => schools.find((x) => x.id === s.schoolId)!)
 const sample = schools.find((s) => surveys[s.id])!
 console.log(

@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import Checkins from '../components/field/Checkins'
+import Deliveries from '../components/field/Deliveries'
 import RecentSurveys from '../components/field/RecentSurveys'
 import SchoolPicker from '../components/field/SchoolPicker'
 import SurveyForm from '../components/field/SurveyForm'
@@ -45,12 +47,8 @@ export default function FieldPage() {
           </>
         ))}
 
-      {tab !== 'survey' && (
-        <div className="card">
-          <h2>{TABS.find((t) => t.id === tab)!.label}</h2>
-          <p className="muted">Coming soon.</p>
-        </div>
-      )}
+      {tab === 'deliveries' && <Deliveries />}
+      {tab === 'checkins' && <Checkins />}
     </div>
   )
 }

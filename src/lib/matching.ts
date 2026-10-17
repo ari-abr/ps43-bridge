@@ -37,3 +37,13 @@ export function matchPartners(tier: Tier, school: Point, partners: Partner[], co
   }
   return matches.sort((a, b) => a.km - b.km)
 }
+
+/** The default supplier for a tier's kit: the most trusted supplier (ties: nearer wins). */
+export function topPartner(tier: Tier, school: Point, partners: Partner[]): MatchedPartner | undefined {
+  return rank(SUPPLIER_TYPES[tier], school, partners)[0]
+}
+
+/** Transporters for a shipment: most trusted first (ties: nearer wins). */
+export function matchTransporters(school: Point, partners: Partner[]): MatchedPartner[] {
+  return rank(['transporter'], school, partners)
+}

@@ -21,28 +21,58 @@ export interface Survey {
   surveyedAt: string // YYYY-MM-DD (seed) or full ISO time (new surveys); compared as strings
 }
 
+/** Never stored: worked out by shipmentStatus() in src/lib/shipments.ts. */
 export type ShipmentStatus = 'approved' | 'in transit' | 'delivered' | 'verified'
 
 /** Where a school is in the journey, from its surveys and shipments. */
 export type SchoolStatus = 'unassessed' | 'assessed' | 'kit approved' | 'in transit' | 'delivered' | 'verified'
 
 export interface Device {
-  id: string // printed as a QR code on the device
+  assetId: string // "PS43-0001", unique across all shipments; printed as a QR code on the device
   type: 'laptop' | 'server'
 }
 
+/** A shipment as stored. Its status comes from inTransitAt and the delivery confirmations. */
 export interface Shipment {
   id: string
   schoolId: string
-  kitId: string
   tier: Tier
+  kitId: string
+  kitItems: KitItem[]
+  partnerId: string // supplier
   transporterId: string
-  status: ShipmentStatus
-  approvedAt: string
-  shippedAt?: string
-  deliveredAt?: string
-  verifiedAt?: string
-  devices: Device[] // tagged when the shipment leaves; empty while only approved
+  devices: Device[] // created from the kit's device counts when the kit is approved
+  createdAt: string
+  inTransitAt: string | null
+}
+
+export type Party = 'coordinator' | 'teacher'
+
+/**
+ * One per party per shipment, id "conf-<shipmentId>-<party>". Kept apart from the shipment so two
+ * offline confirmations can never overwrite each other.
+ */
+export interface Confirmation {
+  id: string
+  shipmentId: string
+  party: Party
+  confirmedAt: string
+  scannedAssetIds?: string[] // coordinator only
+  photoTaken?: boolean // coordinator only
+  devicesReceived?: number // teacher only
+  note: string
+}
+
+/** A monthly check-in on a school's delivered devices. */
+export interface Checkin {
+  id: string
+  schoolId: string
+  shipmentId: string
+  working: number
+  broken: number
+  missing: number
+  note: string
+  checkedAt: string
 }
 
 export interface KitItem {

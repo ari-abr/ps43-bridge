@@ -3,6 +3,7 @@ import type { SchoolView } from '../../lib/api'
 import { matchPartners } from '../../lib/matching'
 import { TIER_LABELS } from '../../lib/scoring'
 import type { Kit, Partner } from '../../lib/types'
+import ShipmentSection from './ShipmentSection'
 import { capitalise, tierColor } from './tierStyle'
 
 interface Props {
@@ -30,8 +31,7 @@ export default function SchoolPanel({ school, score, kits, partners, onClose }: 
     )
   }
 
-  const { survey, shipment } = school
-  const transporter = shipment ? partners.find((p) => p.id === shipment.transporterId) : undefined
+  const { survey } = school
 
   return (
     <div className="card panel">
@@ -111,37 +111,7 @@ export default function SchoolPanel({ school, score, kits, partners, onClose }: 
         </>
       )}
 
-      <h3>Shipment</h3>
-      {shipment ? (
-        <dl className="facts">
-          <dt>Status</dt>
-          <dd>{capitalise(shipment.status)}</dd>
-          <dt>Transporter</dt>
-          <dd>{transporter?.name ?? shipment.transporterId}</dd>
-          <dt>Approved</dt>
-          <dd>{shipment.approvedAt}</dd>
-          {shipment.shippedAt && (
-            <>
-              <dt>Shipped</dt>
-              <dd>{shipment.shippedAt}</dd>
-            </>
-          )}
-          {shipment.deliveredAt && (
-            <>
-              <dt>Delivered</dt>
-              <dd>{shipment.deliveredAt}</dd>
-            </>
-          )}
-          {shipment.verifiedAt && (
-            <>
-              <dt>Verified</dt>
-              <dd>{shipment.verifiedAt}</dd>
-            </>
-          )}
-        </dl>
-      ) : (
-        <p className="muted">No shipment yet</p>
-      )}
+      <ShipmentSection school={school} kit={kit} partners={partners} />
 
       <h3>Learning</h3>
       <p className="muted">No learning data yet</p>
