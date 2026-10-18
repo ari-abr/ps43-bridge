@@ -92,8 +92,8 @@ export default function DemoControls() {
 
       <h2>Demo scene</h2>
       <p className="muted small">
-        Resets all data, then picks grey (unassessed) schools for the live survey and approves a kit for one assessed
-        school for the delivery demo. Needs Online.
+        Resets all data, then picks grey (unassessed) schools for the live survey, approves a kit for one assessed
+        school for the delivery demo, and picks a school for the request demo. Needs Online.
       </p>
       <button type="button" className="btn-secondary" onClick={() => setAskScene(true)} disabled={settingUp || !online}>
         {settingUp ? 'Setting up…' : 'Set up demo scene'}
@@ -133,7 +133,27 @@ export default function DemoControls() {
               </span>
             </li>
           </ul>
-          <p className="muted small">Demo data. "Reset demo data" clears the scene.</p>
+          {scene.request && (
+            <>
+              <p className="scene-title">Request: teacher asks, coordinator checks, admin ships</p>
+              <ul className="plain-list">
+                <li>
+                  <strong>{scene.request.name}</strong> <span className="muted">({scene.request.region})</span>
+                  <br />
+                  <span className="muted small">
+                    Tier 0, no shipment yet: choose it on the Teacher screen. Its kit has no devices, so the delivery
+                    needs no scanning.
+                  </span>
+                </li>
+              </ul>
+            </>
+          )}
+          {scene.seedRequests !== undefined && (
+            <p className="muted small">
+              The map also shows {scene.seedRequests} demo requests in different states, one linked to a shipment.
+            </p>
+          )}
+          <p className="muted small">Demo data. "Reset demo data" clears the scene and any requests made since.</p>
         </div>
       ) : (
         <p className="muted small">No scene set up yet.</p>

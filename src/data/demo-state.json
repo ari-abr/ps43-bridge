@@ -1,5 +1,5 @@
 {
- "note": "DEMO DATA: made-up survey answers and shipments for the demo. Schools not listed in \"surveys\" are unsurveyed (grey).",
+ "note": "DEMO DATA: made-up survey answers, shipments and requests for the demo. Schools not listed in \"surveys\" are unsurveyed (grey).",
  "surveys": {
   "sch-006": {
    "power": "none",
@@ -710,8 +710,8 @@
      "type": "laptop"
     }
    ],
-   "createdAt": "2026-09-21",
-   "inTransitAt": "2026-09-25"
+   "createdAt": "2026-10-08",
+   "inTransitAt": "2026-10-12"
   },
   {
    "id": "ship-07",
@@ -878,8 +878,8 @@
      "type": "laptop"
     }
    ],
-   "createdAt": "2026-09-20",
-   "inTransitAt": "2026-09-26"
+   "createdAt": "2026-09-01",
+   "inTransitAt": "2026-09-07"
   }
  ],
  "confirmations": [
@@ -949,7 +949,7 @@
    "id": "conf-ship-08-coordinator",
    "shipmentId": "ship-08",
    "party": "coordinator",
-   "confirmedAt": "2026-10-04",
+   "confirmedAt": "2026-09-15",
    "scannedAssetIds": [
     "PS43-0051",
     "PS43-0052",
@@ -975,9 +975,127 @@
    "id": "conf-ship-08-teacher",
    "shipmentId": "ship-08",
    "party": "teacher",
-   "confirmedAt": "2026-10-06",
+   "confirmedAt": "2026-09-17",
    "devicesReceived": 16,
    "note": ""
+  }
+ ],
+ "requests": [
+  {
+   "id": "rq-demo-1",
+   "schoolId": "sch-012",
+   "category": "Teacher training",
+   "item": "Training day on the new workbooks",
+   "quantity": 1,
+   "priority": "Urgent",
+   "reason": "Two new teachers joined this term and have not been shown how to use the PS43 workbooks.",
+   "pupilsAffected": 60,
+   "requestedByRole": "Headteacher",
+   "createdAt": "2026-10-08T09:15:00.000Z",
+   "demo": true
+  },
+  {
+   "id": "rq-demo-2",
+   "schoolId": "sch-155",
+   "category": "Books and printed materials",
+   "item": "Printed Times Tables workbooks",
+   "quantity": 40,
+   "priority": "Soon",
+   "reason": "We have no power yet. Pupils learn from the board and have no workbooks to practise at home.",
+   "pupilsAffected": 120,
+   "requestedByRole": "Teacher",
+   "createdAt": "2026-10-02T07:40:00.000Z",
+   "demo": true
+  },
+  {
+   "id": "rq-demo-3",
+   "schoolId": "sch-210",
+   "category": "Repairs",
+   "item": "Laptop repair (screen and keyboard)",
+   "quantity": 3,
+   "priority": "Soon",
+   "reason": "Three laptops from the PS43 kit stopped working, so pupils now share in threes during lessons.",
+   "pupilsAffected": 45,
+   "requestedByRole": "Teacher",
+   "createdAt": "2026-10-05T11:05:00.000Z",
+   "demo": true
+  },
+  {
+   "id": "rq-demo-4",
+   "schoolId": "sch-201",
+   "category": "Furniture",
+   "item": "Desks with benches",
+   "quantity": 15,
+   "priority": "When possible",
+   "reason": "Pupils in Class 1 sit on the floor. Desks would also keep a future laptop corner safe.",
+   "pupilsAffected": 70,
+   "requestedByRole": "Headteacher",
+   "createdAt": "2026-09-28T08:30:00.000Z",
+   "demo": true
+  },
+  {
+   "id": "rq-demo-5",
+   "schoolId": "sch-120",
+   "category": "Devices",
+   "item": "Laptops for the upper classes",
+   "quantity": 16,
+   "priority": "Urgent",
+   "reason": "Our school has no computers at all. Classes 5 and 6 need them to prepare for secondary school.",
+   "pupilsAffected": 90,
+   "requestedByRole": "Headteacher",
+   "createdAt": "2026-08-26T08:00:00.000Z",
+   "demo": true
+  }
+ ],
+ "requestEvents": [
+  {
+   "id": "rqe-demo-1",
+   "requestId": "rq-demo-2",
+   "status": "Checked by coordinator",
+   "party": "coordinator",
+   "note": "Confirmed on visit: only 12 old workbooks for three classes.",
+   "createdAt": "2026-10-06T13:20:00.000Z"
+  },
+  {
+   "id": "rqe-demo-2",
+   "requestId": "rq-demo-3",
+   "status": "Checked by coordinator",
+   "party": "coordinator",
+   "note": "Confirmed on visit: 3 laptops broken.",
+   "createdAt": "2026-10-07T10:00:00.000Z"
+  },
+  {
+   "id": "rqe-demo-3",
+   "requestId": "rq-demo-3",
+   "status": "Approved",
+   "party": "admin",
+   "note": "Approved. Our refurbishing partner will collect them on the next delivery round.",
+   "createdAt": "2026-10-09T15:45:00.000Z"
+  },
+  {
+   "id": "rqe-demo-4",
+   "requestId": "rq-demo-4",
+   "status": "Declined",
+   "party": "admin",
+   "note": "Furniture is not in the PS43 kits. Passed on to the regional education office.",
+   "createdAt": "2026-10-01T09:10:00.000Z"
+  },
+  {
+   "id": "rqe-demo-5",
+   "requestId": "rq-demo-5",
+   "status": "Checked by coordinator",
+   "party": "coordinator",
+   "note": "Confirmed on visit: no devices yet, grid power and a room that locks.",
+   "createdAt": "2026-08-29T12:00:00.000Z"
+  },
+  {
+   "id": "rqe-demo-6",
+   "requestId": "rq-demo-5",
+   "status": "Approved",
+   "party": "admin",
+   "note": "Shipment ship-08 created for this request.",
+   "shipmentId": "ship-08",
+   "createdAt": "2026-09-01T09:00:00.000Z"
   }
  ]
 }

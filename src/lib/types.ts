@@ -90,6 +90,53 @@ export interface Progress {
   simulated?: boolean
 }
 
+export type RequestCategory =
+  | 'Devices'
+  | 'Power and solar'
+  | 'Internet'
+  | 'Books and printed materials'
+  | 'Furniture'
+  | 'Repairs'
+  | 'Teacher training'
+  | 'Other'
+
+export type RequestPriority = 'Urgent' | 'Soon' | 'When possible'
+
+/** An equipment or resource request from a school. Created by the teacher and never edited afterwards. No personal names. */
+export interface ResourceRequest {
+  id: string
+  schoolId: string
+  category: RequestCategory
+  item: string
+  quantity: number
+  priority: RequestPriority
+  reason: string
+  pupilsAffected: number
+  requestedByRole: 'Teacher' | 'Headteacher'
+  createdAt: string
+  demo?: boolean // seed data
+}
+
+/** A status change saved by a coordinator or an admin. */
+export type RequestEventStatus = 'Checked by coordinator' | 'Approved' | 'Declined'
+
+/** Never stored: worked out by requestStatus() in src/lib/requests.ts. */
+export type RequestStatus = 'Submitted' | RequestEventStatus | 'Fulfilled'
+
+/**
+ * One record per status change (unique ids), kept apart from the request so a coordinator and an
+ * admin updating the same request offline can never overwrite each other.
+ */
+export interface RequestEvent {
+  id: string
+  requestId: string
+  status: RequestEventStatus
+  party: 'coordinator' | 'admin'
+  note: string
+  shipmentId?: string // the shipment created for this request
+  createdAt: string
+}
+
 export interface KitItem {
   name: string
   qty: number
@@ -116,6 +163,30 @@ export interface Partner {
   supplies: string[]
   trust: 1 | 2 | 3 | 4 | 5
   trustLabel: 'Referred' | 'Checked' | 'Vouched' | 'Proven' | 'Trusted'
+}
+
+/** The four kinds of resource partners can pledge. */
+export type ResourceType = 'laptops' | 'solar kits' | 'funding' | 'trainer days'
+
+/** A partner's pledge. Never edited after it is saved; "delivered" is a separate PledgeEvent. */
+export interface Pledge {
+  id: string
+  partnerId: string
+  resource: ResourceType
+  quantity: number
+  unit: string // "laptops", "solar kits", "CFA francs" or "trainer days"
+  /** Seed pledges can start as delivered; new pledges are always "pledged". */
+  status: 'pledged' | 'delivered'
+  note: string
+  createdAt?: string // missing on seed pledges
+}
+
+/** Marks a pledge as delivered (one record, unique id), kept apart from the pledge like RequestEvent. */
+export interface PledgeEvent {
+  id: string
+  pledgeId: string
+  status: 'delivered'
+  createdAt: string
 }
 
 export interface Lesson {

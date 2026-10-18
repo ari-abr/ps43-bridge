@@ -11,7 +11,10 @@
 import demoState from '../data/demo-state.json'
 import kitsSeed from '../data/kits.json'
 import partnersSeed from '../data/partners.json'
+import pledgesSeed from '../data/pledges.json'
 import schoolsSeed from '../data/schools.json'
+import { isOpen, requestStatus } from './requests.ts'
+import { RESOURCE_UNITS } from './resourceGaps.ts'
 import { needScore, nearestKm, tierFromSurvey, type NeedInput, type Tier } from './scoring.ts'
 import { assetNumber, confirmationId, devicesForKit, latestBySchool, shipmentStatus } from './shipments.ts'
 import type {
@@ -20,7 +23,12 @@ import type {
   Kit,
   Partner,
   Party,
+  Pledge,
+  PledgeEvent,
   Progress,
+  RequestEvent,
+  RequestStatus,
+  ResourceRequest,
   School,
   SchoolStatus,
   Shipment,
@@ -205,6 +213,13 @@ export function getOutbox(collection: string): OutboxItem[] {
   return [...waiting, ...uploaded].sort((a, b) => b.savedAt.localeCompare(a.savedAt))
 }
 
+/** Records in a collection still waiting in this device's upload queue. */
+export function getQueuedRecords<T extends DataRecord>(collection: string): T[] {
+  return getQueue()
+    .filter((q) => q.collection === collection)
+    .map((q) => q.record as T)
+}
+
 // ---------- records ----------
 
 function upsert(collection: string, record: DataRecord) {
@@ -254,12 +269,28 @@ export async function saveRecord(collection: string, record: DataRecord): Promis
 //   'shipments'     Shipment                     replaces the seed shipment with the same id (Admin only)
 //   'confirmations' Confirmation                 one per party per shipment: "conf-<shipmentId>-<party>"
 //   'checkins'      Checkin                      one per check-in (unique ids)
+//   'requests'      ResourceRequest              one per request (unique ids), never edited
+//   'requestEvents' RequestEvent                 one per status change (unique ids)
+//   'pledges'       Pledge                       one per pledge (unique ids), never edited
+//   'pledgeEvents'  PledgeEvent                  one per "Mark delivered" (unique ids)
 
 export type SurveyRecord = DataRecord & Survey & { schoolId: string }
 export type ShipmentRecord = DataRecord & Shipment
 export type ConfirmationRecord = DataRecord & Confirmation
 export type CheckinRecord = DataRecord & Checkin
 export type ProgressRow = DataRecord & Progress
+export type RequestRecord = DataRecord & ResourceRequest
+export type RequestEventRecord = DataRecord & RequestEvent
+
+/** A request with its status changes (oldest first) and the status they give it. */
+export interface RequestView extends ResourceRequest {
+  status: RequestStatus
+  events: RequestEvent[]
+  /** The newest event with a note, or null. */
+  latestNote: RequestEvent | null
+  /** The shipment created for this request, or null. */
+  shipmentId: string | null
+}
 
 /** A shipment with its confirmations and the status they give it. */
 export interface ShipmentView extends Shipment {
@@ -282,11 +313,17 @@ export interface SchoolView extends School {
   checkin: Checkin | null
   /** The school's learning totals, or null if no student has used a device there yet. */
   progress: Progress | null
+  /** The school's equipment and resource requests, newest first. */
+  requests: RequestView[]
+  /** Requests still Submitted or Checked by coordinator. */
+  openRequests: number
 }
 
 const seedSurveys = demoState.surveys as Record<string, Survey>
 const seedShipments = demoState.shipments as Shipment[]
 const seedConfirmations = demoState.confirmations as Confirmation[]
+const seedRequests = demoState.requests as ResourceRequest[]
+const seedRequestEvents = demoState.requestEvents as RequestEvent[]
 
 /** Seed records plus uploaded ones (an uploaded record replaces a seed one with the same id). */
 async function seedPlusUploaded<T extends { id: string }>(collection: string, seed: T[]): Promise<T[]> {
@@ -344,6 +381,33 @@ async function getProgressBySchool(): Promise<Map<string, Progress>> {
   return bySchool
 }
 
+/** Every request with its events and derived status, grouped by school (newest first). */
+async function getRequestsBySchool(shipments: ShipmentView[]): Promise<Map<string, RequestView[]>> {
+  const [requests, events] = await Promise.all([
+    seedPlusUploaded('requests', seedRequests),
+    seedPlusUploaded('requestEvents', seedRequestEvents),
+  ])
+  const shipmentById = new Map(shipments.map((s) => [s.id, s]))
+  const eventsOf = new Map<string, RequestEvent[]>()
+  for (const e of [...events].sort((a, b) => a.createdAt.localeCompare(b.createdAt))) {
+    eventsOf.set(e.requestId, [...(eventsOf.get(e.requestId) ?? []), e])
+  }
+
+  const bySchool = new Map<string, RequestView[]>()
+  for (const r of [...requests].sort((a, b) => b.createdAt.localeCompare(a.createdAt))) {
+    const own = eventsOf.get(r.id) ?? []
+    const view: RequestView = {
+      ...r,
+      events: own,
+      status: requestStatus(own, (id) => shipmentById.get(id)?.status),
+      latestNote: [...own].reverse().find((e) => e.note) ?? null,
+      shipmentId: [...own].reverse().find((e) => e.shipmentId)?.shipmentId ?? null,
+    }
+    bySchool.set(r.schoolId, [...(bySchool.get(r.schoolId) ?? []), view])
+  }
+  return bySchool
+}
+
 const SHIPMENT_STATUS: Record<ShipmentStatus, SchoolStatus> = {
   approved: 'kit approved',
   'in transit': 'in transit',
@@ -351,7 +415,7 @@ const SHIPMENT_STATUS: Record<ShipmentStatus, SchoolStatus> = {
   verified: 'verified',
 }
 
-/** Every school with its latest survey, tier, need score, status, shipment and latest check-in. */
+/** Every school with its latest survey, tier, need score, status, shipment, latest check-in and requests. */
 export async function getSchools(): Promise<SchoolView[]> {
   const [surveys, shipments, checkins, progress] = await Promise.all([
     getLatestSurveys(),
@@ -359,6 +423,7 @@ export async function getSchools(): Promise<SchoolView[]> {
     getLatestCheckins(),
     getProgressBySchool(),
   ])
+  const requests = await getRequestsBySchool(shipments)
 
   // One shipment per school: the most recently created.
   const shipmentOf = latestBySchool(shipments)
@@ -389,6 +454,7 @@ export async function getSchools(): Promise<SchoolView[]> {
       }
       score = needScore(need)
     }
+    const own = requests.get(school.id) ?? []
     return {
       ...school,
       survey,
@@ -399,6 +465,8 @@ export async function getSchools(): Promise<SchoolView[]> {
       shipment,
       checkin: checkins.get(school.id) ?? null,
       progress: progress.get(school.id) ?? null,
+      requests: own,
+      openRequests: own.filter((r) => isOpen(r.status)).length,
     }
   })
 }
@@ -411,6 +479,8 @@ export interface NewShipment {
   kit: Kit
   partnerId: string
   transporterId: string
+  /** Set by createShipmentForRequest, which links the request to this id. */
+  id?: string
 }
 
 /**
@@ -423,7 +493,7 @@ export async function createShipment(input: NewShipment): Promise<'uploaded' | '
     .map((q) => q.record as ShipmentRecord)
   const used = [...(await getShipments()), ...queued].flatMap((s) => s.devices.map((d) => assetNumber(d.assetId)))
   const shipment: ShipmentRecord = {
-    id: newId('ship'),
+    id: input.id ?? newId('ship'),
     schoolId: input.schoolId,
     tier: input.tier,
     kitId: input.kit.id,
@@ -455,6 +525,40 @@ export async function markInTransit(s: Shipment): Promise<'uploaded' | 'queued'>
   return saveRecord('shipments', record)
 }
 
+// ---------- requests ----------
+
+export type NewRequest = Omit<ResourceRequest, 'id' | 'createdAt' | 'demo'>
+
+/** Teacher: send a new request (queued while Offline). Returns the new id too, so the screen can follow it. */
+export async function saveRequest(input: NewRequest): Promise<{ id: string; result: 'uploaded' | 'queued' }> {
+  const record: RequestRecord = { ...input, id: newId('rq'), createdAt: new Date().toISOString() }
+  return { id: record.id, result: await saveRecord('requests', record) }
+}
+
+/** Coordinator or admin: record a status change as its own event (queued while Offline). */
+export async function saveRequestEvent(input: Omit<RequestEvent, 'id' | 'createdAt'>): Promise<'uploaded' | 'queued'> {
+  const record: RequestEventRecord = { ...input, id: newId('rqe'), createdAt: new Date().toISOString() }
+  return saveRecord('requestEvents', record)
+}
+
+/**
+ * Admin: approve a kit for the request's school through the usual shipment flow, and link the
+ * request to the new shipment (an "Approved" event with its id). The request becomes Fulfilled
+ * once that shipment is delivered.
+ */
+export async function createShipmentForRequest(input: NewShipment, requestId: string): Promise<'uploaded' | 'queued'> {
+  const shipmentId = newId('ship')
+  const result = await createShipment({ ...input, id: shipmentId })
+  await saveRequestEvent({
+    requestId,
+    status: 'Approved',
+    party: 'admin',
+    note: `Shipment ${shipmentId} created for this request.`,
+    shipmentId,
+  })
+  return result
+}
+
 /** This device's own confirmation for a shipment (waiting to upload, or uploaded), if any. */
 export function getMyConfirmation(shipmentId: string, party: Party): OutboxItem | undefined {
   const id = confirmationId(shipmentId, party)
@@ -479,6 +583,79 @@ export function schoolName(id: string): string {
 export async function getPartners(): Promise<Partner[]> {
   await wait()
   return partnersSeed.partners as Partner[]
+}
+
+// ---------- pledges (Admin) ----------
+
+export type PledgeRecord = DataRecord & Pledge
+export type PledgeEventRecord = DataRecord & PledgeEvent
+
+/** A pledge with its "delivered" mark applied. */
+export interface PledgeView extends Pledge {
+  /** When it was marked delivered in the app; null for pledges not delivered or delivered in the seed. */
+  deliveredAt: string | null
+  /** A seed pledge (demo data). */
+  demo: boolean
+  /** This device saved it (or its delivered mark) and has not uploaded it yet. */
+  waiting: boolean
+}
+
+const seedPledges = pledgesSeed.pledges as Pledge[]
+
+/**
+ * Every pledge, newest first (seed pledges last). This device's pledges and delivered marks that
+ * are still waiting to upload count straight away, so the gaps update while Offline too.
+ */
+export async function getPledges(): Promise<PledgeView[]> {
+  const [uploaded, uploadedEvents] = await Promise.all([
+    seedPlusUploaded('pledges', seedPledges),
+    getRecords<PledgeEventRecord>('pledgeEvents'),
+  ])
+  const queued = getQueuedRecords<PledgeRecord>('pledges')
+  const queuedEvents = getQueuedRecords<PledgeEventRecord>('pledgeEvents')
+  const waitingIds = new Set([...queued.map((p) => p.id), ...queuedEvents.map((e) => e.pledgeId)])
+  const byId = new Map<string, Pledge>(uploaded.map((p) => [p.id, p]))
+  queued.forEach((p) => byId.has(p.id) || byId.set(p.id, p))
+
+  const deliveredAt = new Map<string, string>()
+  for (const e of [...uploadedEvents, ...queuedEvents]) {
+    const current = deliveredAt.get(e.pledgeId)
+    if (!current || e.createdAt < current) deliveredAt.set(e.pledgeId, e.createdAt)
+  }
+  const seedIds = new Set(seedPledges.map((p) => p.id))
+
+  return [...byId.values()]
+    .map((p) => {
+      const at = deliveredAt.get(p.id) ?? null
+      return {
+        ...p,
+        status: p.status === 'delivered' || at ? ('delivered' as const) : ('pledged' as const),
+        deliveredAt: p.status === 'delivered' ? null : at,
+        demo: seedIds.has(p.id),
+        waiting: waitingIds.has(p.id),
+      }
+    })
+    .sort((a, b) => (b.createdAt ?? '').localeCompare(a.createdAt ?? ''))
+}
+
+export type NewPledge = Pick<Pledge, 'partnerId' | 'resource' | 'quantity' | 'note'>
+
+/** Admin: save a new pledge (queued while Offline). */
+export async function savePledge(input: NewPledge): Promise<'uploaded' | 'queued'> {
+  const record: PledgeRecord = {
+    ...input,
+    id: newId('pl'),
+    unit: RESOURCE_UNITS[input.resource],
+    status: 'pledged',
+    createdAt: new Date().toISOString(),
+  }
+  return saveRecord('pledges', record)
+}
+
+/** Admin: mark a pledge as delivered with its own record (queued while Offline). The pledge is not edited. */
+export async function markPledgeDelivered(pledgeId: string): Promise<'uploaded' | 'queued'> {
+  const record: PledgeEventRecord = { id: newId('ple'), pledgeId, status: 'delivered', createdAt: new Date().toISOString() }
+  return saveRecord('pledgeEvents', record)
 }
 
 export async function getKits(): Promise<Kit[]> {

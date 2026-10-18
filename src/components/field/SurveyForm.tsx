@@ -230,7 +230,7 @@ export default function SurveyForm({ school, onDone }: Props) {
   )
 }
 
-function Choice<T extends string>(props: {
+export function Choice<T extends string>(props: {
   label: string
   name: string
   options: readonly T[]
@@ -260,7 +260,7 @@ function Choice<T extends string>(props: {
   )
 }
 
-function Count(props: { label: string; value: string; error?: string; onChange: (value: string) => void }) {
+export function Count(props: { label: string; value: string; error?: string; onChange: (value: string) => void }) {
   return (
     <label className={`count ${props.error ? 'has-error' : ''}`}>
       <span className="count-label">{props.label}</span>

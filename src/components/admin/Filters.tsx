@@ -5,7 +5,7 @@ import { STATUSES, capitalise } from './tierStyle'
 export interface FilterState {
   region: Region | 'all'
   tier: 'all' | 'unassessed' | '0' | '1' | '2' | '3'
-  status: SchoolStatus | 'all'
+  status: SchoolStatus | 'all' | 'open requests'
 }
 
 export const NO_FILTERS: FilterState = { region: 'all', tier: 'all', status: 'all' }
@@ -56,6 +56,7 @@ export default function Filters({ value, onChange }: Props) {
               {capitalise(s)}
             </option>
           ))}
+          <option value="open requests">Has open requests</option>
         </select>
       </label>
 

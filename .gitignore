@@ -5,3 +5,6 @@ dev-dist
 
 # raw Overpass downloads (re-download with: npm run fetch-schools)
 data-raw/overpass-*.json
+
+# UI review screenshots (npm run ui-review)
+ui-review/

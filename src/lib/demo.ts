@@ -20,6 +20,13 @@ export interface DemoScene {
   surveySchools: SceneSchool[]
   /** An assessed school with an approved kit, for the delivery demo. */
   delivery: SceneSchool & { shipmentId: string; devices: number }
+  /**
+   * An assessed Tier 0 school with no shipment or requests, for the request demo: its Tier 0 kit
+   * has no devices, so the delivery can be confirmed without scanning. Missing in scenes saved by older builds.
+   */
+  request?: SceneSchool
+  /** Seed requests (demo data) on the map when the scene was set up. */
+  seedRequests?: number
 }
 
 export const getDemoScene = () => getLocal<DemoScene | null>(SCENE_KEY, null)
@@ -78,12 +85,20 @@ export async function setUpDemoScene(): Promise<DemoScene> {
   })
   if (result !== 'uploaded') throw new Error('Could not approve the kit. Check you are Online and try again.')
 
-  const shipment = (await getSchools()).find((s) => s.id === target.id)?.shipment
+  const after = await getSchools()
+  const shipment = after.find((s) => s.id === target.id)?.shipment
   if (!shipment) throw new Error('The approved kit was not found.')
+
+  const requestSchool = pick(
+    after.filter((s) => s.status === 'assessed' && s.tier === 0 && s.requests.length === 0),
+    after,
+  )
 
   const scene: DemoScene = {
     surveySchools,
     delivery: { ...brief(target), shipmentId: shipment.id, devices: shipment.devices.length },
+    request: requestSchool && brief(requestSchool),
+    seedRequests: after.reduce((n, s) => n + s.requests.length, 0),
   }
   setLocal(SCENE_KEY, scene)
   return scene

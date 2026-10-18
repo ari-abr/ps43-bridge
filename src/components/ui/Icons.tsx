@@ -92,6 +92,13 @@ export const Book = (p: IconProps) => (
   </Svg>
 )
 
+export const Inbox = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M3 13l3-8h12l3 8v6H3z" />
+    <path d="M3 13h5l1.5 2.5h5L16 13h5" />
+  </Svg>
+)
+
 export const Truck = (p: IconProps) => (
   <Svg {...p}>
     <path d="M2 6h12v10H2zM14 9h4l4 4v3h-8" />

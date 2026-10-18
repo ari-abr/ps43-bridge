@@ -2,19 +2,21 @@ import { useState } from 'react'
 import Checkins from '../components/field/Checkins'
 import Deliveries from '../components/field/Deliveries'
 import RecentSurveys from '../components/field/RecentSurveys'
+import Requests from '../components/field/Requests'
 import SchoolPicker from '../components/field/SchoolPicker'
 import SurveyForm, { SURVEY_STEPS } from '../components/field/SurveyForm'
-import { Clipboard, Laptop, Truck } from '../components/ui/Icons'
+import { Clipboard, Inbox, Laptop, Truck } from '../components/ui/Icons'
 import PageHeader from '../components/ui/PageHeader'
 import Steps from '../components/ui/Steps'
 import type { SchoolView } from '../lib/api'
 
-type Tab = 'survey' | 'deliveries' | 'checkins'
+type Tab = 'survey' | 'deliveries' | 'checkins' | 'requests'
 
 const TABS = [
   { id: 'survey', label: 'Survey', Icon: Clipboard },
   { id: 'deliveries', label: 'Deliveries', Icon: Truck },
   { id: 'checkins', label: 'Check-ins', Icon: Laptop },
+  { id: 'requests', label: 'Requests', Icon: Inbox },
 ] as const
 
 export default function FieldPage() {
@@ -27,7 +29,7 @@ export default function FieldPage() {
         tone="green"
         eyebrow="PS43 Bridge · Field Tools"
         title="Field Tools"
-        intro="Survey schools, confirm deliveries and count devices. Works offline: what you save waits on this phone until you are Online."
+        intro="Survey schools, confirm deliveries, count devices and check requests. Works offline: what you save waits on this phone until you are Online."
       />
 
       <div className="tabs" role="tablist" aria-label="Field Tools">
@@ -61,6 +63,7 @@ export default function FieldPage() {
 
         {tab === 'deliveries' && <Deliveries />}
         {tab === 'checkins' && <Checkins />}
+        {tab === 'requests' && <Requests />}
       </div>
     </div>
   )

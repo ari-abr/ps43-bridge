@@ -18,6 +18,10 @@ export interface Summary {
   schoolsWithProgress: number
   /** Mastery rate across all active learners (each school weighted by its active learners). Null with no data. */
   averageMastery: number | null
+  requestsReceived: number
+  /** Submitted or Checked by coordinator. */
+  requestsOpen: number
+  requestsFulfilled: number
 }
 
 const isDelivered = (s: SchoolView) => s.status === 'delivered' || s.status === 'verified'
@@ -45,6 +49,9 @@ export function summarise(schools: SchoolView[]): Summary {
     activeLearners,
     schoolsWithProgress: withProgress.length,
     averageMastery: ratedLearners > 0 ? Math.round(masteryWeighted / ratedLearners) : null,
+    requestsReceived: schools.reduce((n, s) => n + s.requests.length, 0),
+    requestsOpen: schools.reduce((n, s) => n + s.openRequests, 0),
+    requestsFulfilled: schools.reduce((n, s) => n + s.requests.filter((r) => r.status === 'Fulfilled').length, 0),
   }
 }
 

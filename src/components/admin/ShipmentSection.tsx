@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { createShipment, markInTransit, type SchoolView, type ShipmentView } from '../../lib/api'
+import { createShipment, createShipmentForRequest, markInTransit, type SchoolView, type ShipmentView } from '../../lib/api'
 import { matchPartners, matchTransporters, topPartner } from '../../lib/matching'
 import type { Kit, Partner, ShipmentStatus } from '../../lib/types'
 import { useSyncStatus } from '../../lib/useSyncStatus'
@@ -83,7 +83,16 @@ function DevicesSection({ school }: { school: SchoolView }) {
   )
 }
 
-function ApproveForm({ school, kit, partners }: { school: SchoolView; kit: Kit; partners: Partner[] }) {
+interface ApproveProps {
+  school: SchoolView
+  kit: Kit
+  partners: Partner[]
+  /** Set when creating the shipment from a request: the request is linked to the new shipment. */
+  requestId?: string
+  onDone?: () => void
+}
+
+export function ApproveForm({ school, kit, partners, requestId, onDone }: ApproveProps) {
   const { online } = useSyncStatus()
   const tier = school.tier!
   const suppliers = matchPartners(tier, school, partners)
@@ -97,7 +106,9 @@ function ApproveForm({ school, kit, partners }: { school: SchoolView; kit: Kit; 
     setBusy(true)
     setError(null)
     try {
-      toastSaved(await createShipment({ schoolId: school.id, tier, kit, partnerId, transporterId }), 'Kit approval')
+      const input = { schoolId: school.id, tier, kit, partnerId, transporterId }
+      toastSaved(await (requestId ? createShipmentForRequest(input, requestId) : createShipment(input)), 'Kit approval')
+      onDone?.()
     } catch {
       setError('Could not save the shipment (device storage full?).')
       toast('error', 'Could not save the shipment.')
