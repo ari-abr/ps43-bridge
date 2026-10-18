@@ -293,7 +293,8 @@ select { cursor: pointer; }
   padding: var(--s-5);
   box-shadow: var(--shadow-1);
 }
-.card > h2:first-child:not(.section-title):not(.panel-title) { margin-top: 0; }
+.card > h2:first-child:not(.section-title):not(.panel-title),
+.card > .label-rule:first-child { margin-top: 0; }
 
 .chip, .pill, .badge {
   display: inline-flex;
@@ -471,7 +472,7 @@ select { cursor: pointer; }
   padding: var(--s-3) var(--s-4);
 }
 
-.logo { display: inline-flex; align-items: center; gap: var(--s-2); padding: var(--s-1) 0; text-decoration: none; flex: none; }
+.logo { display: inline-flex; align-items: center; gap: var(--s-2); min-height: var(--tap); padding: var(--s-1) 0; text-decoration: none; flex: none; }
 .logo-mark { font-family: var(--font-display); font-size: 1.85rem; line-height: 1; letter-spacing: 0.02em; text-transform: uppercase; color: var(--green); }
 .logo-app { padding-left: var(--s-2); border-left: 3px solid var(--yellow); font-size: var(--fs-label); font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--navy); }
 .logo-on-dark .logo-mark { color: #fff; }
@@ -686,7 +687,8 @@ select { cursor: pointer; }
 .slider-head { display: flex; justify-content: space-between; font-weight: 700; }
 .slider input { width: 100%; min-height: var(--tap); accent-color: var(--green); }
 
-.priority-list { max-height: 520px; margin: 0; padding: 0; overflow-y: auto; list-style: none; }
+/* position: relative keeps .sr-only text inside scrolling lists clipped (otherwise it stretches the page). */
+.priority-list { position: relative; max-height: 520px; margin: 0; padding: 0; overflow-y: auto; list-style: none; }
 .priority-row {
   display: flex;
   align-items: center;
@@ -753,7 +755,7 @@ select { cursor: pointer; }
 .picker-filters { display: flex; gap: var(--s-2); margin: var(--s-3) 0; }
 .picker-filters input { flex: 1; min-width: 0; }
 .picker-list, .recent-list { margin: 0; padding: 0; list-style: none; }
-.picker-list { max-height: 55vh; overflow-y: auto; border-top: 1px solid var(--border); }
+.picker-list { position: relative; max-height: 55vh; overflow-y: auto; border-top: 1px solid var(--border); }
 .picker-row {
   display: flex;
   align-items: center;
@@ -812,7 +814,7 @@ select { cursor: pointer; }
 .manual-row { display: flex; gap: var(--s-2); }
 .manual-row input { flex: 1; min-width: 0; text-transform: uppercase; }
 .scan-ok { margin: 0; font-weight: 700; color: var(--green); }
-.device-list { max-height: 40vh; margin: 0; padding: 0; overflow-y: auto; border-top: 1px solid var(--border); list-style: none; }
+.device-list { position: relative; max-height: 40vh; margin: 0; padding: 0; overflow-y: auto; border-top: 1px solid var(--border); list-style: none; }
 .device-list li { display: flex; align-items: center; gap: var(--s-3); padding: var(--s-2) var(--s-1); border-bottom: 1px solid var(--border); }
 .device-list .tick { width: 1.75rem; height: 1.75rem; font-size: 1rem; }
 .device-id { flex: 1; font-family: ui-monospace, Consolas, monospace; font-weight: 700; }
@@ -898,10 +900,11 @@ select { cursor: pointer; }
 .progress-sync { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-1) var(--s-3); margin-top: var(--s-2); }
 .progress-sync .badge { white-space: normal; }
 
-.table-wrap { margin-top: var(--s-2); overflow-x: auto; }
+.table-wrap { position: relative; margin-top: var(--s-2); overflow-x: auto; }
 .class-table { width: 100%; border-collapse: collapse; }
 .class-table th, .class-table td { padding: var(--s-3) var(--s-2); border-bottom: 1px solid var(--border); text-align: left; white-space: nowrap; }
 .class-table th { border-bottom: 2px solid var(--navy); font-size: var(--fs-label); letter-spacing: 0.08em; text-transform: uppercase; color: var(--navy); }
+.class-table tbody th { border-bottom: 1px solid var(--border); }
 .class-table tbody tr:hover { background: var(--bg); }
 .class-table .pill { margin-left: var(--s-2); }
 .empty { padding: var(--s-4) 0; }
@@ -913,7 +916,7 @@ select { cursor: pointer; }
   .stack-table tr { margin-bottom: var(--s-2); padding: var(--s-2) var(--s-3); border: 1px solid var(--border); border-radius: var(--r-md); background: var(--surface); }
   .stack-table td { display: flex; justify-content: space-between; gap: var(--s-4); padding: var(--s-1) 0; border: 0; text-align: right !important; white-space: normal; }
   .stack-table td::before { content: attr(data-label); flex: none; font-weight: 700; color: var(--muted); text-align: left; }
-  .table-wrap { overflow-x: visible; }
+  .table-wrap:has(> .stack-table) { overflow-x: visible; }
 }
 
 /* =====================================================================
@@ -991,6 +994,7 @@ select { cursor: pointer; }
   .compliance .page-header { padding: 0 0 4mm; border-radius: 0; border-bottom: 2pt solid #000; background: none; color: #000; }
   .compliance .page-header h1 { font-size: 30pt; }
   .compliance .card { border: 1pt solid #999; box-shadow: none; padding: 4mm; }
+  .compliance .card.cur-delivery, .compliance .card.rm-bullets { padding-left: calc(4mm + 1.25rem); }
   .compliance .callout { border: 1pt solid #000; border-left-width: 4pt; background: none; color: #000; }
   .compliance .section-title, .law-title, .support-item dt, .check-icon, .compliance .how-num { color: #000; }
   .law-card, .support-item, .priority-steps li { break-inside: avoid; }
@@ -1014,6 +1018,7 @@ select { cursor: pointer; }
 .cur-card-title { margin: 0 0 var(--s-1); font-size: 1.05rem; color: var(--green); }
 
 .cur-levels th[scope="row"] { color: var(--navy); }
+.cur-levels th, .cur-levels td { white-space: normal; }
 
 .cur-subject { display: flex; flex-direction: column; gap: var(--s-3); }
 .cur-band { margin: 0; padding: var(--s-3) var(--s-4); border-radius: var(--r-md); font-family: var(--font-display); font-weight: 400; font-size: clamp(1.75rem, 4vw, 2.25rem); line-height: 1.1; text-transform: uppercase; }
@@ -1035,6 +1040,8 @@ select { cursor: pointer; }
 .cur-open { margin-top: var(--s-2); text-decoration: none; }
 
 .cur-delivery { display: grid; gap: var(--s-2); margin: 0; padding-left: var(--s-6); max-width: 72ch; }
+/* Bulleted lists drawn as cards: keep the bullets inside the card. */
+.card.cur-delivery, .card.rm-bullets { padding-left: calc(var(--s-5) + 1.25rem); }
 
 @media print {
   .curriculum .cur-level.is-filtered { display: block; }
