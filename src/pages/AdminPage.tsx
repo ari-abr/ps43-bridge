@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import AttentionPanel from '../components/admin/AttentionPanel'
 import DemoControls from '../components/admin/DemoControls'
 import Filters, { NO_FILTERS, type FilterState } from '../components/admin/Filters'
 import PriorityList, { type RankedSchool } from '../components/admin/PriorityList'
@@ -11,6 +12,7 @@ import type { ColorBy } from '../components/admin/tierStyle'
 import SummaryBar from '../components/admin/SummaryBar'
 import PageHeader from '../components/ui/PageHeader'
 import { KEY_PREFIX, getKits, getPartners, getSchools, subscribe, type SchoolView } from '../lib/api'
+import { getAttentionItems } from '../lib/attention'
 import { DEFAULT_WEIGHTS, needScore, type NeedWeights } from '../lib/scoring'
 import type { Kit, Partner } from '../lib/types'
 
@@ -95,6 +97,13 @@ export default function AdminPage() {
         .sort((a, b) => b.score - a.score || a.school.name.localeCompare(b.school.name)),
     [shown, scoreOf],
   )
+  // Assessed schools with no kit yet come first; the rest already have one on the way or delivered.
+  const nextToEquip = useMemo(() => ranked.filter((r) => r.school.status === 'assessed'), [ranked])
+  const inProgress = useMemo(() => ranked.filter((r) => r.school.status !== 'assessed'), [ranked])
+
+  // There is no demo clock: "Simulate 30 days" writes check-ins dated now, so the real time is "now".
+  // Recomputed only when the schools reload (every data change) or the filters change.
+  const attention = useMemo(() => getAttentionItems(shown, Date.now()), [shown])
 
   const openRequests = shown.reduce((n, s) => n + s.openRequests, 0)
 
@@ -177,12 +186,14 @@ export default function AdminPage() {
         <div className="admin-panel" ref={panelRef}>
           <SchoolPanel
             school={selected}
-            score={selected ? scoreOf(selected) : null}
+            weights={weights}
             kits={kits}
             partners={partners}
             onClose={() => setSelectedId(null)}
           />
         </div>
+
+        <AttentionPanel loading={schools === null} items={attention} selectedId={selected?.id ?? null} onSelect={selectFromList} />
 
         <div className="admin-list card">
           <div className="tabs tabs-compact" role="tablist" aria-label="Lists">
@@ -206,9 +217,15 @@ export default function AdminPage() {
             {listTab === 'priority' ? (
               <>
                 <h2 className="section-title">Priority list</h2>
-                <p className="help">Assessed schools, highest need score first. The top schools should get a kit soonest.</p>
+                <p className="help">Assessed schools without a kit, highest need score first. The top schools should get a kit soonest.</p>
                 <PrioritySettings weights={weights} onChange={changeWeights} />
-                <PriorityList loading={schools === null} ranked={ranked} selectedId={selected?.id ?? null} onSelect={selectFromList} />
+                <PriorityList
+                  loading={schools === null}
+                  next={nextToEquip}
+                  inProgress={inProgress}
+                  selectedId={selected?.id ?? null}
+                  onSelect={selectFromList}
+                />
               </>
             ) : (
               <>

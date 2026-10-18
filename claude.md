@@ -6,8 +6,9 @@ NO logins and NO backend in this demo.
 
 ## Modules
 1. Admin Map (/admin, online): map of schools coloured by readiness tier 0-3
-   (grey = unassessed), filters, school side panel, priority list by need score,
-   partners layer, donor report.
+   (grey = unassessed), filters, school side panel with "Why this score?" bars,
+   priority list by need score ("Next to equip" = assessed without a kit; "In progress"
+   collapsed), "Needs attention" card, partners layer, donor report.
 2. Field Tools (/field, offline): school survey form, shipment list, QR scan of devices,
    confirm delivery, monthly check-in form, sync status.
 3. Learning (/learn/teacher, /learn/student, offline): student lessons + quizzes,
@@ -31,6 +32,10 @@ NO logins and NO backend in this demo.
 - api.ts fires an update on every change; the browser "storage" event refreshes other windows.
 - Tier and need-score rules live in src/lib/scoring.ts. Partner matching lives in
   src/lib/matching.ts. Reuse them; don't duplicate the logic.
+  getScoreBreakdown() gives the need score and its per-factor points; needScore() calls it.
+- "Needs attention" items come from getAttentionItems() in src/lib/attention.ts (thresholds
+  at the top). Derived from getSchools() only, nothing stored. "Now" is the real clock (no
+  demo clock; "Simulate 30 days" writes check-ins dated now).
 - Only school-level totals go to the fake server, never individual student records.
 
 ## Stack
@@ -44,6 +49,7 @@ NO logins and NO backend in this demo.
 - Show sync status on screen ("3 items waiting to upload").
 - No photos stored (localStorage is small); use a "photo taken" checkbox instead.
 - Layout must work on a phone.
+
 
 
 

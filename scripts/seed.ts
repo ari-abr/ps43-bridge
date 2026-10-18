@@ -253,6 +253,10 @@ const transporterByRegion: Record<Region, string> = {
 }
 
 // 8 shipments: two per status, spread over regions
+// Days to move a shipment's dates by, so the Admin "Needs attention" panel starts with a mix of items:
+// ship-06 left recently (not slow yet), ship-08 was delivered over 30 days ago (check-in due).
+const DATE_SHIFT_DAYS: Record<string, number> = { 'ship-06': 17, 'ship-08': -19 }
+
 const shipmentSchools = REGIONS.flatMap((region) =>
   shuffle(schools.filter((s) => s.region === region && surveys[s.id])),
 )
@@ -273,6 +277,7 @@ chosen.forEach((school, i) => {
   nextAsset += devices.length
 
   // Same random calls in the same order as before, so the rest of the seed data does not change.
+  const shift = (date: string) => addDays(date, DATE_SHIFT_DAYS[id] ?? 0)
   const approvedAt = randomDate('2026-09-16', '2026-09-22')
   const shippedAt = status !== 'approved' ? addDays(approvedAt, int(3, 7)) : null
   const deliveredAt = status === 'delivered' || status === 'verified' ? addDays(shippedAt!, int(4, 10)) : null
@@ -287,8 +292,8 @@ chosen.forEach((school, i) => {
     partnerId: topPartner(tier, school, partners)!.partner.id,
     transporterId: transporterByRegion[school.region],
     devices,
-    createdAt: approvedAt,
-    inTransitAt: shippedAt,
+    createdAt: shift(approvedAt),
+    inTransitAt: shippedAt && shift(shippedAt),
   }
   shipments.push(shipment)
 
@@ -297,7 +302,7 @@ chosen.forEach((school, i) => {
         id: confirmationId(id, 'coordinator'),
         shipmentId: id,
         party: 'coordinator',
-        confirmedAt: deliveredAt,
+        confirmedAt: shift(deliveredAt),
         scannedAssetIds: devices.map((d) => d.assetId),
         photoTaken: true,
         note: '',
@@ -308,7 +313,7 @@ chosen.forEach((school, i) => {
         id: confirmationId(id, 'teacher'),
         shipmentId: id,
         party: 'teacher',
-        confirmedAt: verifiedAt,
+        confirmedAt: shift(verifiedAt),
         devicesReceived: devices.length,
         note: '',
       }

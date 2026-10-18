@@ -710,8 +710,8 @@
      "type": "laptop"
     }
    ],
-   "createdAt": "2026-09-21",
-   "inTransitAt": "2026-09-25"
+   "createdAt": "2026-10-08",
+   "inTransitAt": "2026-10-12"
   },
   {
    "id": "ship-07",
@@ -878,8 +878,8 @@
      "type": "laptop"
     }
    ],
-   "createdAt": "2026-09-20",
-   "inTransitAt": "2026-09-26"
+   "createdAt": "2026-09-01",
+   "inTransitAt": "2026-09-07"
   }
  ],
  "confirmations": [
@@ -949,7 +949,7 @@
    "id": "conf-ship-08-coordinator",
    "shipmentId": "ship-08",
    "party": "coordinator",
-   "confirmedAt": "2026-10-04",
+   "confirmedAt": "2026-09-15",
    "scannedAssetIds": [
     "PS43-0051",
     "PS43-0052",
@@ -975,7 +975,7 @@
    "id": "conf-ship-08-teacher",
    "shipmentId": "ship-08",
    "party": "teacher",
-   "confirmedAt": "2026-10-06",
+   "confirmedAt": "2026-09-17",
    "devicesReceived": 16,
    "note": ""
   }
@@ -1043,7 +1043,7 @@
    "reason": "Our school has no computers at all. Classes 5 and 6 need them to prepare for secondary school.",
    "pupilsAffected": 90,
    "requestedByRole": "Headteacher",
-   "createdAt": "2026-09-14T08:00:00.000Z",
+   "createdAt": "2026-08-26T08:00:00.000Z",
    "demo": true
   }
  ],
@@ -1086,7 +1086,7 @@
    "status": "Checked by coordinator",
    "party": "coordinator",
    "note": "Confirmed on visit: no devices yet, grid power and a room that locks.",
-   "createdAt": "2026-09-17T12:00:00.000Z"
+   "createdAt": "2026-08-29T12:00:00.000Z"
   },
   {
    "id": "rqe-demo-6",
@@ -1095,7 +1095,7 @@
    "party": "admin",
    "note": "Shipment ship-08 created for this request.",
    "shipmentId": "ship-08",
-   "createdAt": "2026-09-20T09:00:00.000Z"
+   "createdAt": "2026-09-01T09:00:00.000Z"
   }
  ]
 }

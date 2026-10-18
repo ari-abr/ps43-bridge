@@ -1,30 +1,33 @@
 import { useMemo } from 'react'
 import type { SchoolView } from '../../lib/api'
 import { matchPartners } from '../../lib/matching'
-import { TIER_LABELS } from '../../lib/scoring'
+import { TIER_LABELS, getScoreBreakdown, type NeedWeights } from '../../lib/scoring'
 import type { Kit, Partner } from '../../lib/types'
 import { Close } from '../ui/Icons'
 import LearningSection from './LearningSection'
 import RequestsSection from './RequestsSection'
+import ScoreBreakdown from './ScoreBreakdown'
 import ShipmentSection from './ShipmentSection'
 import TierBadge from './TierBadge'
 import { TIER_EXPLAINER, TIER_HELP, capitalise } from './tierStyle'
 
 interface Props {
   school: SchoolView | null
-  /** Need score with the current priority weights. */
-  score: number | null
+  /** The current Priority settings weights. */
+  weights: NeedWeights
   kits: Kit[]
   partners: Partner[]
   onClose: () => void
 }
 
-export default function SchoolPanel({ school, score, kits, partners, onClose }: Props) {
+export default function SchoolPanel({ school, weights, kits, partners, onClose }: Props) {
   const kit = school?.tier == null ? undefined : kits.find((k) => k.tier === school.tier)
   const matches = useMemo(
     () => (school && school.tier !== null ? matchPartners(school.tier, school, partners) : []),
     [school, partners],
   )
+  // The same function gives the score in the list, so the parts always add up to it.
+  const breakdown = useMemo(() => (school?.need ? getScoreBreakdown(school.need, weights) : null), [school, weights])
 
   if (!school) {
     return (
@@ -63,7 +66,13 @@ export default function SchoolPanel({ school, score, kits, partners, onClose }: 
       <section className="panel-section" aria-label="Readiness">
         <h3 className="label-rule">Readiness</h3>
         {school.tier === null ? (
-          <p className="muted">Not assessed yet. A coordinator surveys the school in Field Tools first.</p>
+          <>
+            <p className="muted">Not assessed yet. A coordinator surveys the school in Field Tools first.</p>
+            <dl className="facts">
+              <dt>Need score</dt>
+              <dd>Not scored yet. Needs a field survey.</dd>
+            </dl>
+          </>
         ) : (
           <>
             <div className="readiness">
@@ -77,9 +86,10 @@ export default function SchoolPanel({ school, score, kits, partners, onClose }: 
             </div>
             <dl className="facts">
               <dt>Need score</dt>
-              <dd>{score === null ? '–' : `${score.toFixed(1)} of 100`}</dd>
+              <dd>{breakdown === null ? '–' : `${breakdown.score.toFixed(1)} of 100`}</dd>
             </dl>
             <p className="help">{TIER_EXPLAINER} The need score (0 to 100) is higher for schools that should get a kit sooner.</p>
+            {breakdown && <ScoreBreakdown breakdown={breakdown} />}
           </>
         )}
       </section>
