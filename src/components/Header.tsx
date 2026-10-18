@@ -26,7 +26,9 @@ export default function Header() {
     { to: '/admin', label: 'Admin Map', match: '/admin' },
     { to: '/field', label: 'Field Tools', match: '/field' },
     { to: learnPath, label: 'Learning', match: '/learn' },
+    { to: '/curriculum', label: 'Curriculum Plan', match: '/curriculum' },
     { to: '/compliance', label: 'Legal Compliance', match: '/compliance' },
+    { to: '/roadmap', label: 'Pilot Roadmap', match: '/roadmap' },
   ]
 
   return (

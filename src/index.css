@@ -998,6 +998,56 @@ select { cursor: pointer; }
 }
 
 /* =====================================================================
+   Curriculum Plan (reuses the Legal Compliance layout classes)
+   ===================================================================== */
+
+.cur-filter { display: inline-flex; align-self: flex-start; gap: var(--s-1); padding: var(--s-1); border-radius: var(--r-pill); background: var(--surface); box-shadow: var(--shadow-1); }
+.cur-filter button { min-height: var(--tap); padding: 0 var(--s-5); border: 0; border-radius: var(--r-pill); background: none; color: var(--navy); font: inherit; font-weight: 700; cursor: pointer; }
+.cur-filter button:hover { background: var(--navy-20); }
+.cur-filter button.is-active { background: var(--navy); color: #fff; }
+
+.cur-principles { display: grid; grid-template-columns: 1fr; gap: var(--s-3); margin: 0; padding: 0; list-style: none; }
+@media (min-width: 560px) { .cur-principles { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 900px) { .cur-principles { grid-template-columns: repeat(3, 1fr); } }
+.cur-principles .card { padding: var(--s-3) var(--s-4); }
+.cur-principles p { margin: 0; }
+.cur-card-title { margin: 0 0 var(--s-1); font-size: 1.05rem; color: var(--green); }
+
+.cur-levels th[scope="row"] { color: var(--navy); }
+
+.cur-subject { display: flex; flex-direction: column; gap: var(--s-3); }
+.cur-band { margin: 0; padding: var(--s-3) var(--s-4); border-radius: var(--r-md); font-family: var(--font-display); font-weight: 400; font-size: clamp(1.75rem, 4vw, 2.25rem); line-height: 1.1; text-transform: uppercase; }
+.cur-band-green { background: var(--green); color: #fff; }
+.cur-band-navy { background: var(--navy); color: #fff; }
+.cur-band-red { background: var(--red); color: #fff; }
+.cur-band-yellow { background: var(--yellow); color: var(--navy); }
+
+.cur-level.is-filtered { display: none; }
+.cur-level-title { margin: 0; font-size: 1.15rem; color: var(--navy); }
+.cur-goal { margin: var(--s-1) 0 var(--s-2); max-width: 72ch; }
+.cur-units { display: grid; grid-template-columns: 1fr; gap: var(--s-2); }
+@media (min-width: 720px) { .cur-units { grid-template-columns: repeat(3, 1fr); } }
+.cur-unit { display: flex; flex-direction: column; align-items: flex-start; gap: var(--s-1); padding: var(--s-3) var(--s-4); }
+.cur-unit-title { margin: 0; font-size: 1.05rem; color: var(--navy); }
+.cur-unit-text { margin: 0; font-size: var(--fs-small); }
+.cur-chip-primary { background: var(--green-20); }
+.cur-chip-secondary { background: var(--navy-20); }
+.cur-open { margin-top: var(--s-2); text-decoration: none; }
+
+.cur-delivery { display: grid; gap: var(--s-2); margin: 0; padding-left: var(--s-6); max-width: 72ch; }
+
+@media print {
+  .curriculum .cur-level.is-filtered { display: block; }
+  .curriculum .cur-band { border-radius: 0; border-bottom: 2pt solid #000; background: none !important; color: #000 !important; padding: 1mm 0; font-size: 18pt; }
+  .curriculum .cur-chip { background: none; border: 1pt solid #666; }
+  .cur-principles { grid-template-columns: repeat(3, 1fr); }
+  .cur-units { grid-template-columns: repeat(3, 1fr); }
+  .cur-card-title, .cur-unit-title, .cur-level-title { color: #000; }
+  .cur-unit, .cur-principles li, .cur-level { break-inside: avoid; }
+  .cur-band { break-after: avoid; }
+}
+
+/* =====================================================================
    Print pages: QR tags and donor report (A4)
    ===================================================================== */
 
@@ -1067,3 +1117,38 @@ select { cursor: pointer; }
   .report-method { break-inside: avoid; }
   .stack-table thead { position: static; }
 }
+
+/* =====================================================================
+   Pilot Roadmap (reuses the Legal Compliance layout classes)
+   ===================================================================== */
+
+.roadmap { max-width: 800px; }
+.roadmap .disclaimer { max-width: 75ch; }
+
+.rm-steps { display: flex; flex-direction: column; gap: var(--s-4); margin: 0; padding: 0; list-style: none; }
+.rm-step-head { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-2) var(--s-3); margin-bottom: var(--s-2); }
+.rm-step .law-title { margin: 0; }
+.rm-step .label-rule { margin: var(--s-4) 0 var(--s-2); }
+.rm-bullets { display: grid; gap: var(--s-2); max-width: 72ch; margin: var(--s-2) 0 0; padding-left: var(--s-5); }
+.rm-list { margin: 0; }
+.rm-ifnot { margin: var(--s-3) 0 0; color: var(--navy); }
+.rm-budget { margin-top: var(--s-4); }
+.rm-links { display: flex; flex-wrap: wrap; gap: var(--s-3); }
+
+/* Long text in cells: wrap, don't scroll. */
+.rm-table th, .rm-table td { white-space: normal; vertical-align: top; }
+.rm-table td:first-child { font-weight: 700; color: var(--navy); }
+@media screen and (max-width: 700px) {
+  .rm-table td { flex-direction: column; gap: var(--s-1); text-align: left !important; }
+}
+
+@media print {
+  .rm-step, .rm-table tr { break-inside: avoid; }
+  .rm-links { display: none; }
+}
+
+/* Six navigation links: tighten them on narrow laptops. */
+@media (min-width: 1024px) and (max-width: 1239px) {
+  .nav-link { padding: 0 var(--s-2); font-size: 0.9375rem; white-space: nowrap; }
+}
+
