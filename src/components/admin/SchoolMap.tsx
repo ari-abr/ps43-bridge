@@ -22,14 +22,16 @@ const partnerIcon = L.divIcon({
 // Only a few distinct icons exist, so they are cached: a new icon object would redraw every marker.
 const iconCache = new Map<string, L.DivIcon>()
 
-function schoolIcon(text: string, className: string, selected: boolean): L.DivIcon {
-  const key = `${text}|${className}|${selected}`
+function schoolIcon(text: string, className: string, selected: boolean, openRequests: number): L.DivIcon {
+  const key = `${text}|${className}|${selected}|${openRequests}`
   let icon = iconCache.get(key)
   if (!icon) {
     const size = selected ? 38 : 28
+    // The badge sits on the corner, so the tier colour and number stay as they are.
+    const badge = openRequests > 0 ? `<span class="request-badge">${openRequests}</span>` : ''
     icon = L.divIcon({
       className: 'school-marker',
-      html: `<span class="pin ${className}${selected ? ' is-selected' : ''}">${text}</span>`,
+      html: `<span class="pin ${className}${selected ? ' is-selected' : ''}">${text}</span>${badge}`,
       iconSize: [size, size],
       iconAnchor: [size / 2, size / 2],
       tooltipAnchor: [size / 2, 0],
@@ -127,14 +129,15 @@ export default function SchoolMap({
           const rate = s.progress?.masteryRate ?? null
           const icon =
             colorBy === 'learning'
-              ? schoolIcon(rate === null ? '–' : String(rate), masteryClass(rate), selected)
-              : schoolIcon(s.tier === null ? '?' : String(s.tier), tierClass(s.tier), selected)
+              ? schoolIcon(rate === null ? '–' : String(rate), masteryClass(rate), selected, s.openRequests)
+              : schoolIcon(s.tier === null ? '?' : String(s.tier), tierClass(s.tier), selected, s.openRequests)
           const words = `${s.name}, ${s.tier === null ? 'unassessed' : TIER_LABELS[s.tier]}${
             colorBy === 'learning' ? (rate === null ? ', no learning data' : `, ${rate}% mastered`) : ''
-          }`
+          }${s.openRequests > 0 ? `, ${s.openRequests} open request${s.openRequests === 1 ? '' : 's'}` : ''}`
           return (
+            // Leaflet sets title and alt only when a marker is created, so a new text means a new marker.
             <Marker
-              key={s.id}
+              key={`${s.id}|${words}`}
               position={[s.lat, s.lng]}
               icon={icon}
               title={words}
@@ -228,6 +231,16 @@ export function MapLegend({ colorBy, onColorBy, showPartners, onTogglePartners }
             </span>
           </li>
         ))}
+        <li>
+          <span className="pin-sample-wrap" aria-hidden="true">
+            <span className="pin pin-sample tier-none" />
+            <span className="request-badge">2</span>
+          </span>
+          <span>
+            <strong>Open requests (red badge)</strong>
+            <span className="legend-help">Requests waiting for a decision. Open the school to see them.</span>
+          </span>
+        </li>
         {showPartners && (
           <li>
             <span className="partner-swatch" aria-hidden="true" />

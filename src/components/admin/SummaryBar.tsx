@@ -31,6 +31,12 @@ export default function SummaryBar({ schools }: { schools: SchoolView[] }) {
               : `${sum.devicesWorking} of ${sum.devicesChecked} devices, latest check-ins`,
           tone: 'yellow',
         },
+        {
+          label: 'Open Requests',
+          value: sum.requestsOpen,
+          hint: 'Waiting for a decision, schools shown',
+          tone: 'navy',
+        },
       ]}
     />
   )

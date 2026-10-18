@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import DeliveryCard from '../components/learn/DeliveryCard'
 import LearnShell from '../components/learn/LearnShell'
 import ProgressSyncNote from '../components/learn/ProgressSyncNote'
+import RequestCard from '../components/learn/RequestCard'
 import StatsBand from '../components/ui/StatsBand'
 import { MASTERY_PERCENT, addDemoClass, classTotals, summariseStudent } from '../lib/learning'
 import { useLearning } from '../lib/useLearning'
@@ -107,6 +108,8 @@ export default function TeacherPage() {
 
         <ProgressSyncNote />
       </div>
+
+      {schoolId && <RequestCard key={schoolId} schoolId={schoolId} />}
     </LearnShell>
   )
 }

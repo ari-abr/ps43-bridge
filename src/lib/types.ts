@@ -90,6 +90,53 @@ export interface Progress {
   simulated?: boolean
 }
 
+export type RequestCategory =
+  | 'Devices'
+  | 'Power and solar'
+  | 'Internet'
+  | 'Books and printed materials'
+  | 'Furniture'
+  | 'Repairs'
+  | 'Teacher training'
+  | 'Other'
+
+export type RequestPriority = 'Urgent' | 'Soon' | 'When possible'
+
+/** An equipment or resource request from a school. Created by the teacher and never edited afterwards. No personal names. */
+export interface ResourceRequest {
+  id: string
+  schoolId: string
+  category: RequestCategory
+  item: string
+  quantity: number
+  priority: RequestPriority
+  reason: string
+  pupilsAffected: number
+  requestedByRole: 'Teacher' | 'Headteacher'
+  createdAt: string
+  demo?: boolean // seed data
+}
+
+/** A status change saved by a coordinator or an admin. */
+export type RequestEventStatus = 'Checked by coordinator' | 'Approved' | 'Declined'
+
+/** Never stored: worked out by requestStatus() in src/lib/requests.ts. */
+export type RequestStatus = 'Submitted' | RequestEventStatus | 'Fulfilled'
+
+/**
+ * One record per status change (unique ids), kept apart from the request so a coordinator and an
+ * admin updating the same request offline can never overwrite each other.
+ */
+export interface RequestEvent {
+  id: string
+  requestId: string
+  status: RequestEventStatus
+  party: 'coordinator' | 'admin'
+  note: string
+  shipmentId?: string // the shipment created for this request
+  createdAt: string
+}
+
 export interface KitItem {
   name: string
   qty: number

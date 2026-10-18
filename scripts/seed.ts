@@ -5,6 +5,7 @@
 
 import { mkdirSync, readFileSync, statSync, writeFileSync } from 'node:fs'
 import { topPartner } from '../src/lib/matching.ts'
+import { requestStatus } from '../src/lib/requests.ts'
 import { distanceKm, nearestKm, tierFromSurvey } from '../src/lib/scoring.ts'
 import { confirmationId, devicesForKit, shipmentStatus } from '../src/lib/shipments.ts'
 import type { Power, Signal, Tier } from '../src/lib/scoring.ts'
@@ -17,6 +18,8 @@ import type {
   Partner,
   QuizQuestion,
   Region,
+  RequestEvent,
+  ResourceRequest,
   School,
   Shipment,
   ShipmentStatus,
@@ -315,11 +318,149 @@ chosen.forEach((school, i) => {
   if (shipmentStatus(shipment, coordinator, teacher) !== status) throw new Error(`${id} should be ${status}`)
 })
 
+const statusOf = (s: Shipment) =>
+  shipmentStatus(
+    s,
+    confirmations.find((c) => c.id === confirmationId(s.id, 'coordinator')) ?? null,
+    confirmations.find((c) => c.id === confirmationId(s.id, 'teacher')) ?? null,
+  )
+
+// ---------- 4b. demo requests ----------
+// Fixed picks with no random calls, so the course packs below come out the same as before.
+
+const tierOf = (s: School) => tierFromSurvey(surveys[s.id].power, surveys[s.id].signal)
+const withShipment = (status: ShipmentStatus) =>
+  shipments.filter((s) => statusOf(s) === status).map((sh) => ({ sh, school: schools.find((x) => x.id === sh.schoolId)! }))
+const noShipment = (region: Region, tier: Tier) =>
+  schools.find((s) => s.region === region && surveys[s.id] && tierOf(s) === tier && !shipments.some((sh) => sh.schoolId === s.id))!
+
+const [verifiedA, verifiedB] = withShipment('verified')
+const [deliveredA] = withShipment('delivered')
+const booksSchool = noShipment('West', 0)
+const furnitureSchool = noShipment('Centre', 2)
+
+const requests: ResourceRequest[] = [
+  {
+    id: 'rq-demo-1',
+    schoolId: verifiedA.school.id,
+    category: 'Teacher training',
+    item: 'Training day on the new workbooks',
+    quantity: 1,
+    priority: 'Urgent',
+    reason: 'Two new teachers joined this term and have not been shown how to use the PS43 workbooks.',
+    pupilsAffected: 60,
+    requestedByRole: 'Headteacher',
+    createdAt: '2026-10-08T09:15:00.000Z',
+  },
+  {
+    id: 'rq-demo-2',
+    schoolId: booksSchool.id,
+    category: 'Books and printed materials',
+    item: 'Printed Times Tables workbooks',
+    quantity: 40,
+    priority: 'Soon',
+    reason: 'We have no power yet. Pupils learn from the board and have no workbooks to practise at home.',
+    pupilsAffected: 120,
+    requestedByRole: 'Teacher',
+    createdAt: '2026-10-02T07:40:00.000Z',
+  },
+  {
+    id: 'rq-demo-3',
+    schoolId: deliveredA.school.id,
+    category: 'Repairs',
+    item: 'Laptop repair (screen and keyboard)',
+    quantity: 3,
+    priority: 'Soon',
+    reason: 'Three laptops from the PS43 kit stopped working, so pupils now share in threes during lessons.',
+    pupilsAffected: 45,
+    requestedByRole: 'Teacher',
+    createdAt: '2026-10-05T11:05:00.000Z',
+  },
+  {
+    id: 'rq-demo-4',
+    schoolId: furnitureSchool.id,
+    category: 'Furniture',
+    item: 'Desks with benches',
+    quantity: 15,
+    priority: 'When possible',
+    reason: 'Pupils in Class 1 sit on the floor. Desks would also keep a future laptop corner safe.',
+    pupilsAffected: 70,
+    requestedByRole: 'Headteacher',
+    createdAt: '2026-09-28T08:30:00.000Z',
+  },
+  {
+    id: 'rq-demo-5',
+    schoolId: verifiedB.school.id,
+    category: 'Devices',
+    item: 'Laptops for the upper classes',
+    quantity: verifiedB.sh.devices.length,
+    priority: 'Urgent',
+    reason: 'Our school has no computers at all. Classes 5 and 6 need them to prepare for secondary school.',
+    pupilsAffected: 90,
+    requestedByRole: 'Headteacher',
+    createdAt: addDays(verifiedB.sh.createdAt, -6) + 'T08:00:00.000Z',
+  },
+].map((r) => ({ ...r, demo: true }) as ResourceRequest)
+
+const requestEvents: RequestEvent[] = [
+  {
+    id: 'rqe-demo-1',
+    requestId: 'rq-demo-2',
+    status: 'Checked by coordinator',
+    party: 'coordinator',
+    note: 'Confirmed on visit: only 12 old workbooks for three classes.',
+    createdAt: '2026-10-06T13:20:00.000Z',
+  },
+  {
+    id: 'rqe-demo-2',
+    requestId: 'rq-demo-3',
+    status: 'Checked by coordinator',
+    party: 'coordinator',
+    note: 'Confirmed on visit: 3 laptops broken.',
+    createdAt: '2026-10-07T10:00:00.000Z',
+  },
+  {
+    id: 'rqe-demo-3',
+    requestId: 'rq-demo-3',
+    status: 'Approved',
+    party: 'admin',
+    note: 'Approved. Our refurbishing partner will collect them on the next delivery round.',
+    createdAt: '2026-10-09T15:45:00.000Z',
+  },
+  {
+    id: 'rqe-demo-4',
+    requestId: 'rq-demo-4',
+    status: 'Declined',
+    party: 'admin',
+    note: 'Furniture is not in the PS43 kits. Passed on to the regional education office.',
+    createdAt: '2026-10-01T09:10:00.000Z',
+  },
+  {
+    id: 'rqe-demo-5',
+    requestId: 'rq-demo-5',
+    status: 'Checked by coordinator',
+    party: 'coordinator',
+    note: 'Confirmed on visit: no devices yet, grid power and a room that locks.',
+    createdAt: addDays(verifiedB.sh.createdAt, -3) + 'T12:00:00.000Z',
+  },
+  {
+    id: 'rqe-demo-6',
+    requestId: 'rq-demo-5',
+    status: 'Approved',
+    party: 'admin',
+    note: `Shipment ${verifiedB.sh.id} created for this request.`,
+    shipmentId: verifiedB.sh.id,
+    createdAt: verifiedB.sh.createdAt + 'T09:00:00.000Z',
+  },
+]
+
 writeJson(`${OUT}/demo-state.json`, {
-  note: 'DEMO DATA: made-up survey answers and shipments for the demo. Schools not listed in "surveys" are unsurveyed (grey).',
+  note: 'DEMO DATA: made-up survey answers, shipments and requests for the demo. Schools not listed in "surveys" are unsurveyed (grey).',
   surveys,
   shipments,
   confirmations,
+  requests,
+  requestEvents,
 })
 
 // ---------- 5. course packs ----------
@@ -451,12 +592,6 @@ for (const s of Object.values(surveys)) tierCounts[tierFromSurvey(s.power, s.sig
 for (const t of [0, 1, 2, 3]) console.log(`  Tier ${t}: ${tierCounts[t]}`)
 
 console.log('\nShipments per status:')
-const statusOf = (s: Shipment) =>
-  shipmentStatus(
-    s,
-    confirmations.find((c) => c.id === confirmationId(s.id, 'coordinator')) ?? null,
-    confirmations.find((c) => c.id === confirmationId(s.id, 'teacher')) ?? null,
-  )
 for (const status of STATUSES) console.log(`  ${status}: ${shipments.filter((s) => statusOf(s) === status).length}`)
 console.log(`  Devices tagged: ${nextAsset - 1} (PS43-0001 to PS43-${String(nextAsset - 1).padStart(4, '0')})`)
 
@@ -467,6 +602,15 @@ const sample = schools.find((s) => surveys[s.id])!
 console.log(
   `\nCheck: ${equipped.length} equipped schools; nearest one to ${sample.id} is ${nearestKm(sample, equipped)?.toFixed(1)} km away`,
 )
+
+console.log('\nDemo requests:')
+for (const r of requests) {
+  const st = requestStatus(
+    requestEvents.filter((e) => e.requestId === r.id),
+    (id) => statusOf(shipments.find((s) => s.id === id)!),
+  )
+  console.log(`  ${r.id} ${r.schoolId} ${r.category}: ${st}`)
+}
 
 console.log('\nQuiz questions: v1 =', packV1.quiz.length, ', v2 =', packV2.quiz.length)
 console.log('Lessons:        v1 =', packV1.lessons.length, ', v2 =', packV2.lessons.length)

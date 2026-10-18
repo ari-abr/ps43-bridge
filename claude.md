@@ -23,7 +23,9 @@ NO logins and NO backend in this demo.
   - Uploaded surveys go to the "surveys" collection as {id, schoolId, ...survey}.
   - Uploaded shipments go to the "shipments" collection.
   - getSchools() merges each school with its latest survey (newest surveyedAt wins),
-    tier, need score, shipment and status.
+    tier, need score, shipment, status and requests.
+  - Teacher requests go to "requests" (never edited); every status change is its own
+    record in "requestEvents". Request status comes from requestStatus() in src/lib/requests.ts.
 - A header toggle switches Online/Offline. Offline writes go to an upload queue;
   going Online flushes the queue through api.ts.
 - api.ts fires an update on every change; the browser "storage" event refreshes other windows.
@@ -42,3 +44,6 @@ NO logins and NO backend in this demo.
 - Show sync status on screen ("3 items waiting to upload").
 - No photos stored (localStorage is small); use a "photo taken" checkbox instead.
 - Layout must work on a phone.
+
+
+

@@ -92,6 +92,8 @@ export default function ReportPage() {
     ['Devices Working', sum.devicesWorkingPct === null ? '–' : `${sum.devicesWorkingPct}%`, sum.devicesChecked ? `${sum.devicesWorking} of ${sum.devicesChecked} checked` : 'no check-ins yet'],
     ['Youth Reached', sum.schoolsWithProgress ? sum.activeLearners : '–', sum.schoolsWithProgress ? `active learners, ${sum.schoolsWithProgress} school${sum.schoolsWithProgress === 1 ? '' : 's'} reporting` : 'no learning data yet'],
     ['Mastery Rate', pct(sum.averageMastery), 'learners scoring 80% or more'],
+    ['Requests Received', sum.requestsReceived, 'equipment and resource requests from schools'],
+    ['Requests Fulfilled', sum.requestsFulfilled, 'linked shipment delivered'],
   ]
 
   return (

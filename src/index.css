@@ -393,7 +393,10 @@ select { cursor: pointer; }
 .tab { flex: 1; min-height: 3rem; padding: 0 var(--s-3); border: 0; border-radius: var(--r-pill); background: transparent; color: var(--text); }
 .tab:hover { background: var(--navy-20); }
 .tab.is-active { background: var(--navy); color: #fff; }
-@media (max-width: 400px) { .tab svg { display: none; } }
+@media (max-width: 400px) {
+  .tab svg { display: none; }
+  .tab { padding: 0 var(--s-1); font-size: 0.875rem; }
+}
 
 /* ---------- step indicator / tracker ---------- */
 
@@ -667,6 +670,31 @@ select { cursor: pointer; }
 .school-marker .pin { width: 100%; height: 100%; font-size: 16px; border: 2px solid #fff; box-shadow: 0 1px 4px rgba(0, 0, 0, 0.45); }
 .school-marker .pin.is-selected { font-size: 22px; border-width: 3px; box-shadow: 0 0 0 3px var(--text), 0 2px 8px rgba(0, 0, 0, 0.5); }
 
+/* Open requests: a small red count on the marker's corner (Leaflet's icon is absolutely positioned,
+   so it anchors the badge). The pin keeps its tier colour and number. */
+.request-badge {
+  position: absolute;
+  top: -7px;
+  right: -9px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border: 2px solid #fff;
+  border-radius: var(--r-pill);
+  background: var(--red);
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+  pointer-events: none;
+}
+.pin-sample-wrap { position: relative; display: inline-flex; flex: none; margin-right: 6px; }
+
 .partner-marker { background: none; border: 0; }
 .partner-marker span { display: block; width: 16px; height: 16px; margin: 3px; background: var(--navy); border: 2px solid #fff; transform: rotate(45deg); box-shadow: 0 0 4px rgba(0, 0, 0, 0.6); }
 .partner-swatch { display: inline-block; width: 1rem; height: 1rem; margin: 0.35rem; background: var(--navy); transform: rotate(45deg); flex: none; }
@@ -739,6 +767,32 @@ select { cursor: pointer; }
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
+.tabs-compact { margin-bottom: var(--s-3); box-shadow: none; background: var(--bg); }
+.tabs-compact .tab { min-height: var(--tap); font-size: 0.9375rem; }
+
+/* Requests: shared by the school panel, the admin list, Field Tools and the teacher screen. */
+.request-items { display: flex; flex-direction: column; gap: var(--s-2); margin: 0; padding: 0; list-style: none; }
+.request-item { display: flex; flex-direction: column; gap: var(--s-1); margin: 0; }
+.request-head { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: var(--s-1) var(--s-2); }
+.request-chips { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-1); margin: var(--s-1) 0 0; }
+.request-head .request-chips { margin: 0; }
+.request-reason { margin: var(--s-1) 0 0; overflow-wrap: anywhere; }
+.request-reason-short { display: -webkit-box; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; }
+.request-history { margin: var(--s-1) 0 0; padding-left: 1.2rem; }
+.request-history li { margin-bottom: var(--s-1); }
+.request-note { display: block; overflow-wrap: anywhere; color: var(--text); font-style: italic; }
+.request-decide { margin-top: var(--s-2); }
+.request-decide .panel-actions { margin-top: var(--s-2); }
+.request-ship { display: flex; flex-direction: column; gap: var(--s-2); margin-top: var(--s-2); padding-top: var(--s-2); border-top: 1px solid var(--border); }
+.request-ship p { margin: 0; }
+.request-ship-btn { margin-top: var(--s-2); }
+.request-row { align-items: flex-start; }
+.request-row .picker-main { flex: 1; }
+.request-row .badge { flex: none; }
+.priority-urgent { background: var(--red); color: #fff; }
+.priority-soon { background: var(--warning-bg); color: var(--warning-ink); box-shadow: inset 0 0 0 1px var(--yellow); }
+.priority-later { background: var(--bg); color: var(--text); box-shadow: inset 0 0 0 1px var(--border-input); }
+
 .scene { margin-top: var(--s-3); padding: var(--s-3) var(--s-4); border-radius: var(--r-md); background: var(--success-bg); color: var(--navy); }
 .scene-title { margin: var(--s-1) 0 0; font-weight: 700; }
 .scene .muted { color: var(--navy-80); }
@@ -754,6 +808,7 @@ select { cursor: pointer; }
 
 .picker-filters { display: flex; gap: var(--s-2); margin: var(--s-3) 0; }
 .picker-filters input { flex: 1; min-width: 0; }
+.picker-filters-split select { flex: 1 1 0; min-width: 0; }
 .picker-list, .recent-list { margin: 0; padding: 0; list-style: none; }
 .picker-list { position: relative; max-height: 55vh; overflow-y: auto; border-top: 1px solid var(--border); }
 .picker-row {

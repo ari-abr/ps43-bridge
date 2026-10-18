@@ -4,6 +4,7 @@ import DemoControls from '../components/admin/DemoControls'
 import Filters, { NO_FILTERS, type FilterState } from '../components/admin/Filters'
 import PriorityList, { type RankedSchool } from '../components/admin/PriorityList'
 import PrioritySettings from '../components/admin/PrioritySettings'
+import RequestList from '../components/admin/RequestList'
 import SchoolMap, { MapLegend, type MapFocus } from '../components/admin/SchoolMap'
 import SchoolPanel from '../components/admin/SchoolPanel'
 import type { ColorBy } from '../components/admin/tierStyle'
@@ -14,6 +15,12 @@ import { DEFAULT_WEIGHTS, needScore, type NeedWeights } from '../lib/scoring'
 import type { Kit, Partner } from '../lib/types'
 
 const WEIGHTS_KEY = KEY_PREFIX + 'admin:weights'
+
+type ListTab = 'priority' | 'requests'
+const LIST_TABS: { id: ListTab; label: string }[] = [
+  { id: 'priority', label: 'Priority list' },
+  { id: 'requests', label: 'Requests' },
+]
 
 function loadWeights(): NeedWeights {
   try {
@@ -28,7 +35,9 @@ function loadWeights(): NeedWeights {
 
 function matchesFilters(s: SchoolView, f: FilterState): boolean {
   if (f.region !== 'all' && s.region !== f.region) return false
-  if (f.status !== 'all' && s.status !== f.status) return false
+  if (f.status === 'open requests') {
+    if (s.openRequests === 0) return false
+  } else if (f.status !== 'all' && s.status !== f.status) return false
   if (f.tier === 'unassessed') return s.tier === null
   if (f.tier !== 'all') return s.tier === Number(f.tier)
   return true
@@ -44,6 +53,7 @@ export default function AdminPage() {
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [focus, setFocus] = useState<MapFocus | null>(null)
   const [weights, setWeights] = useState<NeedWeights>(loadWeights)
+  const [listTab, setListTab] = useState<ListTab>('priority')
   const panelRef = useRef<HTMLDivElement>(null)
 
   // Load, and reload whenever api.ts reports a change (this window or another).
@@ -85,6 +95,8 @@ export default function AdminPage() {
         .sort((a, b) => b.score - a.score || a.school.name.localeCompare(b.school.name)),
     [shown, scoreOf],
   )
+
+  const openRequests = shown.reduce((n, s) => n + s.openRequests, 0)
 
   // A school that the filters hide is no longer selected.
   const selected = shown.find((s) => s.id === selectedId) ?? null
@@ -173,10 +185,39 @@ export default function AdminPage() {
         </div>
 
         <div className="admin-list card">
-          <h2 className="section-title">Priority list</h2>
-          <p className="help">Assessed schools, highest need score first. The top schools should get a kit soonest.</p>
-          <PrioritySettings weights={weights} onChange={changeWeights} />
-          <PriorityList loading={schools === null} ranked={ranked} selectedId={selected?.id ?? null} onSelect={selectFromList} />
+          <div className="tabs tabs-compact" role="tablist" aria-label="Lists">
+            {LIST_TABS.map(({ id, label }) => (
+              <button
+                key={id}
+                type="button"
+                role="tab"
+                id={`list-tab-${id}`}
+                aria-selected={listTab === id}
+                aria-controls="list-tabpanel"
+                className={`tab ${listTab === id ? 'is-active' : ''}`}
+                onClick={() => setListTab(id)}
+              >
+                {label}
+                {id === 'requests' && openRequests > 0 && ` (${openRequests})`}
+              </button>
+            ))}
+          </div>
+          <div role="tabpanel" id="list-tabpanel" aria-labelledby={`list-tab-${listTab}`}>
+            {listTab === 'priority' ? (
+              <>
+                <h2 className="section-title">Priority list</h2>
+                <p className="help">Assessed schools, highest need score first. The top schools should get a kit soonest.</p>
+                <PrioritySettings weights={weights} onChange={changeWeights} />
+                <PriorityList loading={schools === null} ranked={ranked} selectedId={selected?.id ?? null} onSelect={selectFromList} />
+              </>
+            ) : (
+              <>
+                <h2 className="section-title">Open requests</h2>
+                <p className="help">Waiting for a decision, Urgent first, then oldest first. Choose one to open the school.</p>
+                <RequestList loading={schools === null} schools={shown} selectedId={selected?.id ?? null} onSelect={selectFromList} />
+              </>
+            )}
+          </div>
         </div>
       </div>
     </div>

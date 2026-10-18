@@ -5,6 +5,7 @@ import { TIER_LABELS } from '../../lib/scoring'
 import type { Kit, Partner } from '../../lib/types'
 import { Close } from '../ui/Icons'
 import LearningSection from './LearningSection'
+import RequestsSection from './RequestsSection'
 import ShipmentSection from './ShipmentSection'
 import TierBadge from './TierBadge'
 import { TIER_EXPLAINER, TIER_HELP, capitalise } from './tierStyle'
@@ -29,7 +30,9 @@ export default function SchoolPanel({ school, score, kits, partners, onClose }: 
     return (
       <div className="card panel">
         <p className="label-rule">School details</p>
-        <p className="muted">Choose a school on the map or in the priority list to see its survey, kit, shipment and learning.</p>
+        <p className="muted">
+          Choose a school on the map or in the priority list to see its survey, requests, kit, shipment and learning.
+        </p>
       </div>
     )
   }
@@ -48,7 +51,13 @@ export default function SchoolPanel({ school, score, kits, partners, onClose }: 
         </button>
       </div>
       <p className="panel-sub">
-        <span className="chip">{capitalise(school.status)}</span> <span className="chip chip-demo">Demo data</span>
+        <span className="chip">{capitalise(school.status)}</span>
+        {school.openRequests > 0 && (
+          <span className="chip chip-wait">
+            {school.openRequests} open request{school.openRequests === 1 ? '' : 's'}
+          </span>
+        )}
+        <span className="chip chip-demo">Demo data</span>
       </p>
 
       <section className="panel-section" aria-label="Readiness">
@@ -129,6 +138,8 @@ export default function SchoolPanel({ school, score, kits, partners, onClose }: 
           )}
         </section>
       )}
+
+      <RequestsSection school={school} kit={kit} partners={partners} />
 
       <ShipmentSection school={school} kit={kit} partners={partners} />
 
