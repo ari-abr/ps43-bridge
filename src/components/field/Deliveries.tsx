@@ -37,8 +37,8 @@ export default function Deliveries() {
 
   return (
     <div className="card">
-      <h2>Deliveries</h2>
-      <p className="muted small">Kits on their way. Open one at the school to scan the devices and confirm delivery.</p>
+      <h2 className="section-title">Deliveries</h2>
+      <p className="help">Kits on their way. At the school, open one to scan the QR tag on each device and confirm the delivery.</p>
       <div className="picker-filters">
         <select value={region} onChange={(e) => setRegion(e.target.value)} aria-label="Region">
           <option value="all">All regions</option>

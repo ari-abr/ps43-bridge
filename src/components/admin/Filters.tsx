@@ -1,3 +1,4 @@
+import { TIER_LABELS } from '../../lib/scoring'
 import type { Region, SchoolStatus } from '../../lib/types'
 import { STATUSES, capitalise } from './tierStyle'
 
@@ -38,9 +39,9 @@ export default function Filters({ value, onChange }: Props) {
         <select value={value.tier} onChange={(e) => set('tier', e.target.value as FilterState['tier'])}>
           <option value="all">All tiers</option>
           <option value="unassessed">Unassessed</option>
-          {[0, 1, 2, 3].map((t) => (
+          {([0, 1, 2, 3] as const).map((t) => (
             <option key={t} value={String(t)}>
-              Tier {t}
+              {TIER_LABELS[t]}
             </option>
           ))}
         </select>
@@ -58,7 +59,7 @@ export default function Filters({ value, onChange }: Props) {
         </select>
       </label>
 
-      <button type="button" className="btn-secondary" onClick={() => onChange(NO_FILTERS)}>
+      <button type="button" className="btn-link" onClick={() => onChange(NO_FILTERS)}>
         Clear filters
       </button>
     </div>

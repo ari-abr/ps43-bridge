@@ -1,6 +1,6 @@
 import type { SchoolView } from '../../lib/api'
-import { TIER_LABELS } from '../../lib/scoring'
-import { capitalise, tierColor } from './tierStyle'
+import TierBadge from './TierBadge'
+import { capitalise } from './tierStyle'
 
 export interface RankedSchool {
   school: SchoolView
@@ -37,8 +37,7 @@ export default function PriorityList({ loading, ranked, selectedId, onSelect }: 
             </span>
             <span className="priority-score">
               <strong>{score.toFixed(1)}</strong>
-              <span className="tier-dot" style={{ background: tierColor(school.tier) }} aria-hidden="true" />
-              <span className="sr-only">{school.tier === null ? 'Unassessed' : TIER_LABELS[school.tier]}</span>
+              <TierBadge tier={school.tier} />
             </span>
           </button>
         </li>

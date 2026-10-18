@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { getSchools, subscribe, type SchoolView } from '../../lib/api'
 import { setDeviceSchool } from '../../lib/learning'
-import { capitalise, tierColor } from '../admin/tierStyle'
+import TierBadge from '../admin/TierBadge'
+import { capitalise } from '../admin/tierStyle'
 
 interface Props {
   /** Shown when changing an already chosen school. */
@@ -77,7 +78,7 @@ export default function DeviceSchoolPicker({ onCancel, onChosen }: Props) {
                         <span className="muted small">{s.region}</span>
                       </span>
                       <span className="picker-status small">
-                        <span className="tier-dot" style={{ background: tierColor(s.tier) }} />
+                        <TierBadge tier={s.tier} />
                         <span className="pill">{capitalise(s.status)}</span>
                       </span>
                     </button>

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { getOutbox, getSchools, subscribe, type SchoolView, type SurveyRecord } from '../../lib/api'
 import { tierFromSurvey, type Tier } from '../../lib/scoring'
-import { tierColor } from '../admin/tierStyle'
+import TierBadge from '../admin/TierBadge'
 
 interface Props {
   onSelect: (school: SchoolView) => void
@@ -55,7 +55,8 @@ export default function SchoolPicker({ onSelect }: Props) {
 
   return (
     <div className="card">
-      <h2>Choose a school</h2>
+      <h2 className="section-title">Choose a school</h2>
+      <p className="help">Grey schools (?) have no survey yet and are listed first.</p>
       <div className="picker-filters">
         <input
           type="search"
@@ -93,8 +94,8 @@ export default function SchoolPicker({ onSelect }: Props) {
                       <span className="muted small">{s.region}</span>
                     </span>
                     <span className="picker-status small">
-                      <span className="tier-dot" style={{ background: tierColor(tier) }} />
-                      {tier === null ? 'Unassessed' : `Tier ${tier}`}
+                      <TierBadge tier={tier} withLabel={false} />
+                      <span aria-hidden="true">{tier === null ? 'Unassessed' : `Tier ${tier}`}</span>
                       {pending !== undefined && <span className="pill pill-demo">waiting to upload</span>}
                     </span>
                   </button>

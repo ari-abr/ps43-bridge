@@ -1,14 +1,19 @@
 import { useState } from 'react'
 import { createShipment, markInTransit, type SchoolView, type ShipmentView } from '../../lib/api'
 import { matchPartners, matchTransporters, topPartner } from '../../lib/matching'
-import type { Kit, Partner } from '../../lib/types'
+import type { Kit, Partner, ShipmentStatus } from '../../lib/types'
 import { useSyncStatus } from '../../lib/useSyncStatus'
 import { workingOfTotal } from '../../lib/report'
-import { capitalise } from './tierStyle'
+import { toast, toastSaved } from '../../lib/toast'
+import { Arrow, Printer } from '../ui/Icons'
+import Steps from '../ui/Steps'
 
 /** "2026-10-05" stays as it is; a full ISO time becomes local date and time. */
 export const when = (s: string) =>
   s.length <= 10 ? s : new Date(s).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })
+
+const SHIPMENT_STEPS = ['Approved', 'In transit', 'Delivered', 'Verified']
+const STEP_DONE: Record<ShipmentStatus, number> = { approved: 1, 'in transit': 2, delivered: 3, verified: 4 }
 
 interface Props {
   school: SchoolView
@@ -20,14 +25,16 @@ export default function ShipmentSection({ school, kit, partners }: Props) {
   const { shipment } = school
   return (
     <>
-      <h3>Shipment</h3>
-      {shipment ? (
-        <ShipmentDetails shipment={shipment} partners={partners} />
-      ) : school.tier !== null && kit ? (
-        <ApproveForm key={school.id} school={school} kit={kit} partners={partners} />
-      ) : (
-        <p className="muted">No shipment yet{school.tier === null ? ' (needs a survey first)' : ''}</p>
-      )}
+      <section className="panel-section" aria-label="Shipment">
+        <h3 className="label-rule">Shipment</h3>
+        {shipment ? (
+          <ShipmentDetails shipment={shipment} partners={partners} />
+        ) : school.tier !== null && kit ? (
+          <ApproveForm key={school.id} school={school} kit={kit} partners={partners} />
+        ) : (
+          <p className="muted">No shipment yet{school.tier === null ? ' (needs a survey first)' : ''}.</p>
+        )}
+      </section>
 
       {shipment && <Confirmations shipment={shipment} />}
 
@@ -41,8 +48,8 @@ function DevicesSection({ school }: { school: SchoolView }) {
   const { checkin } = school
   const delivered = school.status === 'delivered' || school.status === 'verified'
   return (
-    <>
-      <h3>Devices</h3>
+    <section className="panel-section" aria-label="Devices">
+      <h3 className="label-rule">Devices</h3>
       {checkin ? (
         <>
           <p className="big-figure">
@@ -57,7 +64,7 @@ function DevicesSection({ school }: { school: SchoolView }) {
             <dd>{checkin.missing}</dd>
             <dt>Check-in date</dt>
             <dd>
-              {when(checkin.checkedAt)} {checkin.simulated && <span className="pill pill-demo">simulated demo data</span>}
+              {when(checkin.checkedAt)} {checkin.simulated && <span className="chip chip-demo">Simulated demo data</span>}
             </dd>
             {checkin.note && !checkin.simulated && (
               <>
@@ -69,10 +76,10 @@ function DevicesSection({ school }: { school: SchoolView }) {
         </>
       ) : (
         <p className="muted">
-          {delivered ? 'No check-in yet. Coordinators submit one monthly in Field Tools.' : 'No devices delivered yet.'}
+          {delivered ? 'No check-in yet. Coordinators count the devices every month in Field Tools.' : 'No devices delivered yet.'}
         </p>
       )}
-    </>
+    </section>
   )
 }
 
@@ -90,9 +97,10 @@ function ApproveForm({ school, kit, partners }: { school: SchoolView; kit: Kit; 
     setBusy(true)
     setError(null)
     try {
-      await createShipment({ schoolId: school.id, tier, kit, partnerId, transporterId })
+      toastSaved(await createShipment({ schoolId: school.id, tier, kit, partnerId, transporterId }), 'Kit approval')
     } catch {
       setError('Could not save the shipment (device storage full?).')
+      toast('error', 'Could not save the shipment.')
     } finally {
       setBusy(false)
     }
@@ -101,7 +109,8 @@ function ApproveForm({ school, kit, partners }: { school: SchoolView; kit: Kit; 
   return (
     <div className="approve-form">
       <p className="muted small">
-        {kit.name}: {kit.deviceCount} device{kit.deviceCount === 1 ? '' : 's'} will get QR tags.
+        {kit.name}: {kit.deviceCount} device{kit.deviceCount === 1 ? '' : 's'} will get QR tags. The best-matched
+        partners are already chosen.
       </p>
       <label className="stack-label">
         Supplier
@@ -123,8 +132,8 @@ function ApproveForm({ school, kit, partners }: { school: SchoolView; kit: Kit; 
           ))}
         </select>
       </label>
-      <button type="button" className="btn-primary" onClick={approve} disabled={busy || !online || !partnerId || !transporterId}>
-        {busy ? 'Saving…' : 'Approve kit and create shipment'}
+      <button type="button" className="btn-primary btn-block" onClick={approve} disabled={busy || !online || !partnerId || !transporterId}>
+        {busy ? 'Saving…' : 'Approve kit and create shipment'} {!busy && <Arrow />}
       </button>
       {!online && <p className="muted small">Go Online to approve kits.</p>}
       {error && <p className="form-error">{error}</p>}
@@ -141,7 +150,9 @@ function ShipmentDetails({ shipment, partners }: { shipment: ShipmentView; partn
   async function ship() {
     setBusy(true)
     try {
-      await markInTransit(shipment)
+      toastSaved(await markInTransit(shipment), 'Shipment update')
+    } catch {
+      toast('error', 'Could not update the shipment.')
     } finally {
       setBusy(false)
     }
@@ -149,11 +160,11 @@ function ShipmentDetails({ shipment, partners }: { shipment: ShipmentView; partn
 
   return (
     <>
+      <Steps steps={SHIPMENT_STEPS} done={STEP_DONE[shipment.status]} label="Shipment progress" currentWord="next" />
+      <p className="help">
+        Delivered = the coordinator scanned the devices and confirmed. Verified = the teacher also confirmed what arrived.
+      </p>
       <dl className="facts">
-        <dt>Status</dt>
-        <dd>
-          <span className="pill">{capitalise(shipment.status)}</span>
-        </dd>
         <dt>Supplier</dt>
         <dd>{name(shipment.partnerId)}</dd>
         <dt>Transporter</dt>
@@ -176,12 +187,12 @@ function ShipmentDetails({ shipment, partners }: { shipment: ShipmentView; partn
       <div className="panel-actions">
         {shipment.status === 'approved' && (
           <button type="button" className="btn-primary" onClick={ship} disabled={busy || !online}>
-            {busy ? 'Saving…' : 'Mark in transit'}
+            {busy ? 'Saving…' : 'Mark in transit'} {!busy && <Arrow />}
           </button>
         )}
         {devices.length > 0 && (
-          <a className="btn-secondary btn-as-link" href={`/print/tags/${shipment.id}`} target="_blank" rel="noreferrer">
-            Print QR tags
+          <a className="btn-secondary" href={`/print/tags/${shipment.id}`} target="_blank" rel="noreferrer">
+            <Printer /> Print QR tags
           </a>
         )}
       </div>
@@ -193,13 +204,13 @@ function ShipmentDetails({ shipment, partners }: { shipment: ShipmentView; partn
 function Confirmations({ shipment }: { shipment: ShipmentView }) {
   const { coordinator, teacher, devices } = shipment
   return (
-    <>
-      <h3>Delivery confirmations</h3>
+    <section className="panel-section" aria-label="Delivery confirmations">
+      <h3 className="label-rule">Delivery confirmations</h3>
       <div className="confirm-box">
         <strong>Coordinator</strong>
         {coordinator ? (
           <p className="small">
-            <span className="badge badge-ok">Confirmed {when(coordinator.confirmedAt)}</span>
+            <span className="chip chip-ok">Confirmed {when(coordinator.confirmedAt)}</span>
             <br />
             Devices scanned: {coordinator.scannedAssetIds?.length ?? 0} of {devices.length} · Photo taken:{' '}
             {coordinator.photoTaken ? 'yes' : 'no'}
@@ -212,7 +223,7 @@ function Confirmations({ shipment }: { shipment: ShipmentView }) {
           </p>
         ) : (
           <p className="small">
-            <span className="badge badge-wait">Waiting for the coordinator</span>
+            <span className="chip chip-wait">Waiting for the coordinator</span>
           </p>
         )}
       </div>
@@ -220,7 +231,7 @@ function Confirmations({ shipment }: { shipment: ShipmentView }) {
         <strong>Teacher</strong>
         {teacher ? (
           <p className="small">
-            <span className="badge badge-ok">Confirmed {when(teacher.confirmedAt)}</span>
+            <span className="chip chip-ok">Confirmed {when(teacher.confirmedAt)}</span>
             <br />
             Devices received: {teacher.devicesReceived ?? 0} of {devices.length}
             {teacher.note && (
@@ -232,10 +243,10 @@ function Confirmations({ shipment }: { shipment: ShipmentView }) {
           </p>
         ) : (
           <p className="small">
-            <span className="badge badge-wait">Waiting for the teacher</span>
+            <span className="chip chip-wait">Waiting for the teacher</span>
           </p>
         )}
       </div>
-    </>
+    </section>
   )
 }

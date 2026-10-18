@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import DeliveryCard from '../components/learn/DeliveryCard'
 import LearnShell from '../components/learn/LearnShell'
 import ProgressSyncNote from '../components/learn/ProgressSyncNote'
+import StatsBand from '../components/ui/StatsBand'
 import { MASTERY_PERCENT, addDemoClass, classTotals, summariseStudent } from '../lib/learning'
 import { useLearning } from '../lib/useLearning'
 
@@ -28,28 +29,30 @@ export default function TeacherPage() {
   }
 
   return (
-    <LearnShell title="Learning: Teacher">
+    <LearnShell role="teacher">
       {schoolId && <DeliveryCard schoolId={schoolId} />}
-      <div className="summary" role="group" aria-label="Class summary">
-        <div className="summary-item" title="At least one lesson done or one quiz attempt">
-          <div className="summary-value">{totals.activeStudents}</div>
-          <div className="summary-label">Active students (of {students.length})</div>
-        </div>
-        <div className="summary-item" title="Average of each student's latest quiz score">
-          <div className="summary-value">{pct(totals.averageScore)}</div>
-          <div className="summary-label">Average quiz score</div>
-        </div>
-        <div className="summary-item" title={`Active students with a best score of ${MASTERY_PERCENT}% or more`}>
-          <div className="summary-value">{pct(totals.masteryRate)}</div>
-          <div className="summary-label">
-            Mastery rate ({mastered} of {totals.activeStudents})
-          </div>
-        </div>
-      </div>
+      <StatsBand
+        label="Class summary"
+        items={[
+          {
+            label: 'Active Students',
+            value: totals.activeStudents,
+            hint: `Of ${students.length} on this device. Did a lesson or a quiz.`,
+            tone: 'green',
+          },
+          { label: 'Average Score', value: pct(totals.averageScore), hint: "Each student's latest quiz", tone: 'navy' },
+          {
+            label: 'Mastery Rate',
+            value: pct(totals.masteryRate),
+            hint: `${mastered} of ${totals.activeStudents} scored ${MASTERY_PERCENT}% or more`,
+            tone: 'yellow',
+          },
+        ]}
+      />
 
       <div className="card">
         <div className="panel-head">
-          <h2>Class progress</h2>
+          <h2 className="section-title">Class progress</h2>
           {!students.some((s) => s.demo) && (
             <button type="button" className="btn-secondary" onClick={addDemo}>
               Add demo class
@@ -90,11 +93,9 @@ export default function TeacherPage() {
                     <td data-label="Best">{pct(s.best)}</td>
                     <td data-label="Status">
                       {s.mastered ? (
-                        <span className="badge badge-ok">Mastered</span>
+                        <span className="chip chip-ok">Mastered</span>
                       ) : (
-                        <span className="badge badge-wait" title={s.best === null ? 'No quiz attempt yet' : `Best score below ${MASTERY_PERCENT}%`}>
-                          Needs help
-                        </span>
+                        <span className="chip chip-wait">{s.best === null ? 'No quiz yet' : 'Needs help'}</span>
                       )}
                     </td>
                   </tr>

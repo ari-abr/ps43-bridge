@@ -24,9 +24,8 @@ export interface DemoScene {
 
 export const getDemoScene = () => getLocal<DemoScene | null>(SCENE_KEY, null)
 
-/** Ask, clear every "ps43:" key and reload. Used by the header and the Demo controls. */
-export function confirmAndReset() {
-  if (!confirm('Clear all demo data on this device and reload?')) return
+/** Clear every "ps43:" key and reload. The footer and the Demo controls ask first (ResetDemoButton). */
+export function resetAndReload() {
   resetDemoData()
   window.location.assign('/')
 }

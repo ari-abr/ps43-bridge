@@ -8,6 +8,7 @@ import SchoolMap, { MapLegend, type MapFocus } from '../components/admin/SchoolM
 import SchoolPanel from '../components/admin/SchoolPanel'
 import type { ColorBy } from '../components/admin/tierStyle'
 import SummaryBar from '../components/admin/SummaryBar'
+import PageHeader from '../components/ui/PageHeader'
 import { KEY_PREFIX, getKits, getPartners, getSchools, subscribe, type SchoolView } from '../lib/api'
 import { DEFAULT_WEIGHTS, needScore, type NeedWeights } from '../lib/scoring'
 import type { Kit, Partner } from '../lib/types'
@@ -113,16 +114,22 @@ export default function AdminPage() {
 
   return (
     <div className="admin">
-      <div className="admin-title">
-        <h1>Admin Map</h1>
-        <Link className="btn-secondary btn-as-link" to={`/admin/report${filters.region === 'all' ? '' : `?region=${filters.region}`}`}>
-          Donor report{filters.region === 'all' ? '' : ` (${filters.region})`}
-        </Link>
-      </div>
+      <PageHeader
+        tone="navy"
+        eyebrow="PS43 Bridge · Admin"
+        title="Admin Map"
+        intro="See every school, decide who gets a kit next, and follow each shipment until students are learning."
+        actions={
+          <Link className="btn-on-dark" to={`/admin/report${filters.region === 'all' ? '' : `?region=${filters.region}`}`}>
+            Donor report{filters.region === 'all' ? '' : ` (${filters.region})`}
+          </Link>
+        }
+      />
+
+      <SummaryBar schools={shown} />
 
       <DemoControls />
 
-      <SummaryBar schools={shown} />
       <Filters value={filters} onChange={setFilters} />
       {schools !== null && shown.length === 0 && (
         <p className="muted" role="status">
@@ -166,8 +173,8 @@ export default function AdminPage() {
         </div>
 
         <div className="admin-list card">
-          <h2>Priority list</h2>
-          <p className="muted small">Assessed schools, highest need first.</p>
+          <h2 className="section-title">Priority list</h2>
+          <p className="help">Assessed schools, highest need score first. The top schools should get a kit soonest.</p>
           <PrioritySettings weights={weights} onChange={changeWeights} />
           <PriorityList loading={schools === null} ranked={ranked} selectedId={selected?.id ?? null} onSelect={selectFromList} />
         </div>

@@ -3,16 +3,19 @@ import Checkins from '../components/field/Checkins'
 import Deliveries from '../components/field/Deliveries'
 import RecentSurveys from '../components/field/RecentSurveys'
 import SchoolPicker from '../components/field/SchoolPicker'
-import SurveyForm from '../components/field/SurveyForm'
+import SurveyForm, { SURVEY_STEPS } from '../components/field/SurveyForm'
+import { Clipboard, Laptop, Truck } from '../components/ui/Icons'
+import PageHeader from '../components/ui/PageHeader'
+import Steps from '../components/ui/Steps'
 import type { SchoolView } from '../lib/api'
 
 type Tab = 'survey' | 'deliveries' | 'checkins'
 
-const TABS: { id: Tab; label: string }[] = [
-  { id: 'survey', label: 'Survey' },
-  { id: 'deliveries', label: 'Deliveries' },
-  { id: 'checkins', label: 'Check-ins' },
-]
+const TABS = [
+  { id: 'survey', label: 'Survey', Icon: Clipboard },
+  { id: 'deliveries', label: 'Deliveries', Icon: Truck },
+  { id: 'checkins', label: 'Check-ins', Icon: Laptop },
+] as const
 
 export default function FieldPage() {
   const [tab, setTab] = useState<Tab>('survey')
@@ -20,21 +23,26 @@ export default function FieldPage() {
 
   return (
     <div className="field">
-      <h1>Field Tools</h1>
+      <PageHeader
+        tone="green"
+        eyebrow="PS43 Bridge · Field Tools"
+        title="Field Tools"
+        intro="Survey schools, confirm deliveries and count devices. Works offline: what you save waits on this phone until you are Online."
+      />
 
       <div className="tabs" role="tablist" aria-label="Field Tools">
-        {TABS.map((t) => (
+        {TABS.map(({ id, label, Icon }) => (
           <button
-            key={t.id}
+            key={id}
             type="button"
             role="tab"
-            id={`tab-${t.id}`}
-            aria-selected={tab === t.id}
+            id={`tab-${id}`}
+            aria-selected={tab === id}
             aria-controls="tabpanel"
-            className={`tab ${tab === t.id ? 'is-active' : ''}`}
-            onClick={() => setTab(t.id)}
+            className={`tab ${tab === id ? 'is-active' : ''}`}
+            onClick={() => setTab(id)}
           >
-            {t.label}
+            <Icon /> {label}
           </button>
         ))}
       </div>
@@ -45,6 +53,7 @@ export default function FieldPage() {
             <SurveyForm key={school.id} school={school} onDone={() => setSchool(null)} />
           ) : (
             <>
+              <Steps steps={SURVEY_STEPS} done={0} label="Survey steps" />
               <SchoolPicker onSelect={setSchool} />
               <RecentSurveys />
             </>

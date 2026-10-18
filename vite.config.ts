@@ -12,8 +12,8 @@ export default defineConfig({
         name: 'PS43 Bridge',
         short_name: 'PS43 Bridge',
         description: 'Building Bridges to Education (demo)',
-        theme_color: '#0f6e5c',
-        background_color: '#ffffff',
+        theme_color: '#007A5E',
+        background_color: '#F1F1F1',
         display: 'standalone',
         start_url: '/',
         icons: [
@@ -28,6 +28,16 @@ export default defineConfig({
         navigateFallback: '/index.html',
         // Map tiles you have looked at while Online stay available when the Wi-Fi drops.
         runtimeCaching: [
+          // The display font (League Gothic from Google Fonts), so headings keep their look offline.
+          {
+            urlPattern: /^https:\/\/fonts\.(googleapis|gstatic)\.com\/.*/,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'google-fonts',
+              expiration: { maxEntries: 20, maxAgeSeconds: 60 * 60 * 24 * 365 },
+              cacheableResponse: { statuses: [0, 200] },
+            },
+          },
           {
             urlPattern: /^https:\/\/tile\.openstreetmap\.org\/.*/,
             handler: 'CacheFirst',

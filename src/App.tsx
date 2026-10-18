@@ -1,8 +1,10 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
+import Footer from './components/Footer'
 import Header from './components/Header'
-import { getSavedRole, pathForRole } from './lib/roles'
+import Toaster from './components/ui/Toaster'
 import AdminPage from './pages/AdminPage'
 import FieldPage from './pages/FieldPage'
+import HomePage from './pages/HomePage'
 import ReportPage from './pages/ReportPage'
 import StudentPage from './pages/StudentPage'
 import TagsPrintPage from './pages/TagsPrintPage'
@@ -11,28 +13,35 @@ import TeacherPage from './pages/TeacherPage'
 function AppLayout() {
   return (
     <>
+      <a className="skip-link" href="#main">
+        Skip to content
+      </a>
       <Header />
-      <main className="main">
+      <main className="main" id="main" tabIndex={-1}>
         <Routes>
+          <Route path="/" element={<HomePage />} />
           <Route path="/admin" element={<AdminPage />} />
           <Route path="/field" element={<FieldPage />} />
           <Route path="/learn/teacher" element={<TeacherPage />} />
           <Route path="/learn/student" element={<StudentPage />} />
-          <Route path="*" element={<Navigate to={pathForRole(getSavedRole())} replace />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>
-      <footer className="footer">Demo data: fictional schools and partners.</footer>
+      <Footer />
     </>
   )
 }
 
 export default function App() {
   return (
-    <Routes>
-      {/* Print pages have no header or footer. */}
-      <Route path="/print/tags/:shipmentId" element={<TagsPrintPage />} />
-      <Route path="/admin/report" element={<ReportPage />} />
-      <Route path="*" element={<AppLayout />} />
-    </Routes>
+    <>
+      <Routes>
+        {/* Print pages have no header or footer. */}
+        <Route path="/print/tags/:shipmentId" element={<TagsPrintPage />} />
+        <Route path="/admin/report" element={<ReportPage />} />
+        <Route path="*" element={<AppLayout />} />
+      </Routes>
+      <Toaster />
+    </>
   )
 }

@@ -1,6 +1,7 @@
 import { useMemo, useState, type FormEvent } from 'react'
 import LearnShell from '../components/learn/LearnShell'
 import ProgressSyncNote from '../components/learn/ProgressSyncNote'
+import { Arrow, ArrowLeft, Check } from '../components/ui/Icons'
 import {
   MASTERY_PERCENT,
   NAME_MAX,
@@ -24,7 +25,7 @@ export default function StudentPage() {
   const [view, setView] = useState<View>({ page: 'course' })
 
   return (
-    <LearnShell title="Learning: Student">
+    <LearnShell role="student">
       {!current ? (
         <StartScreen onStart={() => setView({ page: 'course' })} />
       ) : view.page === 'lesson' && pack.lessons.some((l) => l.id === view.lessonId) ? (
@@ -118,13 +119,13 @@ function StartScreen({ onStart }: { onStart: () => void }) {
           </button>
         ))}
 
-      <button type="submit" className="btn-primary btn-big">
-        Start
+      <button type="submit" className="btn-primary btn-block btn-big">
+        Start <Arrow />
       </button>
 
       {recent.length > 0 && (
         <div>
-          <p className="muted small">On this device</p>
+          <p className="muted small">Already learning on this device? Tap your name.</p>
           <div className="quick-names">
             {recent.map((s) => (
               <button key={s.id} type="button" onClick={() => start(s.name)}>
@@ -154,13 +155,22 @@ function CourseView({ student, pack, onOpenLesson, onQuiz }: CourseProps) {
   return (
     <div className="card learn-course">
       <div className="panel-head">
-        <h2>Hi {student.name}</h2>
+        <h2 className="greeting">Hi {student.name}!</h2>
         <button type="button" className="btn-link" onClick={signOut}>
           Not you? Switch student
         </button>
       </div>
+      <ProgressBar
+        value={summary.lessonsDone}
+        max={pack.lessons.length}
+        label={`${summary.lessonsDone} of ${pack.lessons.length} lessons done`}
+      />
       <p className="muted small">
-        {pack.title} · {summary.lessonsDone} of {pack.lessons.length} lessons done
+        {summary.lessonsDone === pack.lessons.length
+          ? 'All lessons done. Dream big: try the quiz!'
+          : summary.lessonsDone === 0
+            ? 'Start with lesson 1. You can do it!'
+            : 'Great progress. Keep going!'}
       </p>
 
       <ul className="lesson-list">
@@ -173,7 +183,7 @@ function CourseView({ student, pack, onOpenLesson, onQuiz }: CourseProps) {
               <span className="picker-main">
                 <span className="picker-name">{l.title}</span>
               </span>
-              <span className="muted small">{done.has(l.id) ? 'Done' : 'Open'}</span>
+              <span className="lesson-go">{done.has(l.id) ? 'Done' : <Arrow className="arrow-red" />}</span>
             </button>
           </li>
         ))}
@@ -190,7 +200,9 @@ function CourseView({ student, pack, onOpenLesson, onQuiz }: CourseProps) {
                   : `Best score ${summary.best}%${summary.mastered ? ' · Mastered' : ''}`}
               </span>
             </span>
-            <span className="muted small">Start</span>
+            <span className="lesson-go">
+              <Arrow className="arrow-red" />
+            </span>
           </button>
         </li>
       </ul>
@@ -215,9 +227,9 @@ function LessonView({ student, pack, lesson, onOpen, onBack }: LessonProps) {
   return (
     <div className="card learn-lesson">
       <button type="button" className="btn-link" onClick={onBack}>
-        ← All lessons
+        <ArrowLeft /> All lessons
       </button>
-      <h2>{lesson.title}</h2>
+      <h2 className="lesson-title">{lesson.title}</h2>
       <p className="lesson-tip">{lesson.tip}</p>
 
       {lesson.rows && (
@@ -243,18 +255,23 @@ function LessonView({ student, pack, lesson, onOpen, onBack }: LessonProps) {
 
       {isDone ? (
         <div className="save-result is-uploaded" role="status">
-          <strong>✓ Lesson done</strong>
-          <p>Progress saved on this device.</p>
+          <span className="save-result-icon" aria-hidden="true">
+            <Check size={28} strokeWidth={3} />
+          </span>
+          <div>
+            <strong>Lesson done. Well done!</strong>
+            <p>Your progress is saved on this device.</p>
+          </div>
         </div>
       ) : (
-        <button type="button" className="btn-primary btn-big" onClick={() => markLessonDone(student.id, lesson.id)}>
-          Mark as done
+        <button type="button" className="btn-primary btn-block btn-big" onClick={() => markLessonDone(student.id, lesson.id)}>
+          I've done this lesson <Check strokeWidth={3} />
         </button>
       )}
 
       {isDone && (
-        <button type="button" className="btn-primary" onClick={() => (next ? onOpen(next.id) : onBack())}>
-          {next ? `Next: ${next.title}` : 'Back to lessons'}
+        <button type="button" className="btn-primary btn-block btn-big" onClick={() => (next ? onOpen(next.id) : onBack())}>
+          {next ? `Next: ${next.title}` : 'Back to lessons'} <Arrow />
         </button>
       )}
     </div>
@@ -262,6 +279,19 @@ function LessonView({ student, pack, lesson, onOpen, onBack }: LessonProps) {
 }
 
 // ---------- quiz: one question at a time ----------
+
+const PRAISE = ['Correct! Great work.', 'Yes! Well done.', 'Correct! You are a star.', 'Right! Keep it up.']
+
+function ProgressBar({ value, max, label }: { value: number; max: number; label: string }) {
+  return (
+    <div className="progress">
+      <div className="progress-label">{label}</div>
+      <div className="progress-track" role="progressbar" aria-valuemin={0} aria-valuemax={max} aria-valuenow={value} aria-label={label}>
+        <div className="progress-fill" style={{ width: `${max ? (value / max) * 100 : 0}%` }} />
+      </div>
+    </div>
+  )
+}
 
 function Quiz({ student, pack, onBack }: { student: Student; pack: CoursePack; onBack: () => void }) {
   // Keep the questions this attempt started with, even if the pack updates mid-quiz.
@@ -294,16 +324,23 @@ function Quiz({ student, pack, onBack }: { student: Student; pack: CoursePack; o
     const mastered = percent >= MASTERY_PERCENT
     return (
       <div className="card learn-quiz">
-        <h2>Quiz finished</h2>
+        <p className="eyebrow eyebrow-dark">Quiz finished</p>
         <p className="quiz-score">
-          {correct} / {questions.length} <span className="muted">({percent}%)</span>
+          {correct} / {questions.length}
+          <span className="quiz-score-pct">{percent}%</span>
         </p>
         <div className={`save-result ${mastered ? 'is-uploaded' : 'is-queued'}`} role="status">
-          <strong>{mastered ? 'Mastered! Well done.' : `Keep practising: you need ${MASTERY_PERCENT}% to master it.`}</strong>
-          <p>Progress saved on this device.</p>
+          <div>
+            <strong>
+              {mastered
+                ? 'Mastered! Dream big: you did it.'
+                : `Good effort! Practise the lessons and try again. You need ${MASTERY_PERCENT}% to master it.`}
+            </strong>
+            <p>Your progress is saved on this device.</p>
+          </div>
         </div>
-        <button type="button" className="btn-primary" onClick={onBack}>
-          Back to lessons
+        <button type="button" className="btn-primary btn-block btn-big" onClick={onBack}>
+          Back to lessons <Arrow />
         </button>
         <ProgressSyncNote />
       </div>
@@ -316,11 +353,9 @@ function Quiz({ student, pack, onBack }: { student: Student; pack: CoursePack; o
   return (
     <div className="card learn-quiz">
       <button type="button" className="btn-link" onClick={onBack}>
-        ← Leave quiz
+        <ArrowLeft /> Leave quiz
       </button>
-      <p className="muted small">
-        Question {index + 1} of {questions.length}
-      </p>
+      <ProgressBar value={index + (answered ? 1 : 0)} max={questions.length} label={`Question ${index + 1} of ${questions.length}`} />
       <h2 className="quiz-question">{q.question}</h2>
       <div className="quiz-options">
         {q.options.map((opt, i) => {
@@ -335,10 +370,16 @@ function Quiz({ student, pack, onBack }: { student: Student; pack: CoursePack; o
       {answered && (
         <>
           <p className={`quiz-feedback ${right ? 'is-right' : 'is-wrong'}`} role="status">
-            {right ? 'Correct!' : `Not quite. The answer is ${q.options[q.answerIndex]}.`}
+            {right ? (
+              <>
+                <Check size={24} strokeWidth={3} /> {PRAISE[index % PRAISE.length]}
+              </>
+            ) : (
+              `Good try! The answer is ${q.options[q.answerIndex]}. You'll get the next one.`
+            )}
           </p>
-          <button type="button" className="btn-primary btn-big" onClick={next} autoFocus>
-            {index + 1 < questions.length ? 'Next question' : 'See my score'}
+          <button type="button" className="btn-primary btn-block btn-big" onClick={next} autoFocus>
+            {index + 1 < questions.length ? 'Next question' : 'See my score'} <Arrow />
           </button>
         </>
       )}

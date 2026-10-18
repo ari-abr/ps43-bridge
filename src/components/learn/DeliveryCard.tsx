@@ -8,7 +8,9 @@ import {
   type ShipmentView,
 } from '../../lib/api'
 import { confirmationId, latestBySchool } from '../../lib/shipments'
+import { toast, toastSaved } from '../../lib/toast'
 import { capitalise } from '../admin/tierStyle'
+import { Arrow } from '../ui/Icons'
 
 /**
  * Teacher: "PS43 kit delivered? Confirm what arrived." Shown while this school's shipment is
@@ -37,11 +39,13 @@ export default function DeliveryCard({ schoolId }: { schoolId: string }) {
     const waiting = mine?.state === 'waiting'
     return (
       <div className={`save-result ${waiting ? 'is-queued' : 'is-uploaded'}`} role="status">
-        <strong>Thanks, delivery confirmed.</strong>
-        <p>
-          Shipment status: <span className="pill">{capitalise(shipment.status)}</span>
-          {waiting && ' · your confirmation is saved on this device and will upload when Online'}
-        </p>
+        <div>
+          <strong>Thanks, delivery confirmed.</strong>
+          <p>
+            Shipment status: <span className="chip">{capitalise(shipment.status)}</span>
+            {waiting && ' · your confirmation is saved on this device and will upload when Online'}
+          </p>
+        </div>
       </div>
     )
   }
@@ -85,16 +89,18 @@ function ConfirmForm({ shipment }: { shipment: ShipmentView }) {
       note: note.trim(),
     }
     try {
-      await saveRecord('confirmations', record)
+      toastSaved(await saveRecord('confirmations', record), 'Your delivery confirmation')
     } catch {
       setError('Could not save (device storage full?). Try again.')
+      toast('error', 'Could not save your confirmation.')
       setSaving(false)
     }
   }
 
   return (
     <form className="card delivery-card" onSubmit={submit} noValidate>
-      <h2>PS43 kit delivered? Confirm what arrived.</h2>
+      <h2 className="section-title">PS43 kit delivered? Confirm what arrived.</h2>
+      <p className="help">Your confirmation makes the delivery "Verified": both the coordinator and the school agree.</p>
       <p className="muted small">
         Shipment {shipment.id} · {capitalise(shipment.status)} · {count} devices sent
       </p>
@@ -109,8 +115,8 @@ function ConfirmForm({ shipment }: { shipment: ShipmentView }) {
         <textarea rows={2} maxLength={300} value={note} onChange={(e) => setNote(e.target.value)} />
       </label>
       {error && <p className="form-error">{error}</p>}
-      <button type="submit" className="btn-primary" disabled={saving}>
-        {saving ? 'Saving…' : 'Confirm delivery'}
+      <button type="submit" className="btn-primary btn-block" disabled={saving}>
+        {saving ? 'Saving…' : 'Confirm delivery'} {!saving && <Arrow />}
       </button>
     </form>
   )

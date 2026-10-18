@@ -11,6 +11,8 @@ import {
 import { assetId, confirmationId } from '../../lib/shipments'
 import { capitalise } from '../admin/tierStyle'
 import { when } from '../admin/ShipmentSection'
+import { toast, toastSaved } from '../../lib/toast'
+import { Arrow, ArrowLeft } from '../ui/Icons'
 import QrScannerBox from './QrScannerBox'
 
 interface Props {
@@ -83,10 +85,11 @@ export default function DeliveryConfirm({ shipment, onBack }: Props) {
       note: draft.note.trim(),
     }
     try {
-      await saveRecord('confirmations', record)
+      toastSaved(await saveRecord('confirmations', record), 'Delivery confirmation')
       setLocal(draftKey(shipment.id), null)
     } catch {
       setFailed(true)
+      toast('error', 'Could not save the delivery confirmation.')
     } finally {
       setSaving(false)
     }
@@ -95,9 +98,9 @@ export default function DeliveryConfirm({ shipment, onBack }: Props) {
   const header = (
     <>
       <button type="button" className="btn-link" onClick={onBack}>
-        ← All deliveries
+        <ArrowLeft /> All deliveries
       </button>
-      <h2>{schoolName(shipment.schoolId)}</h2>
+      <h2 className="panel-title">{schoolName(shipment.schoolId)}</h2>
       <p className="muted small">
         {shipment.id} · <span className="pill">{capitalise(shipment.status)}</span> · {shipment.devices.length} devices
       </p>
@@ -110,15 +113,17 @@ export default function DeliveryConfirm({ shipment, onBack }: Props) {
       <div className="card delivery">
         {header}
         <div className={`save-result ${waiting ? 'is-queued' : 'is-uploaded'}`} role="status">
-          <strong>
-            {waiting ? 'Delivery confirmed on this device, will upload when Online.' : 'Delivery confirmed and uploaded.'}
-          </strong>
-          <p>
-            {when(confirmed.confirmedAt)} · {confirmed.scannedAssetIds?.length ?? 0} of {shipment.devices.length} devices
-            scanned · photo taken: {confirmed.photoTaken ? 'yes' : 'no'}
-          </p>
+          <div>
+            <strong>
+              {waiting ? 'Delivery confirmed on this phone. It will upload when you are Online.' : 'Delivery confirmed and uploaded.'}
+            </strong>
+            <p>
+              {when(confirmed.confirmedAt)} · {confirmed.scannedAssetIds?.length ?? 0} of {shipment.devices.length} devices
+              scanned · photo taken: {confirmed.photoTaken ? 'yes' : 'no'}
+            </p>
+          </div>
         </div>
-        <button type="button" className="btn-primary" onClick={onBack}>
+        <button type="button" className="btn-primary btn-block" onClick={onBack}>
           Back to deliveries
         </button>
       </div>
@@ -184,19 +189,20 @@ export default function DeliveryConfirm({ shipment, onBack }: Props) {
       </label>
 
       {missing.length > 0 && (
-        <p className="form-error" role="status">
+        <p className="notice-warn" role="status">
           {missing.length} device{missing.length === 1 ? '' : 's'} not scanned. You can still confirm; the Admin will see
           how many were scanned.
         </p>
       )}
       {failed && <p className="form-error">Could not save (device storage full?). Try again.</p>}
 
-      <button type="button" className="btn-primary" onClick={confirm} disabled={saving}>
+      <button type="button" className="btn-primary btn-block btn-big" onClick={confirm} disabled={saving}>
         {saving
           ? 'Saving…'
           : missing.length > 0
             ? `Confirm delivery (${missing.length} not scanned)`
-            : 'Confirm delivery'}
+            : 'Confirm delivery'}{' '}
+        {!saving && <Arrow />}
       </button>
     </div>
   )

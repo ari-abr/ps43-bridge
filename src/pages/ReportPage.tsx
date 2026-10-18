@@ -4,6 +4,8 @@ import { getSchools, subscribe, type SchoolView } from '../lib/api'
 import { TIER_LABELS, type Tier } from '../lib/scoring'
 import { summarise, workingOfTotal } from '../lib/report'
 import { capitalise } from '../components/admin/tierStyle'
+import { Arrow, ArrowLeft, Download } from '../components/ui/Icons'
+import StatsBand from '../components/ui/StatsBand'
 
 const REGIONS = ['Littoral', 'West', 'Centre']
 const pct = (n: number | null) => (n === null ? '–' : `${n}%`)
@@ -82,54 +84,49 @@ export default function ReportPage() {
   const unassessed = schools.filter((s) => s.tier === null).length
 
   const headline: [string, string | number, string?][] = [
-    ['Schools mapped', sum.schoolsMapped],
-    ['Schools assessed', sum.assessed],
-    ['Kits delivered', sum.kitsDelivered, 'confirmed by the field coordinator'],
-    ['Kits verified', sum.kitsVerified, 'confirmed by coordinator and teacher'],
-    ['Devices delivered', sum.devicesDelivered],
-    ['Devices working', sum.devicesWorkingPct === null ? '–' : `${sum.devicesWorkingPct}%`, sum.devicesChecked ? `${sum.devicesWorking} of ${sum.devicesChecked} checked` : 'no check-ins yet'],
-    ['Active learners', sum.schoolsWithProgress ? sum.activeLearners : '–', sum.schoolsWithProgress ? `${sum.schoolsWithProgress} school${sum.schoolsWithProgress === 1 ? '' : 's'} reporting` : 'no learning data yet'],
-    ['Average mastery rate', pct(sum.averageMastery), 'share of learners scoring 80% or more'],
+    ['Schools Mapped', sum.schoolsMapped, 'real school locations'],
+    ['Schools Assessed', sum.assessed, 'surveyed by a coordinator'],
+    ['Schools Reached', sum.kitsDelivered, 'kit delivered, confirmed by the coordinator'],
+    ['Kits Verified', sum.kitsVerified, 'confirmed by coordinator and teacher'],
+    ['Technology Equipped', sum.devicesDelivered, 'devices delivered'],
+    ['Devices Working', sum.devicesWorkingPct === null ? '–' : `${sum.devicesWorkingPct}%`, sum.devicesChecked ? `${sum.devicesWorking} of ${sum.devicesChecked} checked` : 'no check-ins yet'],
+    ['Youth Reached', sum.schoolsWithProgress ? sum.activeLearners : '–', sum.schoolsWithProgress ? `active learners, ${sum.schoolsWithProgress} school${sum.schoolsWithProgress === 1 ? '' : 's'} reporting` : 'no learning data yet'],
+    ['Mastery Rate', pct(sum.averageMastery), 'learners scoring 80% or more'],
   ]
 
   return (
     <main className="print-page report">
       <div className="print-toolbar">
-        <Link to="/admin">← Admin Map</Link>
+        <Link to="/admin" className="btn-link">
+          <ArrowLeft /> Admin Map
+        </Link>
         <span className="toolbar-actions">
           <button type="button" className="btn-secondary" onClick={() => downloadCsv(rows, region)} disabled={rows.length === 0}>
-            Download CSV
+            <Download /> Download CSV
           </button>
           <button type="button" className="btn-primary" onClick={() => window.print()}>
-            Print / Save as PDF
+            Print / Save as PDF <Arrow />
           </button>
         </span>
       </div>
 
       <header className="report-head">
-        <h1>PS43 Bridge: progress report</h1>
-        <p>
+        <p className="eyebrow">PS43 Foundation · Building Bridges to Education</p>
+        <h1 className="display">Progress report</h1>
+        <p className="report-meta">
           {region === 'all' ? 'All regions' : `${region} region`} · {new Date().toLocaleDateString([], { dateStyle: 'long' })}{' '}
-          <span className="pill pill-demo">Demo data</span>
-        </p>
-        <p className="small muted">
-          Building Bridges to Education, Cameroon. School locations are real; school names, partners and all survey,
-          shipment and learning figures are simulated for this demo.
-          {hasSimulated && ' Includes simulated 30-day learning and device data.'}
+          · <strong>Demo data</strong>
         </p>
       </header>
+      <p className="small muted report-disclaimer">
+        Made with PS43 Bridge, a hackathon prototype (not an official PS43 Foundation product). School locations are
+        real; school names, partners and all survey, shipment and learning figures are simulated.
+        {hasSimulated && ' Includes simulated 30-day learning and device data.'}
+      </p>
 
       <section className="report-section">
-        <h2>Headline numbers</h2>
-        <div className="report-grid">
-          {headline.map(([label, value, note]) => (
-            <div key={label} className="report-stat">
-              <div className="report-value">{value}</div>
-              <div className="report-label">{label}</div>
-              {note && <div className="report-note">{note}</div>}
-            </div>
-          ))}
-        </div>
+        <h2 className="label-rule">Our impact in numbers</h2>
+        <StatsBand label="Headline numbers" items={headline.map(([label, value, hint]) => ({ label, value, hint }))} />
       </section>
 
       <section className="report-section">

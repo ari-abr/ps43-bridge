@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { getOutbox, schoolName, subscribe, type SurveyRecord } from '../../lib/api'
 import { tierFromSurvey } from '../../lib/scoring'
-import { tierColor } from '../admin/tierStyle'
+import TierBadge from '../admin/TierBadge'
 
 const timeOf = (iso: string) => new Date(iso).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
 
@@ -12,7 +12,7 @@ export default function RecentSurveys() {
 
   return (
     <div className="card">
-      <h2>My recent surveys</h2>
+      <h2 className="section-title">My recent surveys</h2>
       {items.length === 0 ? (
         <p className="muted">No surveys saved on this device yet.</p>
       ) : (
@@ -25,8 +25,7 @@ export default function RecentSurveys() {
                 <span className="picker-main">
                   <span className="picker-name">{schoolName(s.schoolId)}</span>
                   <span className="muted small">
-                    <span className="tier-dot" style={{ background: tierColor(tier) }} /> Tier {tier} · saved{' '}
-                    {timeOf(item.savedAt)}
+                    <TierBadge tier={tier} /> Tier {tier} · saved {timeOf(item.savedAt)}
                   </span>
                 </span>
                 {item.state === 'waiting' ? (

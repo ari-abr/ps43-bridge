@@ -3,9 +3,11 @@ import type { SchoolView } from '../../lib/api'
 import { matchPartners } from '../../lib/matching'
 import { TIER_LABELS } from '../../lib/scoring'
 import type { Kit, Partner } from '../../lib/types'
+import { Close } from '../ui/Icons'
 import LearningSection from './LearningSection'
 import ShipmentSection from './ShipmentSection'
-import { capitalise, tierColor } from './tierStyle'
+import TierBadge from './TierBadge'
+import { TIER_EXPLAINER, TIER_HELP, capitalise } from './tierStyle'
 
 interface Props {
   school: SchoolView | null
@@ -26,8 +28,8 @@ export default function SchoolPanel({ school, score, kits, partners, onClose }: 
   if (!school) {
     return (
       <div className="card panel">
-        <h2>School details</h2>
-        <p className="muted">Click a school on the map or in the priority list.</p>
+        <p className="label-rule">School details</p>
+        <p className="muted">Choose a school on the map or in the priority list to see its survey, kit, shipment and learning.</p>
       </div>
     )
   }
@@ -37,54 +39,70 @@ export default function SchoolPanel({ school, score, kits, partners, onClose }: 
   return (
     <div className="card panel">
       <div className="panel-head">
-        <h2>{school.name}</h2>
-        <button type="button" className="btn-secondary" onClick={onClose} aria-label="Close school details">
-          ✕
+        <div>
+          <p className="eyebrow eyebrow-dark">{school.region} region</p>
+          <h2 className="panel-title">{school.name}</h2>
+        </div>
+        <button type="button" className="icon-btn" onClick={onClose} aria-label="Close school details">
+          <Close />
         </button>
       </div>
       <p className="panel-sub">
-        {school.region} region · <span className="pill">{capitalise(school.status)}</span>{' '}
-        <span className="pill pill-demo">demo data</span>
+        <span className="chip">{capitalise(school.status)}</span> <span className="chip chip-demo">Demo data</span>
       </p>
 
-      <h3>Survey</h3>
-      {survey ? (
-        <dl className="facts">
-          <dt>Power</dt>
-          <dd>{survey.power}</dd>
-          <dt>Signal</dt>
-          <dd>{survey.signal}</dd>
-          <dt>Pupils</dt>
-          <dd>{survey.pupils}</dd>
-          <dt>Teachers</dt>
-          <dd>{survey.teachers}</dd>
-          <dt>Secure room</dt>
-          <dd>{survey.secureRoom ? 'Yes' : 'No'}</dd>
-          <dt>Survey date</dt>
-          <dd>{survey.surveyedAt.slice(0, 10)}</dd>
-        </dl>
-      ) : (
-        <p className="muted">Not yet assessed</p>
-      )}
+      <section className="panel-section" aria-label="Readiness">
+        <h3 className="label-rule">Readiness</h3>
+        {school.tier === null ? (
+          <p className="muted">Not assessed yet. A coordinator surveys the school in Field Tools first.</p>
+        ) : (
+          <>
+            <div className="readiness">
+              <span className={`tier-big tier-${school.tier}`} aria-hidden="true">
+                {school.tier}
+              </span>
+              <div>
+                <strong>{TIER_LABELS[school.tier]}</strong>
+                <p className="small">{TIER_HELP[school.tier]}</p>
+              </div>
+            </div>
+            <dl className="facts">
+              <dt>Need score</dt>
+              <dd>{score === null ? '–' : `${score.toFixed(1)} of 100`}</dd>
+            </dl>
+            <p className="help">{TIER_EXPLAINER} The need score (0 to 100) is higher for schools that should get a kit sooner.</p>
+          </>
+        )}
+      </section>
 
-      <h3>Tier and need</h3>
-      {school.tier === null ? (
-        <p className="muted">Available after a survey.</p>
-      ) : (
-        <dl className="facts">
-          <dt>Tier</dt>
-          <dd>
-            <span className="tier-dot" style={{ background: tierColor(school.tier) }} /> {TIER_LABELS[school.tier]}
-          </dd>
-          <dt>Need score</dt>
-          <dd>{score === null ? '–' : `${score.toFixed(1)} of 100`}</dd>
-        </dl>
-      )}
+      <section className="panel-section" aria-label="Survey">
+        <h3 className="label-rule">Survey</h3>
+        {survey ? (
+          <dl className="facts">
+            <dt>Power</dt>
+            <dd>{capitalise(survey.power)}</dd>
+            <dt>Mobile signal</dt>
+            <dd>{survey.signal === 'none' ? 'None' : survey.signal}</dd>
+            <dt>Pupils</dt>
+            <dd>{survey.pupils}</dd>
+            <dt>Teachers</dt>
+            <dd>{survey.teachers}</dd>
+            <dt>Room that locks</dt>
+            <dd>{survey.secureRoom ? 'Yes' : 'No'}</dd>
+            <dt>Survey date</dt>
+            <dd>{survey.surveyedAt.slice(0, 10)}</dd>
+          </dl>
+        ) : (
+          <p className="muted">No survey yet.</p>
+        )}
+      </section>
 
       {kit && (
-        <>
-          <h3>Recommended kit</h3>
-          <p className="kit-name">{kit.name}</p>
+        <section className="panel-section" aria-label="Recommended kit">
+          <h3 className="label-rule">Recommended kit</h3>
+          <p className="kit-name">
+            <TierBadge tier={school.tier} /> {kit.name}
+          </p>
           <ul className="plain-list">
             {kit.items.map((item) => (
               <li key={item.name}>
@@ -93,11 +111,11 @@ export default function SchoolPanel({ school, score, kits, partners, onClose }: 
             ))}
           </ul>
 
-          <h3>Matched partners</h3>
+          <h3 className="label-rule">Matched partners</h3>
           {matches.length === 0 ? (
             <p className="muted">No partner can supply this kit yet.</p>
           ) : (
-            <ul className="plain-list">
+            <ul className="plain-list partner-list">
               {matches.map(({ partner, km }) => (
                 <li key={partner.id}>
                   <strong>{partner.name}</strong>
@@ -109,7 +127,7 @@ export default function SchoolPanel({ school, score, kits, partners, onClose }: 
               ))}
             </ul>
           )}
-        </>
+        </section>
       )}
 
       <ShipmentSection school={school} kit={kit} partners={partners} />

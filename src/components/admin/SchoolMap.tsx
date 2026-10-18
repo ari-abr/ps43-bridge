@@ -1,22 +1,43 @@
 import { useEffect, useState } from 'react'
 import L from 'leaflet'
-import { CircleMarker, MapContainer, Marker, Popup, TileLayer, Tooltip, useMap } from 'react-leaflet'
+import { MapContainer, Marker, Popup, TileLayer, Tooltip, useMap } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 import type { SchoolView } from '../../lib/api'
 import type { Partner } from '../../lib/types'
 import { TIER_LABELS } from '../../lib/scoring'
-import { MASTERY_BANDS, TIER_COLORS, UNASSESSED_COLOR, masteryColor, tierColor, type ColorBy } from './tierStyle'
+import { MASTERY_BANDS, TIER_HELP, masteryClass, tierClass, type ColorBy } from './tierStyle'
 
 const CAMEROON_CENTRE: L.LatLngTuple = [5.7, 12.4]
 
-// Partners are diamonds, so they cannot be mistaken for the round school markers.
+// Partners are navy diamonds, so they cannot be mistaken for the round school markers.
 const partnerIcon = L.divIcon({
   className: 'partner-marker',
   html: '<span></span>',
-  iconSize: [20, 20],
-  iconAnchor: [10, 10],
-  popupAnchor: [0, -10],
+  iconSize: [22, 22],
+  iconAnchor: [11, 11],
+  popupAnchor: [0, -11],
 })
+
+// School markers are round with the tier number (or mastery rate) inside, so they never rely on colour alone.
+// Only a few distinct icons exist, so they are cached: a new icon object would redraw every marker.
+const iconCache = new Map<string, L.DivIcon>()
+
+function schoolIcon(text: string, className: string, selected: boolean): L.DivIcon {
+  const key = `${text}|${className}|${selected}`
+  let icon = iconCache.get(key)
+  if (!icon) {
+    const size = selected ? 38 : 28
+    icon = L.divIcon({
+      className: 'school-marker',
+      html: `<span class="pin ${className}${selected ? ' is-selected' : ''}">${text}</span>`,
+      iconSize: [size, size],
+      iconAnchor: [size / 2, size / 2],
+      tooltipAnchor: [size / 2, 0],
+    })
+    iconCache.set(key, icon)
+  }
+  return icon
+}
 
 export interface MapFocus {
   lat: number
@@ -103,24 +124,26 @@ export default function SchoolMap({
 
         {ordered.map((s) => {
           const selected = s.id === selectedId
+          const rate = s.progress?.masteryRate ?? null
+          const icon =
+            colorBy === 'learning'
+              ? schoolIcon(rate === null ? '–' : String(rate), masteryClass(rate), selected)
+              : schoolIcon(s.tier === null ? '?' : String(s.tier), tierClass(s.tier), selected)
+          const words = `${s.name}, ${s.tier === null ? 'unassessed' : TIER_LABELS[s.tier]}${
+            colorBy === 'learning' ? (rate === null ? ', no learning data' : `, ${rate}% mastered`) : ''
+          }`
           return (
-            <CircleMarker
+            <Marker
               key={s.id}
-              center={[s.lat, s.lng]}
-              radius={selected ? 11 : 7}
-              pathOptions={{
-                color: selected ? '#111' : '#fff',
-                weight: selected ? 3 : 1.5,
-                fillColor: colorBy === 'learning' ? masteryColor(s.progress?.masteryRate ?? null) : tierColor(s.tier),
-                fillOpacity: 0.9,
-              }}
+              position={[s.lat, s.lng]}
+              icon={icon}
+              title={words}
+              alt={words}
+              zIndexOffset={selected ? 1000 : 0}
               eventHandlers={{ click: () => onSelect(s.id) }}
             >
-              <Tooltip>
-                {s.name} · {s.tier === null ? 'Unassessed' : TIER_LABELS[s.tier]}
-                {colorBy === 'learning' && s.progress?.masteryRate != null && ` · mastery ${s.progress.masteryRate}%`}
-              </Tooltip>
-            </CircleMarker>
+              <Tooltip>{words}</Tooltip>
+            </Marker>
           )
         })}
 
@@ -152,36 +175,69 @@ interface LegendProps {
 
 export function MapLegend({ colorBy, onColorBy, showPartners, onTogglePartners }: LegendProps) {
   const tierItems = [
-    { label: 'Unassessed', color: UNASSESSED_COLOR },
-    ...([0, 1, 2, 3] as const).map((t) => ({ label: TIER_LABELS[t], color: TIER_COLORS[t] })),
+    ...([0, 1, 2, 3] as const).map((t) => ({
+      key: String(t),
+      pin: String(t),
+      className: tierClass(t),
+      label: TIER_LABELS[t],
+      help: TIER_HELP[t],
+    })),
+    { key: 'none', pin: '?', className: tierClass(null), label: 'Unassessed (grey)', help: 'No survey yet.' },
   ]
-  const learningItems = [{ label: 'No learning data', color: UNASSESSED_COLOR }, ...MASTERY_BANDS]
+  const learningItems = [
+    ...MASTERY_BANDS.map((b, i) => ({
+      key: b.className,
+      pin: ['35', '65', '90'][i],
+      className: b.className,
+      label: `${b.label} (${['red', 'yellow', 'green'][i]})`,
+      help: 'Share of active learners scoring 80% or more on the quiz.',
+    })),
+    { key: 'none', pin: '–', className: 'band-none', label: 'No learning data (grey)', help: 'No school totals received yet.' },
+  ]
   const items = colorBy === 'learning' ? learningItems : tierItems
+
   return (
     <div className="legend">
-      <label className="field-inline legend-colorby">
-        <span>Colour by</span>
-        <select value={colorBy} onChange={(e) => onColorBy(e.target.value as ColorBy)}>
-          <option value="tier">Readiness tier</option>
-          <option value="learning">Learning (mastery rate)</option>
-        </select>
-      </label>
+      <div className="legend-controls">
+        <label className="field-inline">
+          <span>Colour by</span>
+          <select value={colorBy} onChange={(e) => onColorBy(e.target.value as ColorBy)}>
+            <option value="tier">Readiness tier</option>
+            <option value="learning">Learning (mastery rate)</option>
+          </select>
+        </label>
+        <label className="check-row">
+          <input type="checkbox" checked={showPartners} onChange={(e) => onTogglePartners(e.target.checked)} /> Show
+          partners
+        </label>
+      </div>
+      <p className="legend-intro small">
+        {colorBy === 'learning'
+          ? 'The number in each circle is the mastery rate in percent.'
+          : 'The number in each circle is the readiness tier: how ready the school is for devices.'}
+      </p>
       <ul className="legend-items" aria-label="Map legend">
         {items.map((i) => (
-          <li key={i.label}>
-            <span className="tier-dot" style={{ background: i.color }} /> {i.label}
+          <li key={i.key}>
+            <span className={`pin pin-sample ${i.className}`} aria-hidden="true">
+              {i.pin}
+            </span>
+            <span>
+              <strong>{i.label}</strong>
+              <span className="legend-help">{i.help}</span>
+            </span>
           </li>
         ))}
         {showPartners && (
           <li>
-            <span className="partner-swatch" /> Partner
+            <span className="partner-swatch" aria-hidden="true" />
+            <span>
+              <strong>Partner (navy diamond)</strong>
+              <span className="legend-help">Supplier or transporter. Click one for details.</span>
+            </span>
           </li>
         )}
       </ul>
-      <label className="legend-toggle">
-        <input type="checkbox" checked={showPartners} onChange={(e) => onTogglePartners(e.target.checked)} /> Show
-        partners
-      </label>
     </div>
   )
 }

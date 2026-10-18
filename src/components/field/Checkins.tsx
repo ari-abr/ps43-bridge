@@ -9,7 +9,9 @@ import {
   type CheckinRecord,
   type SchoolView,
 } from '../../lib/api'
+import { toast, toastSaved } from '../../lib/toast'
 import { capitalise } from '../admin/tierStyle'
+import { Arrow, ArrowLeft } from '../ui/Icons'
 
 const timeOf = (iso: string) => new Date(iso).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })
 const hasKit = (s: SchoolView) => s.status === 'delivered' || s.status === 'verified'
@@ -45,8 +47,8 @@ export default function Checkins() {
   return (
     <>
       <div className="card">
-        <h2>Monthly check-in</h2>
-        <p className="muted small">Schools with a delivered or verified kit.</p>
+        <h2 className="section-title">Monthly check-in</h2>
+        <p className="help">Once a month, count how many devices are working, broken or missing. Only schools with a delivered kit are listed.</p>
         <div className="picker-filters">
           <input
             type="search"
@@ -122,10 +124,13 @@ function CheckinForm({ school, onDone }: { school: SchoolView; onDone: () => voi
       checkedAt: new Date().toISOString(),
     }
     try {
-      setState(await saveRecord('checkins', record))
+      const result = await saveRecord('checkins', record)
+      setState(result)
+      toastSaved(result, 'Check-in')
     } catch {
       setState('editing')
       setError('Could not save (device storage full?). Try again.')
+      toast('error', 'Could not save the check-in.')
     }
   }
 
@@ -134,12 +139,14 @@ function CheckinForm({ school, onDone }: { school: SchoolView; onDone: () => voi
       <div className="card">
         <h2>{school.name}</h2>
         <div className={`save-result ${state === 'queued' ? 'is-queued' : 'is-uploaded'}`} role="status">
-          <strong>{state === 'queued' ? 'Check-in saved on this device, will upload when Online.' : 'Check-in uploaded.'}</strong>
-          <p>
-            {counts.working} working · {counts.broken} broken · {counts.missing} missing
-          </p>
+          <div>
+            <strong>{state === 'queued' ? 'Check-in saved on this phone. It will upload when you are Online.' : 'Check-in saved and uploaded.'}</strong>
+            <p>
+              {counts.working} working · {counts.broken} broken · {counts.missing} missing
+            </p>
+          </div>
         </div>
-        <button type="button" className="btn-primary" onClick={onDone}>
+        <button type="button" className="btn-primary btn-block" onClick={onDone}>
           Done
         </button>
       </div>
@@ -161,11 +168,12 @@ function CheckinForm({ school, onDone }: { school: SchoolView; onDone: () => voi
   return (
     <form className="card survey-form" onSubmit={submit} noValidate>
       <button type="button" className="btn-link" onClick={onDone}>
-        ← All schools
+        <ArrowLeft /> All schools
       </button>
-      <h2>{school.name}</h2>
-      <p className="muted small">
-        {delivered} devices delivered ({shipment.id}). Count every one.
+      <h2 className="panel-title">{school.name}</h2>
+      <p className="help">
+        {delivered} devices were delivered ({shipment.id}). Count every one: working + broken + missing must add up to{' '}
+        {delivered}.
       </p>
       <div className="count-row count-row-3">
         {field('working', 'Working')}
@@ -180,8 +188,8 @@ function CheckinForm({ school, onDone }: { school: SchoolView; onDone: () => voi
         <textarea rows={2} maxLength={300} value={note} onChange={(e) => setNote(e.target.value)} />
       </label>
       {error && <p className="form-error">{error}</p>}
-      <button type="submit" className="btn-primary" disabled={state === 'saving'}>
-        {state === 'saving' ? 'Saving…' : 'Save check-in'}
+      <button type="submit" className="btn-primary btn-block btn-big" disabled={state === 'saving'}>
+        {state === 'saving' ? 'Saving…' : 'Save check-in'} {state !== 'saving' && <Arrow />}
       </button>
     </form>
   )
@@ -192,7 +200,7 @@ function RecentCheckins() {
   useEffect(() => subscribe(() => setItems(getOutbox('checkins'))), [])
   return (
     <div className="card">
-      <h2>My recent check-ins</h2>
+      <h2 className="section-title">My recent check-ins</h2>
       {items.length === 0 && <p className="muted">No check-ins saved on this device yet.</p>}
       <ul className="recent-list">
         {items.map((item) => {

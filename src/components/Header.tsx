@@ -1,17 +1,16 @@
 import { useEffect, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
-import { getQueue, setOnline } from '../lib/api'
-import { confirmAndReset } from '../lib/demo'
-import { ROLES, getSavedRole, pathForRole, roleForPath, saveRole, type Role } from '../lib/roles'
-import { useSyncStatus } from '../lib/useSyncStatus'
+import { Link, useLocation } from 'react-router-dom'
+import { getSavedRole, pathForRole } from '../lib/roles'
+import Logo from './Logo'
+import StatusPill from './StatusPill'
+import { Close, MenuIcon } from './ui/Icons'
 
 export default function Header() {
-  const navigate = useNavigate()
   const { pathname } = useLocation()
-  const { online, queueCount } = useSyncStatus()
-  const role = roleForPath(pathname) ?? getSavedRole()
-  // On a phone the role switcher and reset button sit in a menu; Online/Offline and sync status stay visible.
+  // On a phone the navigation sits in a menu; the status pill always shows.
   const [menuOpen, setMenuOpen] = useState(false)
+
+  useEffect(() => setMenuOpen(false), [pathname])
 
   useEffect(() => {
     if (!menuOpen) return
@@ -20,67 +19,44 @@ export default function Header() {
     return () => window.removeEventListener('keydown', close)
   }, [menuOpen])
 
-  function changeRole(next: Role) {
-    saveRole(next)
-    setMenuOpen(false)
-    navigate(pathForRole(next))
-  }
-
-  const syncText =
-    queueCount === 0
-      ? 'All synced'
-      : `${queueCount} item${queueCount === 1 ? '' : 's'} waiting to upload`
-
-  // e.g. "1 surveys, 1 progress": what is waiting, by collection.
-  const waitingByCollection = Object.entries(
-    getQueue().reduce<Record<string, number>>((acc, q) => ({ ...acc, [q.collection]: (acc[q.collection] ?? 0) + 1 }), {}),
-  )
-    .map(([collection, n]) => `${n} ${collection}`)
-    .join(', ')
+  // "Learning" opens the Learning page (student or teacher) used last on this device.
+  const saved = getSavedRole()
+  const learnPath = pathForRole(saved === 'teacher' ? 'teacher' : 'student')
+  const links = [
+    { to: '/admin', label: 'Admin Map', match: '/admin' },
+    { to: '/field', label: 'Field Tools', match: '/field' },
+    { to: learnPath, label: 'Learning', match: '/learn' },
+  ]
 
   return (
-    <header className={`header ${menuOpen ? 'menu-open' : ''}`}>
-      <div className="header-top">
-        <div className="header-title">PS43 Bridge</div>
+    <header className={`site-header ${menuOpen ? 'menu-open' : ''}`}>
+      <div className="site-header-inner">
+        <Logo />
+
+        <nav id="site-nav" className="site-nav" aria-label="Main">
+          {links.map((l) => {
+            const current = pathname.startsWith(l.match)
+            return (
+              <Link key={l.match} to={l.to} className={`nav-link ${current ? 'is-current' : ''}`} aria-current={current ? 'page' : undefined}>
+                {l.label}
+              </Link>
+            )
+          })}
+        </nav>
+
+        <div className="site-header-status">
+          <StatusPill />
+        </div>
+
         <button
           type="button"
           className="menu-btn"
           aria-expanded={menuOpen}
-          aria-controls="header-controls"
+          aria-controls="site-nav"
+          aria-label={menuOpen ? 'Close menu' : 'Open menu'}
           onClick={() => setMenuOpen((o) => !o)}
         >
-          {menuOpen ? 'Close menu' : 'Menu'}
-        </button>
-      </div>
-
-      <div className="header-controls" id="header-controls">
-        <label className="field-inline menu-item">
-          <span>Role</span>
-          <select value={role} onChange={(e) => changeRole(e.target.value as Role)}>
-            {ROLES.map((r) => (
-              <option key={r.id} value={r.id}>
-                {r.label}
-              </option>
-            ))}
-          </select>
-        </label>
-
-        <button
-          type="button"
-          className={`toggle ${online ? 'is-online' : 'is-offline'}`}
-          onClick={() => setOnline(!online)}
-          aria-pressed={online}
-          title="Simulated connectivity"
-        >
-          <span className="dot" aria-hidden="true" /> {online ? 'Online' : 'Offline'}
-        </button>
-
-        <span className={`badge ${queueCount === 0 ? 'badge-ok' : 'badge-wait'}`} role="status" title={waitingByCollection || undefined}>
-          {syncText}
-        </span>
-
-        <button type="button" className="btn-secondary menu-item" onClick={confirmAndReset}>
-          Reset demo data
+          {menuOpen ? <Close size={24} /> : <MenuIcon size={24} />}
         </button>
       </div>
     </header>

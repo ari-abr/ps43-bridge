@@ -1,5 +1,6 @@
 import QrScanner from 'qr-scanner'
 import { useEffect, useRef, useState, type FormEvent } from 'react'
+import { QrIcon } from '../ui/Icons'
 
 interface Props {
   /** Called for every code read, including repeats (the camera reads the same code many times a second). */
@@ -77,13 +78,13 @@ export default function QrScannerBox({ onCode }: Props) {
       {!cameraBlocked && (
         <button
           type="button"
-          className={on ? 'btn-secondary' : 'btn-primary'}
+          className="btn-secondary btn-block"
           onClick={() => {
             setError(null)
             setOn(!on)
           }}
         >
-          {on ? 'Stop camera' : 'Scan with camera'}
+          <QrIcon /> {on ? 'Stop camera' : 'Scan with camera'}
         </button>
       )}
       {error && (
@@ -106,7 +107,9 @@ export default function QrScannerBox({ onCode }: Props) {
             value={manual}
             onChange={(e) => setManual(e.target.value)}
           />
-          <button type="submit">Add</button>
+          <button type="submit" className="btn-secondary">
+            Add
+          </button>
         </div>
       </form>
     </div>

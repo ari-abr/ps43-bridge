@@ -38,7 +38,8 @@ Notes:
 
 ## The three modules
 
-Pick a role in the header (on a phone it is under "Menu"):
+The home page (`/`) introduces the app. Use the header navigation, "Admin Map", "Field Tools" and "Learning"
+(on a phone it is under the menu button). Learning has a Student / Teacher switch at the top.
 
 | Role | Page | Works offline | What it does |
 | --- | --- | --- | --- |
@@ -46,8 +47,9 @@ Pick a role in the header (on a phone it is under "Menu"):
 | Coordinator, in Field Tools | `/field` | Yes | School survey form, deliveries (scan QR tags and confirm), monthly device check-in, upload queue |
 | Teacher and Student, in Learning | `/learn/teacher`, `/learn/student` | Yes | Times Tables lessons and quiz, class progress for the teacher, delivery confirmation by the teacher, course updates (v1 to v2) |
 
-The header toggle switches the demo Online or Offline. While Offline, saves go to an upload queue and the header
-shows "3 items waiting to upload". Going Online sends the queue.
+The status pill in the header shows the connection and the upload queue, and a tap switches the demo Online or
+Offline: green "Online · all synced", yellow "Offline · 3 waiting to upload", red when uploads keep failing. While
+Offline, saves go to the upload queue; going Online sends it.
 
 Rules are plain code, no AI: tier = rules on survey answers (`src/lib/scoring.ts`), need score = weighted sum
 (`src/lib/scoring.ts`), kit = lookup by tier, partners = lookup by tier and distance (`src/lib/matching.ts`).
@@ -61,7 +63,7 @@ On the Admin page, open **Demo controls**:
   shown in the box, so you know which to use on stage. It needs Online.
 - **Publish Times Tables v2** makes version 2 the one devices should install.
 - **Simulate 30 days** fills every school with a verified kit with simulated learning totals and a device check-in.
-- **Reset demo data** clears everything this app saved (also in the header).
+- **Reset demo data** clears everything this app saved, after a confirmation (also in the footer).
 
 Developer hook: set `localStorage["ps43:debug:failUploads"] = "1"` in the browser console to make every upload
 fail, to test that items stay queued and retry. It is not shown in the app.

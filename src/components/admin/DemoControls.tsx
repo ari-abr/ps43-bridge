@@ -1,9 +1,12 @@
 import { useCallback, useEffect, useState } from 'react'
 import { getPublishedVersion, publishCourseVersion, subscribe } from '../../lib/api'
-import { confirmAndReset, getDemoScene, setUpDemoScene, type DemoScene } from '../../lib/demo'
+import { getDemoScene, setUpDemoScene, type DemoScene } from '../../lib/demo'
 import { PACK_ID, latestPackVersion } from '../../lib/learning'
 import { simulate30Days, type SimulationResult } from '../../lib/simulate'
+import { toast } from '../../lib/toast'
 import { useSyncStatus } from '../../lib/useSyncStatus'
+import ConfirmDialog from '../ui/ConfirmDialog'
+import ResetDemoButton from '../ui/ResetDemoButton'
 
 /** Presenter tools for the stage demo: set up the scene, publish the course update, simulate time, reset. */
 export default function DemoControls() {
@@ -17,6 +20,7 @@ export default function DemoControls() {
   const [settingUp, setSettingUp] = useState(false)
   const [sceneError, setSceneError] = useState<string | null>(null)
   const [scene, setScene] = useState<DemoScene | null>(getDemoScene)
+  const [askScene, setAskScene] = useState(false)
   const latest = latestPackVersion(PACK_ID)
 
   const load = useCallback(async () => {
@@ -40,8 +44,10 @@ export default function DemoControls() {
     setPublishError(null)
     try {
       await publishCourseVersion(PACK_ID, latest)
+      toast('success', `Times Tables v${latest} published. Devices install it when they are next Online.`)
     } catch {
       setPublishError('Could not publish. Check you are Online and try again.')
+      toast('error', 'Could not publish the course update.')
     } finally {
       setPublishing(false)
     }
@@ -52,21 +58,25 @@ export default function DemoControls() {
     setSimulateError(null)
     try {
       setSimulated(await simulate30Days())
+      toast('success', 'Simulated 30 days of learning and check-ins.')
     } catch {
       setSimulateError('Could not simulate (device storage full?). Try "Reset demo data".')
+      toast('error', 'Could not simulate 30 days.')
     } finally {
       setSimulating(false)
     }
   }
 
   async function setUpScene() {
-    if (!confirm('This clears all demo data on this device and sets up the demo scene. Continue?')) return
+    setAskScene(false)
     setSettingUp(true)
     setSceneError(null)
     setSimulated(null)
     try {
       setScene(await setUpDemoScene())
+      toast('success', 'Demo scene ready.')
     } catch (err) {
+      toast('error', 'Could not set up the demo scene.')
       setSceneError(err instanceof Error ? err.message : 'Could not set up the demo scene.')
     } finally {
       setSettingUp(false)
@@ -85,9 +95,18 @@ export default function DemoControls() {
         Resets all data, then picks grey (unassessed) schools for the live survey and approves a kit for one assessed
         school for the delivery demo. Needs Online.
       </p>
-      <button type="button" className="btn-primary" onClick={setUpScene} disabled={settingUp || !online}>
+      <button type="button" className="btn-secondary" onClick={() => setAskScene(true)} disabled={settingUp || !online}>
         {settingUp ? 'Setting up…' : 'Set up demo scene'}
       </button>
+      <ConfirmDialog
+        open={askScene}
+        title="Set up the demo scene?"
+        confirmLabel="Yes, clear and set up"
+        onConfirm={setUpScene}
+        onCancel={() => setAskScene(false)}
+      >
+        <p>This clears all demo data on this device first, then sets up the schools for the stage demo.</p>
+      </ConfirmDialog>
       {!online && <p className="muted small">Go Online to set up the scene.</p>}
       {sceneError && (
         <p className="form-error" role="alert">
@@ -152,9 +171,7 @@ export default function DemoControls() {
       {simulateError && <p className="form-error">{simulateError}</p>}
 
       <h2>Reset</h2>
-      <button type="button" className="btn-secondary" onClick={confirmAndReset}>
-        Reset demo data
-      </button>
+      <ResetDemoButton />
     </details>
   )
 }

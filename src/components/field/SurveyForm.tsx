@@ -1,7 +1,13 @@
 import { useState, type FormEvent } from 'react'
 import { newId, saveRecord, type SchoolView, type SurveyRecord } from '../../lib/api'
 import { POWER_OPTIONS, SIGNAL_OPTIONS, TIER_LABELS, tierFromSurvey, type Power, type Signal } from '../../lib/scoring'
-import { capitalise, tierColor } from '../admin/tierStyle'
+import { toast, toastSaved } from '../../lib/toast'
+import TierBadge from '../admin/TierBadge'
+import { TIER_HELP, capitalise } from '../admin/tierStyle'
+import { Arrow, ArrowLeft, Check } from '../ui/Icons'
+import Steps from '../ui/Steps'
+
+export const SURVEY_STEPS = ['Choose school', 'Answer', 'Save']
 
 interface Props {
   school: SchoolView
@@ -91,59 +97,72 @@ export default function SurveyForm({ school, onDone }: Props) {
     }
     setState('saving')
     try {
-      setState(await saveRecord('surveys', record))
+      const result = await saveRecord('surveys', record)
+      setState(result)
+      toastSaved(result, 'Survey')
     } catch {
       setState('failed') // e.g. device storage full
+      toast('error', 'Could not save the survey on this device.')
     }
   }
 
   const head = (
     <div className="panel-head">
       <div>
-        <h2>{school.name}</h2>
+        <p className="eyebrow eyebrow-dark">{school.region} region</p>
+        <h2 className="panel-title">{school.name}</h2>
         <p className="panel-sub muted">
-          {school.region} ·{' '}
           {school.survey && school.tier !== null
             ? `Last survey ${school.survey.surveyedAt.slice(0, 10)}, Tier ${school.tier}`
             : 'Not surveyed yet'}
         </p>
       </div>
-      <button type="button" onClick={onDone}>
-        Back
+      <button type="button" className="btn-link" onClick={onDone}>
+        <ArrowLeft /> Back
       </button>
     </div>
   )
 
   if (state === 'queued' || state === 'uploaded') {
     return (
-      <div className="card">
-        {head}
-        <div className={`save-result ${state === 'queued' ? 'is-queued' : 'is-uploaded'}`} role="status">
-          {state === 'queued' ? (
-            <>
-              <strong>Saved on this device, will upload when online.</strong>
-              <p className="small">It is in the upload queue. Switch to Online to send it.</p>
-            </>
-          ) : (
-            <>
-              <strong>Uploaded.</strong>
-              <p className="small">The Admin Map now shows this school as Tier {tier}.</p>
-            </>
-          )}
+      <>
+        <Steps steps={SURVEY_STEPS} done={3} label="Survey steps" />
+        <div className="card">
+          {head}
+          <div className={`save-result ${state === 'queued' ? 'is-queued' : 'is-uploaded'}`} role="status">
+            <span className="save-result-icon" aria-hidden="true">
+              <Check size={28} strokeWidth={3} />
+            </span>
+            <div>
+              {state === 'queued' ? (
+                <>
+                  <strong>Survey saved on this phone.</strong>
+                  <p>It is waiting to upload. It goes to the Admin Map as soon as you are Online.</p>
+                </>
+              ) : (
+                <>
+                  <strong>Survey saved and uploaded.</strong>
+                  <p>The Admin Map now shows this school as Tier {tier}.</p>
+                </>
+              )}
+            </div>
+          </div>
+          <button type="button" className="btn-primary btn-block" onClick={onDone}>
+            Survey another school <Arrow />
+          </button>
         </div>
-        <button type="button" className="btn-primary" onClick={onDone}>
-          Survey another school
-        </button>
-      </div>
+      </>
     )
   }
 
   return (
+    <>
+    <Steps steps={SURVEY_STEPS} done={1} label="Survey steps" />
     <form className="card survey-form" onSubmit={save} noValidate>
       {head}
 
       <button type="button" className="btn-link" onClick={fillSample}>
-        Fill sample answers
+        Fill sample answers (demo)
       </button>
 
       <Choice
@@ -169,7 +188,7 @@ export default function SurveyForm({ school, onDone }: Props) {
       </div>
 
       <Choice
-        label="Secure room (can be locked)"
+        label="Is there a room that can be locked?"
         name="secureRoom"
         options={['yes', 'no'] as const}
         value={answers.secureRoom}
@@ -179,11 +198,14 @@ export default function SurveyForm({ school, onDone }: Props) {
 
       <div className="tier-preview" aria-live="polite">
         {tier === null ? (
-          <span className="muted">Choose power and signal to see the tier.</span>
+          <span className="muted">Choose power and signal to see the readiness tier.</span>
         ) : (
           <>
-            <span className="tier-dot" style={{ background: tierColor(tier) }} /> This school will be{' '}
-            <strong>Tier {tier}</strong> ({TIER_LABELS[tier].replace(/^Tier \d: /, '')})
+            <TierBadge tier={tier} />
+            <span>
+              This school will be <strong>Tier {tier}</strong> ({TIER_LABELS[tier].replace(/^Tier \d: /, '')}).{' '}
+              <span className="small">{TIER_HELP[tier]}</span>
+            </span>
           </>
         )}
       </div>
@@ -199,11 +221,12 @@ export default function SurveyForm({ school, onDone }: Props) {
         </p>
       )}
 
-      <button type="submit" className="btn-primary" disabled={state === 'saving'}>
-        {state === 'saving' ? 'Uploading…' : 'Save survey'}
+      <button type="submit" className="btn-primary btn-block btn-big" disabled={state === 'saving'}>
+        {state === 'saving' ? 'Saving…' : 'Save survey'} {state !== 'saving' && <Arrow />}
       </button>
       <p className="muted small">The survey date is set automatically when you save.</p>
     </form>
+    </>
   )
 }
 
