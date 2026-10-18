@@ -506,7 +506,7 @@ select { cursor: pointer; }
 .status-wait { background: var(--yellow); color: var(--navy); }
 .status-error { background: var(--red); color: #fff; }
 
-@media (max-width: 799px) {
+@media (max-width: 1023px) {
   .site-header-inner {
     display: grid;
     grid-template-columns: 1fr auto;
@@ -914,6 +914,87 @@ select { cursor: pointer; }
   .stack-table td { display: flex; justify-content: space-between; gap: var(--s-4); padding: var(--s-1) 0; border: 0; text-align: right !important; white-space: normal; }
   .stack-table td::before { content: attr(data-label); flex: none; font-weight: 700; color: var(--muted); text-align: left; }
   .table-wrap { overflow-x: visible; }
+}
+
+/* =====================================================================
+   Legal Compliance
+   ===================================================================== */
+
+.compliance { display: flex; flex-direction: column; gap: var(--s-5); max-width: 900px; margin: 0 auto; }
+.compliance .page-header { margin-bottom: 0; }
+
+/* Notice and callout boxes: navy = information, yellow with navy text = high risk. */
+.callout { display: flex; align-items: flex-start; gap: var(--s-3); margin: 0; padding: var(--s-3) var(--s-4); border-radius: var(--r-md); color: var(--navy); }
+.callout svg { flex: none; margin-top: 0.1rem; }
+.callout p { margin: 0; }
+.callout-info { border: 2px solid var(--navy); background: var(--info-bg); }
+.callout-warn { border-left: 6px solid var(--yellow); background: var(--warning-bg); }
+.disclaimer { padding: var(--s-4) var(--s-5); max-width: 75ch; }
+
+/* Jump links: sticky on desktop, one scrollable row on a phone. */
+.jump-bar {
+  display: flex;
+  gap: var(--s-2);
+  padding: var(--s-2);
+  overflow-x: auto;
+  border-radius: var(--r-pill);
+  background: var(--surface);
+  box-shadow: var(--shadow-1);
+  scrollbar-width: thin;
+}
+.jump-bar a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap);
+  padding: 0 var(--s-4);
+  border-radius: var(--r-pill);
+  color: var(--navy);
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+  flex: none;
+}
+.jump-bar a:hover { background: var(--navy-20); }
+@media (min-width: 900px) {
+  .jump-bar { position: sticky; top: var(--s-2); z-index: 10; flex-wrap: wrap; overflow-x: visible; }
+}
+
+.compliance-section { scroll-margin-top: 5rem; }
+.compliance-section > .section-title { display: flex; align-items: center; gap: var(--s-2); font-size: clamp(2.25rem, 5vw, 3rem); }
+.section-intro { max-width: 70ch; margin: 0 0 var(--s-4); }
+.law-cards { display: flex; flex-direction: column; gap: var(--s-4); }
+.law-card { max-width: 100%; }
+.law-title { margin: 0; font-size: 1.25rem; color: var(--navy); }
+.law-card .label-rule { margin: var(--s-4) 0 var(--s-2); }
+.law-text { max-width: 72ch; margin: 0; }
+.law-card .callout { margin-top: var(--s-4); }
+
+.check-list { display: flex; flex-direction: column; gap: var(--s-2); max-width: 72ch; margin: 0; padding: 0; list-style: none; }
+.check-list li { display: flex; align-items: flex-start; gap: var(--s-2); }
+.check-icon { flex: none; margin-top: 0.15rem; color: var(--green); }
+
+.priority-steps { display: grid; gap: var(--s-4); max-width: 72ch; margin: 0; padding: 0; list-style: none; }
+.priority-steps li { display: flex; align-items: flex-start; gap: var(--s-4); }
+.priority-steps .how-num { padding-top: 0.15rem; text-align: right; }
+
+.support-grid { display: grid; grid-template-columns: 1fr; gap: var(--s-3); margin: 0; }
+@media (min-width: 720px) { .support-grid { grid-template-columns: 1fr 1fr; } }
+.support-item dt { margin-bottom: var(--s-2); padding-bottom: var(--s-2); border-bottom: 1px solid var(--navy-40); font-weight: 700; color: var(--green); }
+.support-item dd { margin: 0; }
+
+.compliance-footer { margin: 0; padding-top: var(--s-4); border-top: 1px solid var(--border); }
+
+@media print {
+  .site-header, .site-footer, .skip-link, .toaster, .no-print { display: none !important; }
+  .main { max-width: none; padding: 0; }
+  .compliance { gap: 4mm; font-size: 10.5pt; }
+  .compliance .page-header { padding: 0 0 4mm; border-radius: 0; border-bottom: 2pt solid #000; background: none; color: #000; }
+  .compliance .page-header h1 { font-size: 30pt; }
+  .compliance .card { border: 1pt solid #999; box-shadow: none; padding: 4mm; }
+  .compliance .callout { border: 1pt solid #000; border-left-width: 4pt; background: none; color: #000; }
+  .compliance .section-title, .law-title, .support-item dt, .check-icon, .compliance .how-num { color: #000; }
+  .law-card, .support-item, .priority-steps li { break-inside: avoid; }
+  .compliance-section > .section-title { break-after: avoid; }
 }
 
 /* =====================================================================

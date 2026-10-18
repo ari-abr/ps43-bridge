@@ -3,6 +3,7 @@ import Footer from './components/Footer'
 import Header from './components/Header'
 import Toaster from './components/ui/Toaster'
 import AdminPage from './pages/AdminPage'
+import CompliancePage from './pages/CompliancePage'
 import FieldPage from './pages/FieldPage'
 import HomePage from './pages/HomePage'
 import ReportPage from './pages/ReportPage'
@@ -24,6 +25,7 @@ function AppLayout() {
           <Route path="/field" element={<FieldPage />} />
           <Route path="/learn/teacher" element={<TeacherPage />} />
           <Route path="/learn/student" element={<StudentPage />} />
+          <Route path="/compliance" element={<CompliancePage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>
