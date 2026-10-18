@@ -94,18 +94,18 @@ export const curriculum = {
       id: 'science',
       title: 'Science and Health',
       primary: {
-        goal: 'Learners understand how to stay healthy and how science improves lives.',
+        goal: 'Learners understand how to stay healthy and how science improves everyday life.',
         units: [
-          p('Staying healthy', 'Hygiene, clean water and preventing malaria.'),
-          p('Diseases in our communities', 'Common infections in the region and how to prevent them.'),
-          p('Scientists who changed the world', 'The lives and discoveries of influential scientists.'),
+          p('Staying healthy', 'Hygiene, clean water, nutrition and healthy habits at home and at school.'),
+          p('Keeping our communities well', 'How people protect their health, from handwashing and vaccination to caring for the environment.'),
+          p('Scientists who changed the world', 'The lives and discoveries of influential scientists, including African and Cameroonian innovators.'),
         ],
       },
       secondary: {
-        goal: 'Learners understand the biology of disease and how science develops new treatments.',
+        goal: 'Learners understand the biology of health and how science develops new treatments.',
         units: [
-          s('Genetics and heredity', 'How traits are inherited.'),
-          s('Infectious disease', 'Malaria, HIV and neglected tropical diseases, and how they are treated.'),
+          s('Genetics and heredity', 'How traits are inherited and what DNA tells us about living things.'),
+          s('Health and disease prevention', 'How the body defends itself, how infections spread, and how vaccines, public health and treatment protect communities.'),
           s('The future of medicine', 'Diagnostic tests, new medicines and biotechnology, and the ethical questions they raise.'),
         ],
       },
