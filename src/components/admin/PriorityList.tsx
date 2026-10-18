@@ -1,12 +1,8 @@
 import { useState } from 'react'
 import type { SchoolView } from '../../lib/api'
+import type { RankedSchool } from '../../lib/resourceGaps'
 import TierBadge from './TierBadge'
 import { capitalise } from './tierStyle'
-
-export interface RankedSchool {
-  school: SchoolView
-  score: number
-}
 
 interface Props {
   loading: boolean

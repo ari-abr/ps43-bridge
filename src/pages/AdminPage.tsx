@@ -3,37 +3,27 @@ import { Link } from 'react-router-dom'
 import AttentionPanel from '../components/admin/AttentionPanel'
 import DemoControls from '../components/admin/DemoControls'
 import Filters, { NO_FILTERS, type FilterState } from '../components/admin/Filters'
-import PriorityList, { type RankedSchool } from '../components/admin/PriorityList'
-import PrioritySettings from '../components/admin/PrioritySettings'
+import PriorityList from '../components/admin/PriorityList'
+import PrioritySettings, { loadWeights, saveWeights } from '../components/admin/PrioritySettings'
 import RequestList from '../components/admin/RequestList'
+import ResourcesCard from '../components/admin/ResourcesCard'
 import SchoolMap, { MapLegend, type MapFocus } from '../components/admin/SchoolMap'
 import SchoolPanel from '../components/admin/SchoolPanel'
+import SchoolSearch from '../components/admin/SchoolSearch'
 import type { ColorBy } from '../components/admin/tierStyle'
 import SummaryBar from '../components/admin/SummaryBar'
 import PageHeader from '../components/ui/PageHeader'
-import { KEY_PREFIX, getKits, getPartners, getSchools, subscribe, type SchoolView } from '../lib/api'
+import { getKits, getPartners, getSchools, subscribe, type SchoolView } from '../lib/api'
 import { getAttentionItems } from '../lib/attention'
-import { DEFAULT_WEIGHTS, needScore, type NeedWeights } from '../lib/scoring'
+import { isNextToEquip, rankByNeed } from '../lib/resourceGaps'
+import type { NeedWeights } from '../lib/scoring'
 import type { Kit, Partner } from '../lib/types'
-
-const WEIGHTS_KEY = KEY_PREFIX + 'admin:weights'
 
 type ListTab = 'priority' | 'requests'
 const LIST_TABS: { id: ListTab; label: string }[] = [
   { id: 'priority', label: 'Priority list' },
   { id: 'requests', label: 'Requests' },
 ]
-
-function loadWeights(): NeedWeights {
-  try {
-    const saved = JSON.parse(localStorage.getItem(WEIGHTS_KEY) ?? 'null')
-    const ok = (n: unknown) => typeof n === 'number' && n >= 0 && n <= 1
-    if (saved && ok(saved.pupilsPerDevice) && ok(saved.readiness) && ok(saved.distance)) return saved
-  } catch {
-    // Unreadable or blocked storage: use the defaults.
-  }
-  return DEFAULT_WEIGHTS
-}
 
 function matchesFilters(s: SchoolView, f: FilterState): boolean {
   if (f.region !== 'all' && s.region !== f.region) return false
@@ -76,30 +66,15 @@ export default function AdminPage() {
 
   function changeWeights(next: NeedWeights) {
     setWeights(next)
-    try {
-      localStorage.setItem(WEIGHTS_KEY, JSON.stringify(next))
-    } catch {
-      // Storage full or blocked: the sliders still work for this visit.
-    }
+    saveWeights(next)
   }
-
-  const scoreOf = useCallback((s: SchoolView) => (s.need ? needScore(s.need, weights) : null), [weights])
 
   const shown = useMemo(() => (schools ?? []).filter((s) => matchesFilters(s, filters)), [schools, filters])
 
-  const ranked = useMemo<RankedSchool[]>(
-    () =>
-      shown
-        .flatMap((school) => {
-          const score = scoreOf(school)
-          return score === null ? [] : [{ school, score }]
-        })
-        .sort((a, b) => b.score - a.score || a.school.name.localeCompare(b.school.name)),
-    [shown, scoreOf],
-  )
+  const ranked = useMemo(() => rankByNeed(shown, weights), [shown, weights])
   // Assessed schools with no kit yet come first; the rest already have one on the way or delivered.
-  const nextToEquip = useMemo(() => ranked.filter((r) => r.school.status === 'assessed'), [ranked])
-  const inProgress = useMemo(() => ranked.filter((r) => r.school.status !== 'assessed'), [ranked])
+  const nextToEquip = useMemo(() => ranked.filter((r) => isNextToEquip(r.school)), [ranked])
+  const inProgress = useMemo(() => ranked.filter((r) => !isNextToEquip(r.school)), [ranked])
 
   // There is no demo clock: "Simulate 30 days" writes check-ins dated now, so the real time is "now".
   // Recomputed only when the schools reload (every data change) or the filters change.
@@ -133,6 +108,29 @@ export default function AdminPage() {
     showPanelOnPhone()
   }
 
+  /** Search can find any school: relax just the filters that hide it, then select it like a marker click. */
+  function selectFromSearch(id: string): string | null {
+    const school = schools?.find((s) => s.id === id)
+    if (!school) return null
+    const relaxed: FilterState = {
+      region: filters.region !== 'all' && school.region !== filters.region ? 'all' : filters.region,
+      tier: matchesFilters(school, { ...NO_FILTERS, tier: filters.tier }) ? filters.tier : 'all',
+      status: matchesFilters(school, { ...NO_FILTERS, status: filters.status }) ? filters.status : 'all',
+    }
+    const cleared = (Object.keys(relaxed) as (keyof FilterState)[]).filter((k) => relaxed[k] !== filters[k])
+    if (cleared.length > 0) setFilters(relaxed)
+    setSelectedId(id)
+    setFocus({ lat: school.lat, lng: school.lng, n: Date.now() })
+    showPanelOnPhone()
+    if (cleared.length === 0) return null
+    const set = (Object.keys(filters) as (keyof FilterState)[]).filter((k) => filters[k] !== 'all')
+    if (cleared.length === set.length) return 'Filters cleared to show this school.'
+    const names = cleared.map((k) => ({ region: 'Region', tier: 'Tier', status: 'Status' })[k])
+    return `${names.join(' and ')} filter cleared to show this school.`
+  }
+
+  const filtered = filters.region !== 'all' || filters.tier !== 'all' || filters.status !== 'all'
+
   return (
     <div className="admin">
       <PageHeader
@@ -163,6 +161,7 @@ export default function AdminPage() {
 
       <div className="admin-grid">
         <div className="admin-map card" role="region" aria-label="Map of schools">
+          <SchoolSearch schools={schools} onChoose={selectFromSearch} />
           {schools === null && <p className="muted loading">Loading schools…</p>}
           <SchoolMap
             schools={shown}
@@ -236,6 +235,8 @@ export default function AdminPage() {
             )}
           </div>
         </div>
+
+        <ResourcesCard next={nextToEquip} loading={schools === null} partners={partners} filtered={filtered} />
       </div>
     </div>
   )

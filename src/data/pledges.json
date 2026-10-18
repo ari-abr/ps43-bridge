@@ -1,0 +1,122 @@
+{
+ "note": "DEMO DATA: fictional pledges from the fictional partners in partners.json. Not real commitments from real organisations.",
+ "pledges": [
+  {
+   "id": "pl-01",
+   "partnerId": "partner-05",
+   "resource": "laptops",
+   "quantity": 25,
+   "unit": "laptops",
+   "status": "pledged",
+   "note": "Donated laptops, wiped and charged before handover."
+  },
+  {
+   "id": "pl-02",
+   "partnerId": "partner-07",
+   "resource": "laptops",
+   "quantity": 15,
+   "unit": "laptops",
+   "status": "pledged",
+   "note": "Comes with chargers."
+  },
+  {
+   "id": "pl-03",
+   "partnerId": "partner-01",
+   "resource": "laptops",
+   "quantity": 12,
+   "unit": "laptops",
+   "status": "delivered",
+   "note": "Refurbished laptops, already used in earlier kits."
+  },
+  {
+   "id": "pl-04",
+   "partnerId": "partner-03",
+   "resource": "solar kits",
+   "quantity": 12,
+   "unit": "solar kits",
+   "status": "pledged",
+   "note": "Includes installation."
+  },
+  {
+   "id": "pl-05",
+   "partnerId": "partner-08",
+   "resource": "solar kits",
+   "quantity": 8,
+   "unit": "solar kits",
+   "status": "pledged",
+   "note": "West region schools only."
+  },
+  {
+   "id": "pl-06",
+   "partnerId": "partner-03",
+   "resource": "solar kits",
+   "quantity": 4,
+   "unit": "solar kits",
+   "status": "delivered",
+   "note": ""
+  },
+  {
+   "id": "pl-07",
+   "partnerId": "partner-09",
+   "resource": "trainer days",
+   "quantity": 30,
+   "unit": "trainer days",
+   "status": "pledged",
+   "note": "Teacher training on the Times Tables course."
+  },
+  {
+   "id": "pl-08",
+   "partnerId": "partner-01",
+   "resource": "trainer days",
+   "quantity": 20,
+   "unit": "trainer days",
+   "status": "pledged",
+   "note": "Laptop care and simple repairs."
+  },
+  {
+   "id": "pl-09",
+   "partnerId": "partner-09",
+   "resource": "trainer days",
+   "quantity": 6,
+   "unit": "trainer days",
+   "status": "delivered",
+   "note": ""
+  },
+  {
+   "id": "pl-10",
+   "partnerId": "partner-05",
+   "resource": "funding",
+   "quantity": 5000000,
+   "unit": "CFA francs",
+   "status": "pledged",
+   "note": "For transport, installation and printing."
+  },
+  {
+   "id": "pl-11",
+   "partnerId": "partner-09",
+   "resource": "funding",
+   "quantity": 2500000,
+   "unit": "CFA francs",
+   "status": "pledged",
+   "note": ""
+  },
+  {
+   "id": "pl-12",
+   "partnerId": "partner-06",
+   "resource": "funding",
+   "quantity": 1500000,
+   "unit": "CFA francs",
+   "status": "pledged",
+   "note": "Covers transport to West region schools."
+  },
+  {
+   "id": "pl-13",
+   "partnerId": "partner-07",
+   "resource": "funding",
+   "quantity": 1000000,
+   "unit": "CFA francs",
+   "status": "delivered",
+   "note": ""
+  }
+ ]
+}

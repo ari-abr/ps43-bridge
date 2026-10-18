@@ -11,8 +11,10 @@
 import demoState from '../data/demo-state.json'
 import kitsSeed from '../data/kits.json'
 import partnersSeed from '../data/partners.json'
+import pledgesSeed from '../data/pledges.json'
 import schoolsSeed from '../data/schools.json'
 import { isOpen, requestStatus } from './requests.ts'
+import { RESOURCE_UNITS } from './resourceGaps.ts'
 import { needScore, nearestKm, tierFromSurvey, type NeedInput, type Tier } from './scoring.ts'
 import { assetNumber, confirmationId, devicesForKit, latestBySchool, shipmentStatus } from './shipments.ts'
 import type {
@@ -21,6 +23,8 @@ import type {
   Kit,
   Partner,
   Party,
+  Pledge,
+  PledgeEvent,
   Progress,
   RequestEvent,
   RequestStatus,
@@ -267,6 +271,8 @@ export async function saveRecord(collection: string, record: DataRecord): Promis
 //   'checkins'      Checkin                      one per check-in (unique ids)
 //   'requests'      ResourceRequest              one per request (unique ids), never edited
 //   'requestEvents' RequestEvent                 one per status change (unique ids)
+//   'pledges'       Pledge                       one per pledge (unique ids), never edited
+//   'pledgeEvents'  PledgeEvent                  one per "Mark delivered" (unique ids)
 
 export type SurveyRecord = DataRecord & Survey & { schoolId: string }
 export type ShipmentRecord = DataRecord & Shipment
@@ -577,6 +583,79 @@ export function schoolName(id: string): string {
 export async function getPartners(): Promise<Partner[]> {
   await wait()
   return partnersSeed.partners as Partner[]
+}
+
+// ---------- pledges (Admin) ----------
+
+export type PledgeRecord = DataRecord & Pledge
+export type PledgeEventRecord = DataRecord & PledgeEvent
+
+/** A pledge with its "delivered" mark applied. */
+export interface PledgeView extends Pledge {
+  /** When it was marked delivered in the app; null for pledges not delivered or delivered in the seed. */
+  deliveredAt: string | null
+  /** A seed pledge (demo data). */
+  demo: boolean
+  /** This device saved it (or its delivered mark) and has not uploaded it yet. */
+  waiting: boolean
+}
+
+const seedPledges = pledgesSeed.pledges as Pledge[]
+
+/**
+ * Every pledge, newest first (seed pledges last). This device's pledges and delivered marks that
+ * are still waiting to upload count straight away, so the gaps update while Offline too.
+ */
+export async function getPledges(): Promise<PledgeView[]> {
+  const [uploaded, uploadedEvents] = await Promise.all([
+    seedPlusUploaded('pledges', seedPledges),
+    getRecords<PledgeEventRecord>('pledgeEvents'),
+  ])
+  const queued = getQueuedRecords<PledgeRecord>('pledges')
+  const queuedEvents = getQueuedRecords<PledgeEventRecord>('pledgeEvents')
+  const waitingIds = new Set([...queued.map((p) => p.id), ...queuedEvents.map((e) => e.pledgeId)])
+  const byId = new Map<string, Pledge>(uploaded.map((p) => [p.id, p]))
+  queued.forEach((p) => byId.has(p.id) || byId.set(p.id, p))
+
+  const deliveredAt = new Map<string, string>()
+  for (const e of [...uploadedEvents, ...queuedEvents]) {
+    const current = deliveredAt.get(e.pledgeId)
+    if (!current || e.createdAt < current) deliveredAt.set(e.pledgeId, e.createdAt)
+  }
+  const seedIds = new Set(seedPledges.map((p) => p.id))
+
+  return [...byId.values()]
+    .map((p) => {
+      const at = deliveredAt.get(p.id) ?? null
+      return {
+        ...p,
+        status: p.status === 'delivered' || at ? ('delivered' as const) : ('pledged' as const),
+        deliveredAt: p.status === 'delivered' ? null : at,
+        demo: seedIds.has(p.id),
+        waiting: waitingIds.has(p.id),
+      }
+    })
+    .sort((a, b) => (b.createdAt ?? '').localeCompare(a.createdAt ?? ''))
+}
+
+export type NewPledge = Pick<Pledge, 'partnerId' | 'resource' | 'quantity' | 'note'>
+
+/** Admin: save a new pledge (queued while Offline). */
+export async function savePledge(input: NewPledge): Promise<'uploaded' | 'queued'> {
+  const record: PledgeRecord = {
+    ...input,
+    id: newId('pl'),
+    unit: RESOURCE_UNITS[input.resource],
+    status: 'pledged',
+    createdAt: new Date().toISOString(),
+  }
+  return saveRecord('pledges', record)
+}
+
+/** Admin: mark a pledge as delivered with its own record (queued while Offline). The pledge is not edited. */
+export async function markPledgeDelivered(pledgeId: string): Promise<'uploaded' | 'queued'> {
+  const record: PledgeEventRecord = { id: newId('ple'), pledgeId, status: 'delivered', createdAt: new Date().toISOString() }
+  return saveRecord('pledgeEvents', record)
 }
 
 export async function getKits(): Promise<Kit[]> {

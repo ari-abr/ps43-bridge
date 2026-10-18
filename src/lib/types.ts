@@ -165,6 +165,30 @@ export interface Partner {
   trustLabel: 'Referred' | 'Checked' | 'Vouched' | 'Proven' | 'Trusted'
 }
 
+/** The four kinds of resource partners can pledge. */
+export type ResourceType = 'laptops' | 'solar kits' | 'funding' | 'trainer days'
+
+/** A partner's pledge. Never edited after it is saved; "delivered" is a separate PledgeEvent. */
+export interface Pledge {
+  id: string
+  partnerId: string
+  resource: ResourceType
+  quantity: number
+  unit: string // "laptops", "solar kits", "CFA francs" or "trainer days"
+  /** Seed pledges can start as delivered; new pledges are always "pledged". */
+  status: 'pledged' | 'delivered'
+  note: string
+  createdAt?: string // missing on seed pledges
+}
+
+/** Marks a pledge as delivered (one record, unique id), kept apart from the pledge like RequestEvent. */
+export interface PledgeEvent {
+  id: string
+  pledgeId: string
+  status: 'delivered'
+  createdAt: string
+}
+
 export interface Lesson {
   id: string
   title: string

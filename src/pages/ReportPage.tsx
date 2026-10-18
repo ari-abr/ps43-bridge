@@ -1,8 +1,10 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
-import { getSchools, subscribe, type SchoolView } from '../lib/api'
+import { getPledges, getSchools, subscribe, type PledgeView, type SchoolView } from '../lib/api'
+import { DEFAULT_NEXT_COUNT, RESOURCE_LABELS, demandFor, isNextToEquip, rankByNeed, resourceGaps, type ResourceGap } from '../lib/resourceGaps'
 import { TIER_LABELS, type Tier } from '../lib/scoring'
 import { summarise, workingOfTotal } from '../lib/report'
+import { loadWeights } from '../components/admin/PrioritySettings'
 import { capitalise } from '../components/admin/tierStyle'
 import { Arrow, ArrowLeft, Download } from '../components/ui/Icons'
 import StatsBand from '../components/ui/StatsBand'
@@ -32,6 +34,14 @@ function toRow(s: SchoolView): Row {
   }
 }
 
+/** "laptops 40 of 95 (short by 55)" */
+function pledgePart(r: ResourceGap): string {
+  const n = (v: number) => v.toLocaleString('en')
+  const unit = r.resource === 'funding' ? ' CFA francs' : ''
+  const tail = r.gap > 0 ? ` (short by ${n(r.gap)})` : r.surplus > 0 ? ` (${n(r.surplus)} spare)` : ''
+  return `${RESOURCE_LABELS[r.resource].toLowerCase()} ${n(r.available)} of ${n(r.needed)}${unit}${tail}`
+}
+
 const csvCell = (v: string) => `"${v.replace(/"/g, '""')}"`
 
 function downloadCsv(rows: Row[], region: string) {
@@ -54,10 +64,14 @@ export default function ReportPage() {
   const [params] = useSearchParams()
   const region = REGIONS.includes(params.get('region') ?? '') ? params.get('region')! : 'all'
   const [all, setAll] = useState<SchoolView[] | null>(null)
+  const [pledges, setPledges] = useState<PledgeView[] | null>(null)
 
   useEffect(() => {
     let live = true
-    const load = () => void getSchools().then((s) => live && setAll(s))
+    const load = () => {
+      void getSchools().then((s) => live && setAll(s))
+      void getPledges().then((p) => live && setPledges(p))
+    }
     load()
     const off = subscribe(load)
     return () => {
@@ -75,6 +89,15 @@ export default function ReportPage() {
         .sort((a, b) => a.region.localeCompare(b.region) || a.name.localeCompare(b.name))
         .map(toRow),
     [schools],
+  )
+  // The same "next to equip" ranking as the Admin page (saved Priority settings), for this report's region.
+  const nextSchools = useMemo(
+    () => rankByNeed(schools, loadWeights()).filter((r) => isNextToEquip(r.school)).slice(0, DEFAULT_NEXT_COUNT),
+    [schools],
+  )
+  const pledgeGaps = useMemo(
+    () => (pledges ? resourceGaps(demandFor(nextSchools.map((r) => r.school.tier!)), pledges) : null),
+    [nextSchools, pledges],
   )
   const hasSimulated = schools.some((s) => s.progress?.simulated || s.checkin?.simulated)
 
@@ -130,6 +153,16 @@ export default function ReportPage() {
         <h2 className="label-rule">Our impact in numbers</h2>
         <StatsBand label="Headline numbers" items={headline.map(([label, value, hint]) => ({ label, value, hint }))} />
       </section>
+
+      {pledgeGaps && nextSchools.length > 0 && (
+        <section className="report-section">
+          <h2>Pledged resources vs. needs</h2>
+          <p>
+            Pledged resources vs. needs for the next {nextSchools.length} school{nextSchools.length === 1 ? '' : 's'} to equip:{' '}
+            {pledgeGaps.map(pledgePart).join('; ')}. Pledges from fictional partners; needs are demo estimates per kit.
+          </p>
+        </section>
+      )}
 
       <section className="report-section">
         <h2>Schools by readiness tier</h2>

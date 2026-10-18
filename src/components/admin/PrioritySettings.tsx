@@ -1,4 +1,27 @@
+import { KEY_PREFIX } from '../../lib/api'
 import { DEFAULT_WEIGHTS, type NeedWeights } from '../../lib/scoring'
+
+const WEIGHTS_KEY = KEY_PREFIX + 'admin:weights'
+
+/** The saved Priority settings (Admin page and donor report), or the defaults. */
+export function loadWeights(): NeedWeights {
+  try {
+    const saved = JSON.parse(localStorage.getItem(WEIGHTS_KEY) ?? 'null')
+    const ok = (n: unknown) => typeof n === 'number' && n >= 0 && n <= 1
+    if (saved && ok(saved.pupilsPerDevice) && ok(saved.readiness) && ok(saved.distance)) return saved
+  } catch {
+    // Unreadable or blocked storage: use the defaults.
+  }
+  return DEFAULT_WEIGHTS
+}
+
+export function saveWeights(next: NeedWeights) {
+  try {
+    localStorage.setItem(WEIGHTS_KEY, JSON.stringify(next))
+  } catch {
+    // Storage full or blocked: the sliders still work for this visit.
+  }
+}
 
 const FIELDS: { key: keyof NeedWeights; label: string; help: string }[] = [
   { key: 'pupilsPerDevice', label: 'Pupils per device', help: 'Many pupils, few devices' },
